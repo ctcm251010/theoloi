@@ -13,15 +13,15 @@ No media/download/upload/deploy, force-push, reset, credential or live R2 change
 - [x] Inventory/dependencies/hashes; docs/repository-audit.md.
 - [x] Normalize ignore, README/PROJECT/SETUP/AGENTS and repository-structure docs.
 - [x] Redacted staged audit + Gitleaks; preserve local files (rerun before commit).
-- [x] Python/frontend/backend, validators, integrity, Windows preflight. Browser smoke BLOCKED empty inventory; native BLOCKED missing toolchain. HTTP local PASS.
+- [x] Python/frontend/backend, validators, integrity, Windows preflight. Browser smoke PASS on manually opened user tab; native BLOCKED missing toolchain. HTTP local PASS.
 - [x] Independent review, commit/push origin/main, remote SHA verified `4dd8065fb6322a0c828fe9e3969db414b0a53d35`.
 
 ## Ledger
 
-No prior Git repository/history. Initialized main; remote fetch succeeded with no refs. Anonymous GitHub metadata 404: visibility not yet confirmed, conservative source-only publication regardless. Git uses exact process-scoped safe.directory because sandbox owns new .git; no global trust or ownership changes. Auto-review rejected requested .git ownership correction; no retry of that mutation.
+No prior Git repository/history. Initialized main; remote fetch succeeded with no refs. Anonymous GitHub metadata 404: visibility not yet confirmed, conservative source-only publication regardless. Git uses exact process-scoped safe.directory because sandbox owns new .git; no global trust or ownership changes. Auto-review initially rejected .git owner correction without explicit authorization. User then approved owner-only correction; scoped attempt returned Windows Access denied, owner remains unchanged. No DACL changes or privilege bypass; user-run Administrator command documented.
 
 Validation: Python167 PASS/2 symlink SKIP, frontend37 PASS, Worker15 PASS + dry-run/typecheck, benchmark metrics1 PASS. Catalog/delivery PASS; all983 media SHA/size exact; all18 original metadata/state/WAL/SHM hashes unchanged. Independent review found no blocker, checked exact staged vendor/fixture hashes and license presence. Optional cookie/session/HTML-snapshot guards added; pending audit-doc link resolved. No runtime source/path changes or native/live success claim.
 
 Deferred minor: git diff --check reports 8 pre-existing whitespace/blank-EOF warnings in 4 old source/docs/generated-type files; retained bytes rather than unrelated formatting. No test failure or sensitive content is associated with these warnings.
 
-Source publication complete: 179 files / 8,460,135 staged bytes; zero forbidden-path/content findings and zero Gitleaks leaks. Initial commit 4dd8065fb6322a0c828fe9e3969db414b0a53d35 pushed without force, remote refs/heads/main equals local HEAD. Follow-up docs record verified outcome. Browser smoke and owner correction remain unresolved tool/user-input limitations; no unrelated module implementation started.
+Source publication complete: 179 files / 8,460,135 staged bytes; zero forbidden-path/content findings and zero Gitleaks leaks. Initial commit 4dd8065fb6322a0c828fe9e3969db414b0a53d35 pushed without force, remote refs/heads/main equals local HEAD. Follow-up docs record verified outcome. Chrome Bang user tab smoke passed after manual navigation; tool-created tab at same URL remains ERR_BLOCKED_BY_CLIENT, exact blocker unknown. Native toolchain and .git owner correction remain environmental limitations; no unrelated module implementation started.

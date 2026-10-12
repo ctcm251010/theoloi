@@ -70,12 +70,16 @@ Repo visibility chưa xác minh được bằng UI: API anonymous trả 404, tro
 | Delivery validator | **PASS**: 983 unique SHA/objectKeys; 0 missing/duplicate/hash mismatch/invalid; 12 warning assets đã có |
 | Media before/after | 983 file / 2,506,137,889 bytes, toàn bộ size/SHA đúng manifest; xem integrity-after local report |
 | Input/state hash | **18/18 SHA giữ nguyên**, gồm metadata và SQLite/WAL/SHM; integrity-after không có changedMetadata |
-| Browser UI smoke mới | **BLOCKED**: browser inventory rỗng; không dùng kết quả phiên trước để báo PASS mới |
+| Browser UI smoke mới | **PASS trên tab người dùng mở thủ công**, Chrome profile Bang: 485/485/13; search 472/clear; quick silent 19977; pause/seek/resume và chuyển tab khi phát; một audio element; không có console warn/error được ghi nhận |
 | Local playback mapping | **PASS HTTP**: full SHA/HEAD/Range đúng guide/instrumental/silent; ba nhóm 485/485/13 |
 | Windows native preflight | **BLOCKED**: thiếu cargo/rustc/MSVC x64/Windows SDK; Node/npm/Tauri/WebView2 có; không build EXE |
 | R2/B10/live deployment | **NOT RUN**, ngoài phạm vi |
 
-Hai Python SKIP: Windows không cho tạo symlink trong hai bài test traversal. Không gọi SKIP là PASS. HTTP tests kiểm tra file thật nhưng không chứng minh âm thanh người dùng nghe hoặc UI Chrome hiện tại; browser đang chờ người dùng kết nối lại extension.
+Hai Python SKIP: Windows không cho tạo symlink trong hai bài test traversal. Không gọi SKIP là PASS. HTTP tests kiểm tra file thật; Chrome smoke sau khi kết nối lại xác nhận media có duration 50.085442s, currentTime tăng, paused=false và không có media error cho `watv:vi:silent:19977`. Đây là xác minh playback qua browser, không phải đánh giá bằng tai toàn bộ thư viện. Để lại player tạm dừng sau kiểm thử; không sửa yêu thích.
+
+### Chẩn đoán điều hướng Browser Use
+
+Trong cùng Chrome profile Bang, hai tab cùng URL `http://127.0.0.1:8766/`: tab do công cụ điều hướng báo `ERR_BLOCKED_BY_CLIENT`, tab người dùng mở thủ công hiển thị AudioTP và được công cụ claim/read/click thành công. Do đó server/local app hoạt động; lỗi quan sát được gắn với đường điều hướng tự động. Chưa xác định extension, policy hoặc thành phần cụ thể nào chặn request; không kết luận do ad blocker khi chưa có bằng chứng. Không thay cài đặt bảo vệ hoặc thử vượt chặn. Dùng tab thủ công để hoàn tất smoke. Screenshot UI tự tạo giữ local tại `logs/repository-audit/app-smoke.png`.
 
 Các lệnh thật đã dùng (full regression cần private inputs theo SETUP):
 
@@ -110,6 +114,16 @@ Branch `main`, remote `https://github.com/ctcm251010/theoloi.git`. **Push source
 
 [Repository](https://github.com/ctcm251010/theoloi) · [Source commit đã verify](https://github.com/ctcm251010/theoloi/commit/4dd8065fb6322a0c828fe9e3969db414b0a53d35).
 
-Git init trong sandbox tạo owner .git khác chủ workspace; scoped Git override chỉ tin đúng đường dẫn cho tiến trình hiện tại, không global safe.directory. Auto-review đã từ chối đổi owner vì chưa có explicit approval; không đổi ACL/owner. Nếu user chưa cho phép sửa owner, lệnh Git có thể cần `git -c safe.directory=D:/Workspace/AudioTP ...` trên checkout này; clone mới bình thường không bị vấn đề đó. Đây là trở ngại tool, không phải secret hoặc hỏng history.
+Ban đầu AudioTP là folder local chưa có Git repository. Git init trong sandbox tạo `.git` với owner `DESKTOP-95CA50B\CodexSandboxOffline`, khác tài khoản `Sunny` dùng Git bên ngoài. Đây là Windows filesystem ownership, độc lập với owner repository GitHub `theoloi`. Scoped Git override chỉ tin đúng đường dẫn cho tiến trình hiện tại, không global safe.directory. Auto-review ban đầu từ chối đổi owner vì chưa có explicit approval; sau khi người dùng cho phép riêng `.git`, đã thử owner-only correction nhưng Windows trả Access denied. Owner chưa đổi; không thay DACL, không takeown hoặc tìm cách vượt quyền.
+
+Nếu cần sửa owner cho checkout hiện tại, người dùng đã đồng ý phạm vi `.git`; có thể tự chạy trong **PowerShell Run as Administrator**:
+
+```powershell
+icacls "D:\Workspace\AudioTP\.git" /setowner "DESKTOP-95CA50B\Sunny" /T /C
+(Get-Acl -LiteralPath "D:\Workspace\AudioTP\.git").Owner
+git -C D:\Workspace\AudioTP status
+```
+
+Kiểm tra output thật vì `icacls /C` có thể tiếp tục sau lỗi; chỉ coi sửa xong khi owner đúng và Git thường chạy được. Trong phiên này dùng `git -c safe.directory=D:/Workspace/AudioTP ...` để hoàn tất commit/push. Clone mới bằng tài khoản người dùng không có khác biệt owner do lần init này. Không phải lỗi audio, credential hoặc history.
 
 Không đọc credential hoặc thay auth; Git fetch dùng cơ chế credential sẵn có mà không xuất giá trị. Không cài thêm GitHub CLI/toolchain. Roadmap tiếp: user-run B10, quyền serving, Worker live, native build/installer và sheet review. Không bắt đầu các milestone đó trong nhiệm vụ repository.
