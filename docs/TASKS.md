@@ -1,5 +1,18 @@
 # THEOLOI tasks
 
+## Phase01 — 13/10/2026 / READY FOR REVIEW
+
+- [x] Đọc Phase00/context/B10 lịch sử; bảo toàn983 media và18 metadata/state hashes.
+- [x] Public Worker contracts + boundary validation; clone typecheck không private JSON, bundle thiếu inputs vẫn FAIL đúng thiết kế.
+- [x] Streaming/Range/HEAD/conditional/errors/readiness, CDN no-store và operation-count tests.
+- [x] Ticket RAM reuse/coalescing, expiry seek, logout/renewal/reconnect cancellation; không credential/disk audio cache ở client.
+- [x] TDD findings review độc lập; focused re-review không còn important finding.
+- [x] Offline regression, workerd mô phỏng/local HTTP ba M4A thật và clean-source clone/typecheck; báo riêng SKIP/browser/native/live.
+- [x] Vận hành/chi phí/request/required-secrets bootstrap/rollback/live checklist; không chạy live.
+- [ ] Audit/commit/push source branch và xác minh published source — xem báo cáo Phase01 cho kết quả cuối.
+- [ ] User review quyền phục vụ/chi phí/deploy, live API/WebView2 playback không có media local trước DONE.
+- [ ] Phase02 chưa bắt đầu; đề xuất native toolchain/build/NSIS/máy sạch sau review.
+
 ## Repository foundation — 12/10/2026
 
 - [x] Đọc context/kiểm kê; giữ runtime paths và local data.
@@ -14,7 +27,7 @@
 ## Follow-up
 
 - [x] Owner `.git`: người dùng chạy owner correction thành công (424 processed/0 failed); Get-Acl trả Sunny và Git thường chạy sạch, không còn dubious ownership.
-- [ ] B10 remote user-run; local hash/B9 không thay remote-content audit.
+- [x] Đọc B10 user-run11/10 PASS983 inventory/HEAD metadata; không phải full SHA remote hoặc audit mới.
 - [ ] Source/rights review trước deploy/phân phối.
 - [ ] Worker live/client config và live playback.
 - [ ] Native toolchain/build/installer/máy sạch/signing.

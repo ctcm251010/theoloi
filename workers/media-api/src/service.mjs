@@ -1,7 +1,8 @@
 import {timingSafeEqual} from 'node:crypto';
+import {validateData} from './validate-data.mjs';
 /** @typedef {{[K in keyof Env]: Env[K] extends string ? string : Env[K]} & {LOCAL_PREVIEW?:string}} WorkerEnv */
-/** @typedef {{assetId:string,objectKey:string,bytes:number,sha256:string}} Asset */
-/** @typedef {typeof import('../generated/catalog.json')} ClientCatalog */
+/** @typedef {import('./contracts').Asset} Asset */
+/** @typedef {import('./contracts').ClientCatalog} ClientCatalog */
 /** @typedef {{v:1,type:'session'|'media',sub:string,epoch:string,iat:number,exp:number,id?:string,revision?:string}} Claims */
 
 const encoder=new TextEncoder();
@@ -82,10 +83,8 @@ function metadataMatches(object,asset){
  * @param {Record<string,Asset>} allowlist
  */
 export function createService(client,allowlist,{now=epochSeconds}={}){
+ validateData(client,allowlist);
  const tracks=new Map(client.tracks.map(t=>[t.id,t]));
- if(tracks.size!==client.tracks.length || tracks.size!==Object.keys(allowlist).length)throw Error('Invalid asset allowlist');
- if(new Set(Object.values(allowlist).map(a=>a.objectKey)).size!==tracks.size)throw Error('Duplicate allowlist object key');
- for(const [id,track]of tracks){const a=allowlist[id];if(!a || a.assetId!==id || !a.objectKey?.startsWith('audio/v1/watv/vi/') || !Number.isSafeInteger(a.bytes) || a.bytes<=0 || !/^[a-f0-9]{64}$/.test(a.sha256) || !track.logicalId)throw Error('Invalid asset allowlist');}
  return {
  /**
   * @param {Request} request
@@ -93,12 +92,12 @@ export function createService(client,allowlist,{now=epochSeconds}={}){
   */
  async fetch(request,env){
   let origin=request.headers.get('Origin'),allowed=false;
-  const headers=new Headers({'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'});
+  const headers=new Headers({'Cache-Control':'private, no-store','CDN-Cache-Control':'no-store','Cloudflare-CDN-Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'});
   try{
    const origins=String(env.ALLOWED_ORIGINS || '').split(',').map(s=>s.trim()).filter(Boolean);
    allowed=!!origin && origins.includes(origin);
    if(origin && !allowed)return finish(error(403,'origin_forbidden'));
-   if(origin && allowed){headers.set('Access-Control-Allow-Origin',origin);headers.set('Access-Control-Expose-Headers','Content-Length, Content-Range, Accept-Ranges, ETag, X-AudioTP-Asset-Id');}
+   if(origin && allowed){headers.set('Access-Control-Allow-Origin',origin);headers.set('Access-Control-Expose-Headers','Content-Length, Content-Range, Accept-Ranges, ETag, X-AudioTP-Asset-Id, Retry-After');}
    const url=new URL(request.url);
    if(url.protocol!=='https:' && !(env.LOCAL_PREVIEW==='true' && ['127.0.0.1','localhost'].includes(url.hostname)))return finish(error(403,'https_required'));
    if(request.method==='OPTIONS'){
@@ -109,12 +108,13 @@ export function createService(client,allowlist,{now=epochSeconds}={}){
     headers.set('Access-Control-Allow-Methods','GET, HEAD, POST, OPTIONS');headers.set('Access-Control-Allow-Headers','Authorization, Content-Type, Range, If-Range, If-None-Match');headers.set('Access-Control-Max-Age','600');return finish(new Response(null,{status:204}));
    }
    if(!['GET','HEAD','POST'].includes(request.method))return finish(error(405,'method_not_allowed',{Allow:'GET, HEAD, POST, OPTIONS'}));
-   if(env.SERVING_ENABLED!=='true')return finish(error(403,'serving_disabled'));
+   if(env.SERVING_ENABLED!=='true')return finish(error(url.pathname==='/v1/health'?503:403,'serving_disabled'));
    if(typeof env.SIGNING_KEY!=='string' || env.SIGNING_KEY.length<32 || !/^[a-f0-9]{64}$/.test(env.GROUP_CODE_SHA256 || '') || !env.AUTH_EPOCH || !env.MEDIA || !env.LOGIN_LIMITER || !env.REQUEST_LIMITER)return finish(error(503,'service_not_configured'));
    const ip=request.headers.get('CF-Connecting-IP') || 'unattributed';
    const login=url.pathname==='/v1/auth/login';
    const limiter=login?env.LOGIN_LIMITER:env.REQUEST_LIMITER;
    if(!(await limiter.limit({key:`${login?'login':'requests'}:${ip}`})).success)return finish(error(429,'rate_limited',{'Retry-After':'60'}));
+   if(url.pathname==='/v1/health')return finish(['GET','HEAD'].includes(request.method)?Response.json({status:'ready',storage:'not-probed'}):error(405,'method_not_allowed',{Allow:'GET, HEAD'}));
    if(login){
     if(request.method!=='POST')return finish(error(405,'method_not_allowed',{Allow:'POST'}));
     let data;try{data=await boundedJSON(request);}catch{return finish(error(400,'invalid_body'));}
@@ -141,7 +141,8 @@ export function createService(client,allowlist,{now=epochSeconds}={}){
     const h=new Headers({'Content-Type':'audio/mp4','Accept-Ranges':'bytes','ETag':head.httpEtag,'X-AudioTP-Asset-Id':id});
     const none=request.headers.get('If-None-Match');
     if(none?.split(',').some(t=>['*',head.httpEtag].includes(t.trim().replace(/^W\//,''))))return finish(new Response(null,{status:304,headers:h}));
-    const rawRange=request.headers.get('Range');
+    // Range is defined for GET; HEAD describes the full selected representation.
+    const rawRange=request.method==='GET'?request.headers.get('Range'):null;
     const ifRange=request.headers.get('If-Range');
     let range=null;
     if(rawRange && (!ifRange || ifRange===head.httpEtag)){
@@ -155,7 +156,7 @@ export function createService(client,allowlist,{now=epochSeconds}={}){
     const object=await env.MEDIA.get(asset.objectKey,{...(range?{range}:{}),onlyIf:{etagMatches:head.etag}});
     if(!object)return finish(error(404,'asset_missing'));
     if(!('body' in object))return finish(error(409,'asset_changed'));
-    if(!metadataMatches(object,asset) || object.etag!==head.etag || (range && object.range && (!('offset' in object.range) || !('length' in object.range) || object.range.offset!==range.offset || object.range.length!==range.length))){await object.body.cancel();return finish(error(409,'asset_changed'));}
+    if(!metadataMatches(object,asset) || object.etag!==head.etag || (range && (!object.range || !('offset' in object.range) || !('length' in object.range) || object.range.offset!==range.offset || object.range.length!==range.length))){await object.body.cancel();return finish(error(409,'asset_changed'));}
     return finish(new Response(object.body,{status,headers:h}));
    }
    const authorization=request.headers.get('Authorization');
@@ -177,7 +178,11 @@ export function createService(client,allowlist,{now=epochSeconds}={}){
     return finish(Response.json({assetId:track.id,path:`/v1/media/${encodeURIComponent(track.id)}`,ticket:await sign(claims,env.SIGNING_KEY),expiresAt:claims.exp}));
    }
    return finish(error(404,'route_not_found'));
-  }catch{return finish(error(503,'upstream_unavailable'));}
+  }catch{
+   // Static diagnostic only. Never log the request URL (bearer ticket), env or error.
+   console.warn(JSON.stringify({event:'media_api_failure',code:'upstream_unavailable'}));
+   return finish(error(503,'upstream_unavailable',{'Retry-After':'5'}));
+  }
   /** @param {Response} response */
   function finish(response){for(const [k,v]of headers)response.headers.set(k,v);if(request.method==='HEAD')return new Response(null,{status:response.status,headers:response.headers});return response;}
  }};

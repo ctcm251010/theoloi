@@ -18,9 +18,9 @@ export class Player {
   update(patch){Object.assign(this.state,patch);for(const listener of this.listeners)listener(this.state);}
   async bounded(operation){let timer;try{return await Promise.race([operation,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Âm thanh phản hồi quá lâu. Hãy thử lại.')),this.timeoutMs);})]);}finally{clearTimeout(timer);}}
   clearBuffering(){clearTimeout(this.bufferTimer);this.bufferTimer=null;}
-  async select(track,queue=[track],{position=0}={}) {
+  async select(track,queue=[track],{position=0,autoplay=true}={}) {
     this.clearBuffering();this.resumeAt=Number.isFinite(position)?Math.max(0,position):0;
-    const token=++this.generation;this.intent=true;this.ready=false;this.media.pause();this.media.src='';this.media.load();
+    const token=++this.generation;this.intent=!!autoplay;this.ready=false;this.media.pause();this.media.src='';this.media.load();
     this.queue=queue.slice();if(!this.queue.some(t=>t.id===track.id))this.queue.unshift(track);
     this.update({track,status:'loading',error:'',position:0,duration:0});
     try {
@@ -48,7 +48,7 @@ export class Player {
   stop(){this.clearBuffering();++this.generation;this.intent=false;this.ready=false;this.resumeAt=0;this.media.pause();this.media.src='';this.media.load();this.queue=[];this.update({track:null,status:'idle',position:0,duration:0,error:''});}
   retry(){if(this.state.track)return this.select(this.state.track,this.queue,{position:this.state.status==='ended'?0:this.state.position});}
   syncTime(){if(!this.ready)return;const duration=Number.isFinite(this.media.duration)?Math.max(0,this.media.duration):0;if(this.resumeAt && duration){this.media.currentTime=Math.min(this.resumeAt,duration);this.resumeAt=0;}const position=Math.max(0,Number.isFinite(this.media.currentTime)?this.media.currentTime:0);if(position>this.state.position && this.state.status==='buffering' && this.intent){this.clearBuffering();this.update({status:'playing'});}this.update({duration,position});}
-  seek(seconds){if(!this.ready || !Number.isFinite(seconds) || !this.state.duration)return;this.media.currentTime=Math.min(this.state.duration,Math.max(0,seconds));this.syncTime();}
+  seek(seconds){if(!this.ready || !Number.isFinite(seconds) || !this.state.duration)return;const position=Math.min(this.state.duration,Math.max(0,seconds));if(this.shouldRefresh(this.state.track))return this.select(this.state.track,this.queue,{position,autoplay:this.intent});this.media.currentTime=position;this.syncTime();}
   setVolume(volume){if(!Number.isFinite(volume))return;this.media.volume=Math.max(0,Math.min(1,volume));this.update({volume:this.media.volume});}
   toggleMute(){this.media.muted=!this.media.muted;this.update({muted:this.media.muted});}
   setModes(patch){for(const key of ['continuous','repeat','shuffle'])if(key in patch)this.state[key]=!!patch[key];this.update({});}

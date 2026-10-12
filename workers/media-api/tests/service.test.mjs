@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {createService,byteRange} from '../src/service.mjs';
 const code='unit-test-access-code-not-a-real-secret';
 const sha=data=>createHash('sha256').update(data).digest('hex');
-const tracks=[{id:'guide:1',logicalId:'song:1',mode:'guide',durationSeconds:125},{id:'instrumental:1',logicalId:'song:1',mode:'instrumental',durationSeconds:126},{id:'silent:1',logicalId:'silent:1',mode:'silent',durationSeconds:57}];
+const tracks=[{id:'guide:1',logicalId:'song:1',mode:'guide',durationSeconds:125},{id:'instrumental:1',logicalId:'song:1',mode:'instrumental',durationSeconds:126},{id:'silent:1',logicalId:'silent:1',mode:'silent',durationSeconds:57}].map(t=>({...t,section:t.mode==='silent'?null:'main',number:1,title:'Bài thử tự tạo',category:'Fixture'}));
 const bytes=Buffer.from('0123456789abcdefghijklmnopqrstuvwxyz');
 const allow=Object.fromEntries(tracks.map(t=>[t.id,{assetId:t.id,objectKey:'audio/v1/watv/vi/'+t.id,bytes:bytes.length,sha256:sha(bytes)}]));
 function fixture(){
@@ -51,7 +51,7 @@ test('single, suffix, open and clamped ranges give exact bytes and lengths',asyn
  const f=fixture(),path=await f.ticket();for(const [value,start,end]of [['bytes=2-5',2,5],['bytes=-4',bytes.length-4,bytes.length-1],['bytes=30-',30,bytes.length-1],['bytes=0-999',0,bytes.length-1]]){
   const r=await f.request(path,{headers:{Range:value}});assert.equal(r.status,206);assert.equal(r.headers.get('Content-Range'),`bytes ${start}-${end}/${bytes.length}`);assert.equal(r.headers.get('Content-Length'),String(end-start+1));assert.deepEqual(Buffer.from(await r.arrayBuffer()),bytes.subarray(start,end+1));
  }
- const r=await f.request(path,{method:'HEAD',headers:{Range:'bytes=0-1'}});assert.equal(r.status,206);assert.equal(r.body,null);assert.equal(r.headers.get('Content-Length'),'2');
+ const r=await f.request(path,{method:'HEAD',headers:{Range:'bytes=0-1'}});assert.equal(r.status,200);assert.equal(r.body,null);assert.equal(r.headers.get('Content-Length'),String(bytes.length));
 });
 test('invalid, multi and unsatisfiable Range returns 416 without GET',async()=>{
  const f=fixture(),path=await f.ticket();for(const value of ['bytes=999-','bytes=4-2','bytes=-0','bytes=-','bytes=1-2,4-5','bytes=1.5-2','bytes=999999999999999999999-','items=0-1']){
@@ -91,4 +91,49 @@ test('rate limits fail closed for login and media without reading R2',async()=>{
 });
 test('unsafe or inconsistent allowlist fails before serving',()=>{
  for(const bad of [{...allow,extra:allow['guide:1']},{...allow,'guide:1':{...allow['guide:1'],objectKey:'private/secret'}},{...allow,'guide:1':{...allow['guide:1'],sha256:'bad'}}])assert.throws(()=>createService({tracks},bad));
+});
+
+test('public health is readiness only, no bucket probe or catalog leak',async()=>{
+ const f=fixture();const r=await f.request('/v1/health');assert.equal(r.status,200);
+ assert.deepEqual(await r.json(),{status:'ready',storage:'not-probed'});assert.equal(f.calls.length,0);
+ f.env.SERVING_ENABLED='false';assert.equal((await f.request('/v1/health')).status,503);
+ assert.equal((await f.request('/v1/health',{method:'HEAD'})).body,null);
+});
+test('all responses disable shared caching including auth errors and preflight',async()=>{
+ const f=fixture();for(const path of ['/v1/catalog',await f.ticket()]){
+  const r=await f.request(path);assert.equal(r.headers.get('CDN-Cache-Control'),'no-store');assert.equal(r.headers.get('Cloudflare-CDN-Cache-Control'),'no-store');await r.arrayBuffer();
+ }
+ const token=await f.login();await f.request('/v1/catalog',{token});assert.equal(f.calls.filter(c=>c[0]==='get').length,1);
+});
+test('strict source-free contract rejects secret fields, malformed metadata and unsafe paths',()=>{
+ const catalog={schemaVersion:1,revision:'r1',tracks};
+ for(const patch of [{sourceUrl:'https://private.invalid'},{revision:''},{tracks:tracks.map(t=>({...t,durationSeconds:NaN}))},{tracks:tracks.map(t=>({...t,objectKey:'hidden'}))},{tracks:tracks.map(t=>({...t,section:'main',mode:'silent'}))}])assert.throws(()=>createService({...catalog,...patch},allow));
+ for(const key of ['audio/v1/watv/vi/../secret','audio/v1/watv/vi/a?secret','audio/v1/watv/vi//a'])assert.throws(()=>createService(catalog,{...allow,'guide:1':{...allow['guide:1'],objectKey:key}}));
+ assert.throws(()=>createService(catalog,{...allow,'guide:1':{...allow['guide:1'],localPath:'secret'}}));
+});
+test('R2 range metadata must be exact and discarded bodies are cancelled',async()=>{
+ for(const range of [undefined,{offset:1,length:2},{offset:0,length:1}]){
+  const f=fixture(),path=await f.ticket();let cancelled=false;
+  f.env.MEDIA.get=async key=>({...f.meta(key),range,body:new ReadableStream({cancel(){cancelled=true;}})});
+  assert.equal((await f.request(path,{headers:{Range:'bytes=0-1'}})).status,409);assert.equal(cancelled,true);
+ }
+});
+test('request counts remain bounded and limiter/upstream faults do not expose detail',async()=>{
+ const f=fixture(),path=await f.ticket();await f.request(path,{method:'HEAD'});assert.deepEqual(f.calls.map(c=>c[0]),['head']);
+ await f.request(path,{headers:{'If-None-Match':'*'}});assert.deepEqual(f.calls.map(c=>c[0]),['head','head']);
+ const r=await f.request(path,{headers:{Range:'bytes=0-1'}});await r.arrayBuffer();assert.deepEqual(f.calls.map(c=>c[0]),['head','head','head','get']);
+ f.env.REQUEST_LIMITER.limit=async()=>{throw Error('private upstream detail');};
+ const failed=await f.request(path);assert.equal(failed.status,503);assert.equal(failed.headers.get('Retry-After'),'5');assert.equal((await failed.text()).includes('private upstream detail'),false);assert.equal(f.calls.length,4);
+});
+test('streaming does not buffer media and consumer cancellation reaches the source',async()=>{
+ const f=fixture(),path=await f.ticket();let cancelled=false;
+ const body=new ReadableStream({pull(controller){controller.enqueue(bytes.subarray(0,2));},cancel(){cancelled=true;}},{highWaterMark:0});
+ f.env.MEDIA.get=async key=>({...f.meta(key),body});
+ const response=await f.request(path);assert.equal(response.body,body);const reader=response.body.getReader();assert.deepEqual((await reader.read()).value,bytes.subarray(0,2));await reader.cancel();assert.equal(cancelled,true);
+});
+test('upstream diagnostics contain only a fixed event and code',async t=>{
+ const lines=[];t.mock.method(console,'warn',line=>lines.push(line));const f=fixture(),path=await f.ticket();
+ f.env.MEDIA.get=async()=>{throw Error('PRIVATE exception, object key and token must never be logged');};
+ const response=await f.request(path);assert.equal(response.status,503);
+ assert.deepEqual(lines.map(s=>JSON.parse(s)),[{event:'media_api_failure',code:'upstream_unavailable'}]);
 });

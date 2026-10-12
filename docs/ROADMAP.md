@@ -5,7 +5,7 @@
 | Phase | Mục tiêu | Trạng thái |
 |---|---|---|
 | 00 — Repository Foundation | Source audit, GitHub, setup và clean-clone validation | DONE |
-| 01 — Cloudflare R2 & Online Audio | Audit B10, API private/Range/auth, client online, kế hoạch deploy/rollback và live E2E | NOT STARTED |
+| 01 — Cloudflare R2 & Online Audio | Source/local PASS; live acceptance chờ phê duyệt, xem [nghiệm thu](phases/phase-01.md) | READY FOR REVIEW |
 | 02 — Windows Application & Installer | Tauri 2/WebView2, native build/EXE/NSIS, máy đích không cần workspace/Python/Node | NOT STARTED |
 | 03 — Closed Beta & Automatic Updates | Beta/máy khác, release artifacts/hash, updater có ký và recovery | NOT STARTED |
 | 04 — Android & iOS | ADR React Native/Tauri Mobile; Android/background audio; iOS theo môi trường thực tế | NOT STARTED |

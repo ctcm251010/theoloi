@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "test:source": "node --test --test-concurrency=1 tests/service.test.mjs tests/source-runtime.test.mjs",
     "preview": "node local-preview.mjs",
     "dev": "wrangler dev --local",
     "check": "wrangler deploy --dry-run --outdir ../../tmp/worker-build",

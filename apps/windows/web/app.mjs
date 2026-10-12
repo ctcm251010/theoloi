@@ -1,6 +1,6 @@
 import {MODES,validateCatalog,filterTracks,formatTime,displayNumber} from './catalog.mjs';
 import {Player} from './player.mjs';
-import {MediaAPI} from './api-client.mjs';
+import {MediaAPI,ConnectionGate} from './api-client.mjs';
 import {LibraryStore} from './storage.mjs';
 import {shortcutAction,libraryView,quickPresentation,QuickPanelState,quickPlaybackPlan} from './ui-core.mjs';
 
@@ -18,6 +18,7 @@ let activeQuickId='';
 let lastRecorded='',lastTrack='',lastStatus='';
 const media=$('audio');media.volume=.7;
 let api=null,sourceKind='none';
+const connections=new ConnectionGate();
 const player=new Player(media,track=>{
  if(!playbackEnabled || !api)throw Error('Chưa kết nối nguồn nghe. Hãy kết nối thư viện trước.');
  return api.resolve(track);
@@ -78,19 +79,23 @@ function renderConnection(){
  notice.textContent=offline?'Mất kết nối. Hãy thử lại khi có mạng.':ready?'Đang ở chế độ chỉ xem danh mục.':'Kết nối thư viện để nghe nhạc.';
  $('demo-notice').hidden=playbackEnabled && !offline;
 }
-function connectionLost(){playbackEnabled=false;activeQuickId='';player.stop();renderConnection();renderQuick();renderRows();$('connection-settings').open=true;openDialog('settings-dialog');setText('connection-status','Phiên truy cập đã hết hạn. Hãy kết nối lại.');}
+function connectionLost(){connections.cancel();api?.logout();api=null;sourceKind='none';playbackEnabled=false;activeQuickId='';player.stop();$('connect-button').disabled=false;renderConnection();renderQuick();renderRows();$('connection-settings').open=true;openDialog('settings-dialog');setText('connection-status','Phiên truy cập đã hết hạn. Hãy kết nối lại.');}
 async function connectLibrary(base,code,{local=false}={}){
  playbackEnabled=false;activeQuickId='';player.stop();api?.logout();api=null;
+ let next;
+ const attempt=connections.begin({logout:()=>next?.logout()});
  $('connect-button').disabled=true;setText('connection-status','Đang kết nối…');
  try{
-  const next=new MediaAPI(base,{onUnauthorized:connectionLost});
+  next=new MediaAPI(base,{onUnauthorized:()=>{if(attempt.current())connectionLost();}});
   if(local)await next.localSession();else await next.login(code);
   const data=await next.catalog();const rows=validateCatalog(data);
+  if(!attempt.current()){next.logout();return;}
   api=next;sourceKind=local?'local':'remote';tracks=rows;revision=data.revision;playbackEnabled=true;
+  attempt.complete();
   setText('connection-status',local?'Đã kết nối thư viện trên máy.':'Đã kết nối thư viện trực tuyến.');
   $('connection-settings').open=false;
- }catch(error){setText('connection-status',error.message);$('connection-settings').open=true;}
- finally{$('access-code').value='';$('connect-button').disabled=false;renderConnection();renderQuick();renderCategories();renderRows();}
+ }catch(error){if(attempt.current()){next?.logout();attempt.complete();setText('connection-status',error.message);$('connection-settings').open=true;}}
+ finally{if(attempt.current()){$('access-code').value='';$('connect-button').disabled=false;renderConnection();renderQuick();renderCategories();renderRows();}}
 }
 $('connection-form').addEventListener('submit',event=>{event.preventDefault();const code=$('access-code').value;$('access-code').value='';void connectLibrary($('api-base').value.trim(),code);});
 $('disconnect').addEventListener('click',()=>{api?.logout();api=null;sourceKind='none';connectionLost();setText('connection-status','Đã ngắt kết nối.');});

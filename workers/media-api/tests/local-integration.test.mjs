@@ -4,10 +4,11 @@ import {readFile,mkdir,writeFile,mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
+import {existsSync} from 'node:fs';
 import {request as httpRequest} from 'node:http';
 import {createPreviewServer,ReadOnlyFileBucket} from '../local-preview.mjs';
 const hash=data=>createHash('sha256').update(data).digest('hex');
-test('real HTTP integration: same Worker handler serves the exact guide/instrumental/silent files',async t=>{
+test('real HTTP integration: same Worker handler serves the exact guide/instrumental/silent files',{skip:!existsSync(new URL('../../../delivery/manifest.vi.json',import.meta.url))?'Private manifest/media not available in source-only clone':false},async t=>{
  const server=await createPreviewServer({port:0});t.after(()=>{server.closeAllConnections();return new Promise(resolve=>server.close(resolve));});
  const base='http://127.0.0.1:'+server.address().port;
  const config=await (await fetch(base+'/connection.json')).json();assert.equal(config.mode,'local-files');

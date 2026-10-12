@@ -11,6 +11,9 @@ class Media extends EventTarget {
 const a={id:'a',mode:'guide',title:'A'},b={id:'b',mode:'instrumental',title:'B'},c={id:'c',mode:'silent',title:'C'};
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b});return {promise,resolve,reject};};
 const setup=(resolver=async t=>`./${t.id}.wav`,opts={})=>{const media=new Media();return {media,player:new Player(media,resolver,{timeoutMs:200,...opts})};};
+test('seeking with an expired ticket renews once and respects paused intent',async()=>{
+ for(const paused of [false,true]){let expired=false,calls=0;const {media,player}=setup(async()=>{calls++;return './permitted.wav';},{shouldRefresh:()=>expired});await player.select(a,[a,b]);if(paused)player.pause();expired=true;await player.seek(7);assert.equal(calls,2);assert.equal(media.currentTime,7);assert.equal(media.paused,paused);assert.equal(player.state.status,paused?'paused':'playing');}
+});
 test('selection captures its queue and supports pause resume seek volume mute',async()=>{
  const {player,media}=setup();const queue=[a,b];await player.select(a,queue);queue.splice(0);
  assert.equal(player.state.status,'playing');player.pause();assert.equal(media.paused,true);
