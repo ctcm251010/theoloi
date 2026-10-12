@@ -54,7 +54,9 @@ Mã nhóm chưa quản lý/thu hồi từng người. Ticket là bearer URL tron
 
 ## Git / file thay đổi
 
-Branch **phase/01-online-audio**, không merge main. Commit/push chỉ sau exact-index audit + Gitleaks và review; SHA cuối bàn giao sau xác minh remote.
+Branch **phase/01-online-audio**, không merge main. [Source commit4fc4d8dcc9fcb7e7cf07454d6def8e26411dafb4](https://github.com/ctcm251010/theoloi/commit/4fc4d8dcc9fcb7e7cf07454d6def8e26411dafb4) đã push, `ls-remote` khớp SHA. Exact-index audit193 files/8,561,287 bytes:0 forbidden paths/0 content findings; staged scan và Gitleaks6-commit history:0 leak. Scanner ban đầu flag synthetic signing-key literal trong test; thay bằng key ngẫu nhiên mỗi test, re-test PASS và scan lại sạch, không thêm allowlist hoặc sửa credential thật.
+
+Clone source-only đã fetch đúng published commit4fc4d8d, working tree sạch, không manifest/generated JSON: typecheck PASS, Worker21 PASS/2 SKIP, frontend49 PASS được chạy lại từ commit này. Overlay trước commit giữ nguyên trong clone stash, không reset/xóa. Helper49596 do agent tạo đã dừng; helper8766/tab người dùng giữ nguyên. Commit docs ledger nghiệm thu theo sau không đổi runtime/data; SHA cuối bàn giao sau verify remote.
 
 - Worker: `src/{contracts.d.ts,generated-data.d.ts,validate-data.mjs,index.mjs,service.mjs}`, `tsconfig.json`, `package.json`, `local-preview.mjs`, `tests/{service,source-runtime,local-integration,runtime}.test.mjs`, README.
 - Windows: `web/{api-client,app,player}.mjs`, `tests/{api-client,connection-gate,player}.test.mjs`.

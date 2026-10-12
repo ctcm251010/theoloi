@@ -9,7 +9,7 @@
 - [x] TDD findings review độc lập; focused re-review không còn important finding.
 - [x] Offline regression, workerd mô phỏng/local HTTP ba M4A thật và clean-source clone/typecheck; báo riêng SKIP/browser/native/live.
 - [x] Vận hành/chi phí/request/required-secrets bootstrap/rollback/live checklist; không chạy live.
-- [ ] Audit/commit/push source branch và xác minh published source — xem báo cáo Phase01 cho kết quả cuối.
+- [x] Exact-index audit193 files/0 finding, Gitleaks staged/history sạch; source4fc4d8d đã push, remote SHA khớp. Published clone typecheck/Worker21 PASS2 SKIP/frontend49 PASS, working tree sạch; xem Phase01.
 - [ ] User review quyền phục vụ/chi phí/deploy, live API/WebView2 playback không có media local trước DONE.
 - [ ] Phase02 chưa bắt đầu; đề xuất native toolchain/build/NSIS/máy sạch sau review.
 

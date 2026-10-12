@@ -51,4 +51,4 @@ Files: docs/phases/phase-01.md, docs/phase01-operations.md; SETUP/README/Worker 
 - [x] Read existing B10 summary only, verify mapping/pins and all 983 local hashes/18 baseline metadata hashes.
 - [x] Run full offline regression, source-only clone tests/typecheck/runtime, private bundle integration, secret scan and independent review; resolve findings.
 - [x] Document reviewed production config, request costs/cache policy, exact user-run deploy/rollback/live acceptance; no live execution.
-- [ ] Mark READY FOR REVIEW (not DONE: live approval/E2E pending), audit exact Git index, commit/push branch if safe; suggest Phase 02 then stop.
+- [x] Mark READY FOR REVIEW (not DONE: live approval/E2E pending), audit exact Git index, commit/push branch if safe; suggest Phase 02 then stop. Source4fc4d8d published and clean clone verified; docs ledger follows.
