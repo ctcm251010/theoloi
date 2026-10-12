@@ -19,7 +19,9 @@ Audio, snapshot website, catalog/manifest vận hành, review decisions, credent
 | `benchmarks/score-viewer` | PDF/raster/vector prototype dùng bản nhạc tự tạo, vendor có license |
 | `docs` | Kiến trúc, vận hành, báo cáo, roadmap/tasks |
 
-Không tạo package mobile/web/shared rỗng. [Cấu trúc](docs/repository-structure.md) · [Audit](docs/repository-audit.md) · [Setup](SETUP.md) · [Roadmap](docs/ROADMAP.md).
+Không tạo package mobile/web/shared rỗng. [Cấu trúc](docs/repository-structure.md) · [Audit](docs/repository-audit.md) · [Setup](SETUP.md) · [Master roadmap](docs/MASTER_ROADMAP.md) · [Roadmap](docs/ROADMAP.md) · [Phase hiện tại](docs/CURRENT_PHASE.md).
+
+Quy trình: hoàn thành trọn phase được giao, kiểm thử/review/cập nhật Git, đề xuất bước tiếp theo rồi dừng. Không tự triển khai toàn bộ master roadmap khi người dùng chỉ giao một phase.
 
 ## Setup Windows
 
@@ -42,6 +44,8 @@ node workers/media-api/local-preview.mjs
 Mở **http://127.0.0.1:8766/**; nếu helper đã chạy chỉ mở/reload. Đây là phát file local, chưa phải R2 live. [Hướng dẫn AudioTP](apps/windows/README.md).
 
 ## Kiểm thử
+
+Clone chỉ có source: dùng nhóm fixture/mock trong [SETUP — Kiểm thử source-only](SETUP.md#kiểm-thử-source-only). Các lệnh full regression dưới đây cần private inputs/projections được chuẩn bị như SETUP; Worker typecheck/dry-run không chạy được khi thiếu generated JSON. Không thay JSON production bằng fixture để làm chúng pass.
 
 ```powershell
 .\.venv\Scripts\python.exe -X utf8 -m unittest discover -s tests -v

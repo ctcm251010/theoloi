@@ -124,6 +124,10 @@ icacls "D:\Workspace\AudioTP\.git" /setowner "DESKTOP-95CA50B\Sunny" /T /C
 git -C D:\Workspace\AudioTP status
 ```
 
-Kiểm tra output thật vì `icacls /C` có thể tiếp tục sau lỗi; chỉ coi sửa xong khi owner đúng và Git thường chạy được. Trong phiên này dùng `git -c safe.directory=D:/Workspace/AudioTP ...` để hoàn tất commit/push. Clone mới bằng tài khoản người dùng không có khác biệt owner do lần init này. Không phải lỗi audio, credential hoặc history.
+Kiểm tra output thật vì `icacls /C` có thể tiếp tục sau lỗi; chỉ coi sửa xong khi owner đúng và Git thường chạy được. Trong phiên publish ban đầu dùng `git -c safe.directory=D:/Workspace/AudioTP ...` để hoàn tất commit/push. Clone mới bằng tài khoản người dùng không có khác biệt owner do lần init này. Không phải lỗi audio, credential hoặc history.
+
+**Cập nhật sau user-run, 12/10/2026:** người dùng đã chạy lệnh Administrator, 424 processed / 0 failed. Kiểm tra độc lập Get-Acl trả `DESKTOP-95CA50B\Sunny`; `git status` thường chạy thành công, main đồng bộ origin/main, working tree sạch. Blocker ownership đã được giải quyết; các mô tả Access denied ở trên là lịch sử chẩn đoán. Không thêm global safe.directory.
+
+**Nghiệm thu master Phase 00 tiếp theo:** xem [phase-00](phases/phase-00.md) cho clean-clone setup/test evidence; đây là bổ sung cho audit baseline, không thay kết quả live/native chưa chạy.
 
 Không đọc credential hoặc thay auth; Git fetch dùng cơ chế credential sẵn có mà không xuất giá trị. Không cài thêm GitHub CLI/toolchain. Roadmap tiếp: user-run B10, quyền serving, Worker live, native build/installer và sheet review. Không bắt đầu các milestone đó trong nhiệm vụ repository.

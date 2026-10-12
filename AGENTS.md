@@ -2,7 +2,10 @@
 
 ## Quy trình riêng
 
-- Đọc PROJECT.md, README.md, docs/ROADMAP.md, docs/TASKS.md và docs module liên quan; không bootstrap lại dự án.
+- Đọc SETUP.md, PROJECT.md, README.md, docs/MASTER_ROADMAP.md, docs/ROADMAP.md, docs/CURRENT_PHASE.md, docs/TASKS.md và báo cáo phase trước; kiểm tra Git/branch và blocker, không bootstrap lại dự án.
+- Phạm vi tự chủ là phase/task người dùng giao. Hoàn thành plan → implement → test → fix → review → document → Git trong phạm vi đó; không dừng giữa các task nhỏ. Sau nghiệm thu, đề xuất 3–5 công việc tiếp theo và DỪNG tại ranh giới phase, trừ khi người dùng đã yêu cầu làm hết/nhiều phase. Không tự hiểu roadmap dài hạn là quyền triển khai toàn bộ.
+- Khi người dùng nói “Tiếp tục”, đọc CURRENT_PHASE/ROADMAP: tiếp tục phần chưa xong của phase hiện hành; nếu đã hoàn tất, bắt đầu phase được đề xuất gần nhất. Phê duyệt phase không thay phê duyệt production/chi phí/quyền nội dung.
+- Trạng thái phase: NOT STARTED / IN PROGRESS / BLOCKED / READY FOR REVIEW / DONE. Chỉ DONE khi acceptance có bằng chứng; phân biệt unit/integration/browser/Windows native/live Cloudflare/user acceptance. Cập nhật CURRENT_PHASE, TASKS, CHANGELOG, DECISIONS/BACKLOG khi phù hợp, không tạo hệ thống roadmap trùng.
 - Windows tại apps/windows, backend tại workers/media-api; pipeline giữ scripts/tests và metadata namespaces root. Không tạo package mobile/shared rỗng.
 - Không đọc/in/commit .secrets, env thật, cookie, token/credential/session. Operational datasets, snapshots, generated production catalogs là local-only theo .gitignore. Audit index trước push.
 - Không sửa 983 media, catalog/manifest gốc, assetId/objectKey hoặc Cloudflare config trong task source thông thường; không tự download/upload/live B10/deploy.

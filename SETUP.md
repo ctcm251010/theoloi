@@ -16,6 +16,27 @@ npm.cmd ci --prefix workers/media-api
 
 Rust/Cargo/MSVC/Windows SDK chỉ cần khi native build, xem apps/windows/README.md.
 
+## Kiểm thử source-only
+
+Sau setup dependency ở trên, clone source có thể chạy các test tự tạo/mock sau mà không cần `.secrets`, catalog, manifest hoặc media vận hành:
+
+```powershell
+npm.cmd test --prefix apps/windows
+node --test workers/media-api/tests/service.test.mjs
+node --test benchmarks/score-viewer/metrics.test.mjs
+Push-Location tests
+try {
+  & '..\.venv\Scripts\python.exe' -X utf8 -m unittest test_verify_r2 test_r2 test_sheet_files test_windows_preview test_windows_build test_worker_secret_setup test_score_benchmark -v
+  if ($LASTEXITCODE -ne 0) { throw 'Source-only Python tests failed' }
+} finally { Pop-Location }
+```
+
+Đây là nhóm con được chọn rõ, không phải full test discover. Test pinned production manifest sẽ SKIP khi file private không có; test read-only status vẫn chạy với SQLite tự tạo. Windows không có quyền symlink có thể SKIP một test traversal. Báo riêng PASS/SKIP, không coi thiếu dữ liệu là full regression PASS. Test demo truyền audio fixture riêng và không phụ thuộc thư mục tmp đã có.
+
+`npm run typecheck --prefix workers/media-api`, Worker dry-run/runtime/full HTTP tests và Python full discover còn cần private inputs/projections. Typecheck trên clone chưa prepare trả TS2307 vì thiếu `generated/catalog.json`/`assets.json`; đây là precondition được công bố, không bỏ checkJs hay tạo production catalog giả. Với full workspace, dùng lệnh README sau khi prepare inputs hợp lệ.
+
+Trên môi trường npm của lần nghiệm thu, npm ci thành công nhưng cảnh báo postinstall esbuild/workerd bị chặn bởi allowScripts. Nhóm source-only trên không cần những bước đó; Worker native bundle/runtime trong clone chưa được xác minh. Không tự mở rộng quyền script cài đặt trong Phase 00.
+
 ## Dữ liệu không có trong clone
 
 Người quản lý cung cấp bộ inputs đã review/cấp quyền qua kênh riêng:

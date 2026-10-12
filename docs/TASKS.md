@@ -13,9 +13,17 @@
 
 ## Follow-up
 
-- [ ] Owner `.git`: user đã cho phép sửa riêng `.git`, nhưng Windows Access denied; lệnh Administrator và verification trong repository-audit.md. Commit/push dùng safe.directory giới hạn từng tiến trình.
+- [x] Owner `.git`: người dùng chạy owner correction thành công (424 processed/0 failed); Get-Acl trả Sunny và Git thường chạy sạch, không còn dubious ownership.
 - [ ] B10 remote user-run; local hash/B9 không thay remote-content audit.
 - [ ] Source/rights review trước deploy/phân phối.
 - [ ] Worker live/client config và live playback.
 - [ ] Native toolchain/build/installer/máy sạch/signing.
 - [ ] Sheet rights/mapping, mobile research theo roadmap.
+
+## Master roadmap — Phase 00
+
+- [x] Lưu MASTER_ROADMAP nguyên văn; bổ sung ranh giới phase vào AGENTS/README và hệ thống docs hiện có.
+- [x] Clone remote main vào tmp/phase00-clean-clone-20261012, tạo venv mới và npm ci cả hai packages; không sửa lockfiles.
+- [x] Reproduce thiếu private manifest/generated JSON và test giả định tmp có sẵn. Tách manifest integration khỏi status mock, demo dùng tempfile/audio fixture; không sửa pipeline production.
+- [x] Nghiệm thu source-only clone: Python92 PASS/2 SKIP; frontend37, service12, metrics1. Full Python workspace168 PASS/2 SKIP; integrity983/18 không đổi. Clone full Worker typecheck FAIL thiếu private generated JSON, ghi rõ precondition.
+- [ ] Audit/stage/commit/push, xác minh final clone/remote SHA, cập nhật trạng thái và đề xuất Phase 01.

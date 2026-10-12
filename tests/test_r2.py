@@ -193,12 +193,16 @@ class R2Tests(unittest.TestCase):
         self.assertEqual(client.meta.config.retries["total_max_attempts"], 1)
         self.assertEqual(client.meta.config.request_checksum_calculation, "when_required")
 
-    def test_pinned_delivery_rejects_changed_manifest_and_readonly_status(self):
+    @unittest.skipUnless((ROOT / 'delivery/manifest.vi.json').is_file(),
+                         'Private production manifest is not part of a source-only clone')
+    def test_pinned_delivery_rejects_changed_manifest(self):
         manifest = rp.load_delivery(ROOT / "delivery/manifest.vi.json")
         self.assertEqual(len(manifest["assets"]), 983)
         p = self.root / "manifest.json"
         p.write_bytes((ROOT / "delivery/manifest.vi.json").read_bytes() + b"\n")
         with self.assertRaises(UploadError): rp.load_delivery(p)
+
+    def test_readonly_status_preserves_state_and_does_not_create_missing_database(self):
         before = self.dbpath.read_bytes()
         self.assertEqual(rp.read_status(self.dbpath, [self.asset], self.target)["remaining"], 1)
         self.assertEqual(before, self.dbpath.read_bytes())

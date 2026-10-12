@@ -227,9 +227,12 @@ class SheetFileTests(unittest.TestCase):
         self.assertEqual(before,self.state.read_bytes())
 
     def test_synthetic_demo_cli_creates_no_bookvn_files_and_refuses_overwrite(self):
-        with tempfile.TemporaryDirectory(dir=ROOT/'tmp') as folder:
+        with tempfile.TemporaryDirectory() as folder:
             root=Path(folder)
-            command=[sys.executable,'-X','utf8',str(ROOT/'scripts/make-sheet-demo.py'),'--root',str(root)]
+            audio=root/'audio-fixture.json'
+            audio.write_text(json_text(self.audio),encoding='utf-8')
+            command=[sys.executable,'-X','utf8',str(ROOT/'scripts/make-sheet-demo.py'),'--root',str(root),
+                     '--audio-catalog',str(audio)]
             result=subprocess.run(command,capture_output=True,text=True,encoding='utf-8')
             self.assertEqual(result.returncode,0,result.stderr)
             demo=root/'tmp/sheets-demo/sample-01'
