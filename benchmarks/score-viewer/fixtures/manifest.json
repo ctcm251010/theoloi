@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "pages": 4,
+  "width": 760,
+  "height": 1060,
+  "rasterScale": 2,
+  "rasterWidth": 1520,
+  "rasterHeight": 2120,
+  "source": "score.json",
+  "assets": [
+    {
+      "file": "original.pdf",
+      "bytes": 65566,
+      "sha256": "30b15c9fce9082584491285862f7234e08f30242934cb61267da1d923de659d2"
+    },
+    {
+      "file": "page-1.avif",
+      "bytes": 104052,
+      "sha256": "8be717cbbc8bf43a55c009c583c5b0c9dc37249f6e3571ec7528cfa31c812cb1"
+    },
+    {
+      "file": "page-1.png",
+      "bytes": 206685,
+      "sha256": "8a9f4403b8f797ae519f863d40de45204507583e6d72b28497e5961f7fed0315"
+    },
+    {
+      "file": "page-1.vector.json",
+      "bytes": 44678,
+      "sha256": "d15f08a4cd9b5e06885052bc6bb5ea758ab1a017a97cbfb7a2a63889b6e084bb"
+    },
+    {
+      "file": "page-1.webp",
+      "bytes": 43800,
+      "sha256": "2c15971d6ad070dcd7363effb1fdd9b75168437c2ee04b9551a37aa6d2e3926b"
+    },
+    {
+      "file": "page-2.avif",
+      "bytes": 104794,
+      "sha256": "b077592e0022096b87df6164ed7ab4b69b5097a0f7d18f289ebb591a4031fd35"
+    },
+    {
+      "file": "page-2.png",
+      "bytes": 207230,
+      "sha256": "ffc6331dd84c7693042fa1a7f118d9328afd9220eda76dbb267950ca3586ac6f"
+    },
+    {
+      "file": "page-2.vector.json",
+      "bytes": 44689,
+      "sha256": "d0c0da07be96ffcde636efa7970996b4f53b4a90a3447dbceeedb2d657543117"
+    },
+    {
+      "file": "page-2.webp",
+      "bytes": 43552,
+      "sha256": "b2a8f4421d4d7ea69334ab9c47af82c1f5634e9c91afee837330da0efe326b91"
+    },
+    {
+      "file": "page-3.avif",
+      "bytes": 104932,
+      "sha256": "cb7e74556af127d75f5649f958747b8fcecb72243eeba51bdbb7a90810835c22"
+    },
+    {
+      "file": "page-3.png",
+      "bytes": 208435,
+      "sha256": "9461135f8324c4d7f7b39b41d25de9f407589f4b708949ceabe00043999a57f8"
+    },
+    {
+      "file": "page-3.vector.json",
+      "bytes": 44682,
+      "sha256": "69e2e7b22e105b3a5d09a80d059467ebdcc3cfe177aa526acae0bc5bbf69e659"
+    },
+    {
+      "file": "page-3.webp",
+      "bytes": 44140,
+      "sha256": "c3f1d5eda1556cb34e2273faad55e83086f45525032058a3fd2da00fb3a402ac"
+    },
+    {
+      "file": "page-4.avif",
+      "bytes": 105451,
+      "sha256": "ae2281d731ef6c8a51640cba4697b7e95861b0a4c1c8fd1dc5c1edce18b92f09"
+    },
+    {
+      "file": "page-4.png",
+      "bytes": 208298,
+      "sha256": "f22a188ac79348e858d340345502d7cdbae9aed25e90d010c59955988cb3bf00"
+    },
+    {
+      "file": "page-4.vector.json",
+      "bytes": 44671,
+      "sha256": "02f06d49162ac346ae61c0e0e56d1d8b29b5344eeaadab87bc55788f7f2e214d"
+    },
+    {
+      "file": "page-4.webp",
+      "bytes": 43708,
+      "sha256": "38b319031060a9e82b70e4134aafde33924ed564c2477b813234d68600d7f7a0"
+    }
+  ],
+  "quality": [
+    {
+      "page": 1,
+      "codec": "png",
+      "maxPixelError": 0,
+      "meanAbsoluteError": 0.0,
+      "encodeMs": 91.65459999894665
+    },
+    {
+      "page": 1,
+      "codec": "webp",
+      "maxPixelError": 0,
+      "meanAbsoluteError": 0.0,
+      "encodeMs": 6034.826099999918
+    },
+    {
+      "page": 1,
+      "codec": "avif",
+      "maxPixelError": 14,
+      "meanAbsoluteError": 0.08919376861966237,
+      "encodeMs": 1578.3620000001974
+    },
+    {
+      "page": 2,
+      "codec": "png",
+      "maxPixelError": 0,
+      "meanAbsoluteError": 0.0,
+      "encodeMs": 103.91460000028019
+    },
+    {
+      "page": 2,
+      "codec": "webp",
+      "maxPixelError": 0,
+      "meanAbsoluteError": 0.0,
+      "encodeMs": 6055.8610999996745
+    },
+    {
+      "page": 2,
+      "codec": "avif",
+      "maxPixelError": 14,
+      "meanAbsoluteError": 0.08810255296259517,
+      "encodeMs": 1504.012999999759
+    },
+    {
+      "page": 3,
+      "codec": "png",
+      "maxPixelError": 0,
+      "meanAbsoluteError": 0.0,
+      "encodeMs": 91.38890000031097
+    },
+    {
+      "page": 3,
+      "codec": "webp",
+      "maxPixelError": 0,
+      "meanAbsoluteError": 0.0,
+      "encodeMs": 5775.43009999863
+    },
+    {
+      "page": 3,
+      "codec": "avif",
+      "maxPixelError": 15,
+      "meanAbsoluteError": 0.08834450513075141,
+      "encodeMs": 1582.7857999993284
+    },
+    {
+      "page": 4,
+      "codec": "png",
+      "maxPixelError": 0,
+      "meanAbsoluteError": 0.0,
+      "encodeMs": 81.7879999995057
+    },
+    {
+      "page": 4,
+      "codec": "webp",
+      "maxPixelError": 0,
+      "meanAbsoluteError": 0.0,
+      "encodeMs": 5776.774899999509
+    },
+    {
+      "page": 4,
+      "codec": "avif",
+      "maxPixelError": 14,
+      "meanAbsoluteError": 0.08831926514399206,
+      "encodeMs": 1600.3894000004948
+    }
+  ],
+  "font": {
+    "file": "score-font.ttf",
+    "bytes": 22120,
+    "sha256": "084ee8126d21cf2837ef61f39fda3ff8d87f1a979280141e290de5217d9b938e",
+    "license": "../vendor/NOTO-LICENSE"
+  },
+  "environment": {
+    "python": "3.13.15",
+    "Pillow": "12.3.0",
+    "reportlab": "5.0.1",
+    "PyMuPDF": "1.28.2",
+    "fonttools": "4.66.1"
+  },
+  "encoding": {
+    "png": "lossless RGB",
+    "webp": "lossless quality=100 method=6",
+    "avif": "quality=90 4:4:4 speed=6, lossy"
+  }
+}

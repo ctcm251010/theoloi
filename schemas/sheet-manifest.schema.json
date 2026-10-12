@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "sheetCatalogSha256", "audioCatalogSha256", "assets", "availability", "revision"],
+  "properties": {
+    "schemaVersion": {"const": 1}, "sheetCatalogSha256": {"$ref": "#/$defs/hash"},
+    "audioCatalogSha256": {"$ref": "#/$defs/hash"}, "revision": {"$ref": "#/$defs/hash"},
+    "assets": {"type": "object", "additionalProperties": {"$ref": "#/$defs/asset"}},
+    "availability": {"type": "object", "additionalProperties": {"type": "object", "additionalProperties": false, "required": ["status", "assetIds"], "properties": {"status": {"enum": ["no-file", "available"]}, "assetIds": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}}}}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}(?![\\s\\S])"},
+    "file": {
+      "type": "object", "additionalProperties": false,
+      "required": ["localPath", "pageNumber", "bytes", "sha256", "mediaType", "extension", "pageCount", "width", "height", "objectKey"],
+      "properties": {
+        "localPath": {"type": "string", "minLength": 1}, "pageNumber": {"type": "integer", "minimum": 1},
+        "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/hash"},
+        "mediaType": {"enum": ["application/pdf", "image/png", "image/jpeg"]}, "extension": {"enum": [".pdf", ".png", ".jpg"]},
+        "pageCount": {"type": "integer", "minimum": 1}, "width": {"type": ["integer", "null"], "minimum": 1}, "height": {"type": ["integer", "null"], "minimum": 1},
+        "objectKey": {"type": "string", "minLength": 1}
+      }
+    },
+    "sourceFile": {"type": "object", "additionalProperties": false, "required": ["localPath", "pageNumber", "bytes", "sha256", "mediaType", "extension", "pageCount", "width", "height"], "properties": {"localPath": {"type": "string"}, "pageNumber": {"type": "integer", "minimum": 1}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/hash"}, "mediaType": {"enum": ["application/pdf", "image/png", "image/jpeg"]}, "extension": {"enum": [".pdf", ".png", ".jpg"]}, "pageCount": {"type": "integer", "minimum": 1}, "width": {"type": ["integer", "null"], "minimum": 1}, "height": {"type": ["integer", "null"], "minimum": 1}}},
+    "asset": {
+      "type": "object", "additionalProperties": false,
+      "required": ["jobId", "sheetId", "edition", "kind", "inputFingerprint", "files", "sourceFiles", "usageRights", "audioLinks"],
+      "properties": {
+        "jobId": {"type": "string"}, "sheetId": {"type": "string"}, "edition": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}(?![\\s\\S])"},
+        "kind": {"enum": ["original-pdf", "image-derived-pdf", "image-pages"]}, "inputFingerprint": {"$ref": "#/$defs/hash"},
+        "files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/file"}},
+        "sourceFiles": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/sourceFile"}},
+        "usageRights": {"type": "object"}, "audioLinks": {"type": "array", "items": {"type": "object"}}
+      }
+    }
+  }
+}

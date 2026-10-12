@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "accountId": "REPLACE_WITH_ACCOUNT_ID",
+  "accountName": "REPLACE_WITH_ACCOUNT_LABEL",
+  "bucket": "REPLACE_WITH_BUCKET",
+  "endpoint": "https://REPLACE_WITH_ACCOUNT_ID.r2.cloudflarestorage.com",
+  "region": "auto"
+}

@@ -1,0 +1,3532 @@
+{
+  "id": "audiotp:self-authored:morning-study:v1",
+  "title": "Bình minh - Khúc tập đọc nhạc",
+  "locale": "vi",
+  "rights": "Self-authored synthetic melody and lyrics; reusable for AudioTP benchmark. Not BookVN/WATV.",
+  "pages": [
+    {
+      "number": 1,
+      "systems": [
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "minh"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "lên"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "đồi"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "lòng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "ta"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "vui"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đón"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ánh"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "êm"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "trong"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "đầy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "hy"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vọng"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Tiếng"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "chim"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "ngân"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "bên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "dòng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "sông"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "cùng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nhau"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đi"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "nắng"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "ấm"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bàn"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tay"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "giữ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "tình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "thương"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mãi"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bền"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lâu"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Gió"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "mang"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "theo"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "câu"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "chào"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "thân"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "từ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nơi"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xa"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "gửi"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tiếng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "hát"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dàng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "đến"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bạn"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "tôi"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trời"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trong"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Hãy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "yêu"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "thêm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "từng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "và"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nâng"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "niu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "những"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ước"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "muốn"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "yên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dưới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vòm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngời"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lên"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "minh"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "lên"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "đồi"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "lòng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "ta"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "vui"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đón"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ánh"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "êm"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "trong"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "đầy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "hy"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vọng"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Tiếng"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "chim"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "ngân"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "bên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "dòng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "sông"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "cùng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nhau"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đi"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "nắng"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "ấm"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bàn"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tay"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "giữ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "tình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "thương"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mãi"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bền"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lâu"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "systems": [
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Tiếng"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "chim"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "ngân"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "bên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "dòng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "sông"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "cùng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nhau"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đi"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "nắng"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "ấm"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bàn"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tay"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "giữ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "tình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "thương"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mãi"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bền"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lâu"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Gió"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "mang"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "theo"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "câu"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "chào"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "thân"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "từ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nơi"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xa"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "gửi"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tiếng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "hát"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dàng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "đến"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bạn"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "tôi"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trời"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trong"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Hãy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "yêu"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "thêm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "từng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "và"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nâng"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "niu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "những"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ước"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "muốn"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "yên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dưới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vòm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngời"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lên"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "minh"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "lên"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "đồi"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "lòng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "ta"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "vui"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đón"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ánh"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "êm"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "trong"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "đầy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "hy"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vọng"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Tiếng"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "chim"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "ngân"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "bên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "dòng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "sông"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "cùng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nhau"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đi"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "nắng"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "ấm"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bàn"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tay"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "giữ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "tình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "thương"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mãi"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bền"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lâu"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Gió"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "mang"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "theo"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "câu"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "chào"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "thân"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "từ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nơi"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xa"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "gửi"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tiếng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "hát"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dàng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "đến"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bạn"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "tôi"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trời"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "systems": [
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Gió"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "mang"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "theo"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "câu"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "chào"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "thân"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "từ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nơi"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xa"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "gửi"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tiếng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "hát"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dàng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "đến"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bạn"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "tôi"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trời"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trong"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Hãy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "yêu"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "thêm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "từng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "và"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nâng"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "niu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "những"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ước"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "muốn"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "yên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dưới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vòm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngời"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lên"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "minh"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "lên"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "đồi"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "lòng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "ta"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "vui"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đón"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ánh"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "êm"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "trong"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "đầy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "hy"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vọng"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Tiếng"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "chim"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "ngân"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "bên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "dòng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "sông"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "cùng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nhau"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đi"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "nắng"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "ấm"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bàn"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tay"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "giữ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "tình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "thương"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mãi"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bền"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lâu"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Gió"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "mang"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "theo"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "câu"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "chào"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "thân"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "từ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nơi"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xa"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "gửi"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tiếng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "hát"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dàng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "đến"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bạn"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "tôi"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trời"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trong"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Hãy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "yêu"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "thêm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "từng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "và"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nâng"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "niu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "những"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ước"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "muốn"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "yên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dưới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vòm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngời"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lên"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "systems": [
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Hãy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "yêu"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "thêm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "từng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "và"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nâng"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "niu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "những"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ước"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "muốn"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "yên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dưới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vòm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngời"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lên"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "minh"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "lên"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "đồi"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "lòng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "ta"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "vui"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đón"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ánh"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "êm"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "trong"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "đầy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "hy"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vọng"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Tiếng"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "chim"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "ngân"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "bên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "dòng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "sông"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "cùng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nhau"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đi"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "nắng"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "ấm"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bàn"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tay"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "giữ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "tình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "thương"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mãi"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bền"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lâu"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Gió"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "mang"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "theo"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "câu"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "chào"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "thân"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "từ"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nơi"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xa"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "gửi"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "tiếng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "hát"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dàng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "đến"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "bạn"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "tôi"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "giữa"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trời"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "trong"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Hãy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "yêu"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "thêm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "từng"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "và"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "nâng"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "niu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "những"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ước"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "muốn"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "yên"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "dưới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vòm"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngời"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "lên"
+            }
+          ]
+        },
+        {
+          "meter": "4/4",
+          "clef": "treble",
+          "notes": [
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "Bình"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "minh"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 1,
+              "lyric": "lên"
+            },
+            {
+              "pitch": "A4",
+              "diatonicStep": 5,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "qua"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 1,
+              "lyric": "đồi"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "xanh"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "lòng"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 0.5,
+              "bar": 2,
+              "lyric": "ta"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "vui"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 2,
+              "lyric": "đón"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "ánh"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "sáng"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 0.5,
+              "bar": 3,
+              "lyric": "dịu"
+            },
+            {
+              "pitch": "G4",
+              "diatonicStep": 4,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "êm"
+            },
+            {
+              "pitch": "F4",
+              "diatonicStep": 3,
+              "beats": 1,
+              "bar": 3,
+              "lyric": "trong"
+            },
+            {
+              "pitch": "E4",
+              "diatonicStep": 2,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "ngày"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "mới"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 0.5,
+              "bar": 4,
+              "lyric": "đầy"
+            },
+            {
+              "pitch": "D4",
+              "diatonicStep": 1,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "hy"
+            },
+            {
+              "pitch": "C4",
+              "diatonicStep": 0,
+              "beats": 1,
+              "bar": 4,
+              "lyric": "vọng"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

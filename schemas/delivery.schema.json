@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WATV Vietnamese internal delivery manifest v1",
+  "description": "Verified artifacts only. Cross-field mapping, B8 counts, revision and actual local file integrity require scripts/validate-delivery.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "provider", "locale", "collectionId", "catalogSha256", "revision", "generatedAt", "outputProfile", "assets"],
+  "properties": {
+    "schemaVersion": {"type": "integer", "const": 1},
+    "provider": {"const": "watv"},
+    "locale": {"const": "vi"},
+    "collectionId": {"const": "newsong"},
+    "catalogSha256": {"$ref": "#/$defs/hash"},
+    "revision": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"},
+    "generatedAt": {"type": "string", "format": "date-time"},
+    "outputProfile": {
+      "const": {"version": 1, "container": "m4a/ipod", "codec": "source-aac", "strategy": "copy", "faststart": true, "sampleRate": "source", "channels": "source", "bitrate": "source"}
+    },
+    "assets": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^watv:vi:(guide|instrumental|silent):[1-9][0-9]*(?![\\s\\S])": {"$ref": "#/$defs/asset"}
+      }
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}(?![\\s\\S])"},
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetId", "logicalId", "kind", "audioId", "variant", "localPath", "objectKey", "bytes", "sha256", "durationSeconds", "codec", "sampleRate", "channels", "container"],
+      "properties": {
+        "assetId": {"type": "string", "pattern": "^watv:vi:(guide|instrumental|silent):[1-9][0-9]*(?![\\s\\S])"},
+        "logicalId": {"type": "string"},
+        "kind": {"enum": ["song", "meditation"]},
+        "audioId": {"type": "string", "pattern": "^[1-9][0-9]*(?![\\s\\S])"},
+        "variant": {"enum": ["guide", "instrumental", "silent"]},
+        "section": {"enum": ["main", "appendix"]},
+        "number": {"type": "integer", "minimum": 1},
+        "localPath": {"type": "string"},
+        "objectKey": {"type": "string"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "durationSeconds": {"type": "number", "exclusiveMinimum": 0},
+        "codec": {"const": "aac"},
+        "sampleRate": {"type": "integer", "minimum": 1},
+        "channels": {"type": "integer", "minimum": 1},
+        "container": {"const": "m4a"}
+      },
+      "oneOf": [
+        {
+          "required": ["section", "number"],
+          "properties": {
+            "kind": {"const": "song"},
+            "variant": {"enum": ["guide", "instrumental"]},
+            "logicalId": {"pattern": "^watv:vi:newsong:(main|appendix):[1-9][0-9]*(?![\\s\\S])"},
+            "assetId": {"pattern": "^watv:vi:(guide|instrumental):[1-9][0-9]*(?![\\s\\S])"},
+            "localPath": {"pattern": "^media/audio/v1/watv/vi/newsong/(main|appendix)/[0-9]{4,}/(guide|instrumental)\\.m4a(?![\\s\\S])"},
+            "objectKey": {"pattern": "^audio/v1/watv/vi/newsong/(main|appendix)/[0-9]{4,}/(guide|instrumental)/[1-9][0-9]*/[0-9a-f]{64}\\.m4a(?![\\s\\S])"}
+          }
+        },
+        {
+          "not": {"anyOf": [{"required": ["section"]}, {"required": ["number"]}]},
+          "properties": {
+            "kind": {"const": "meditation"},
+            "variant": {"const": "silent"},
+            "logicalId": {"pattern": "^watv:vi:silent:[1-9][0-9]*(?![\\s\\S])"},
+            "assetId": {"pattern": "^watv:vi:silent:[1-9][0-9]*(?![\\s\\S])"},
+            "localPath": {"pattern": "^media/audio/v1/watv/vi/meditations/[1-9][0-9]*\\.m4a(?![\\s\\S])"},
+            "objectKey": {"pattern": "^audio/v1/watv/vi/meditations/[1-9][0-9]*/[0-9a-f]{64}\\.m4a(?![\\s\\S])"}
+          }
+        }
+      ]
+    }
+  }
+}

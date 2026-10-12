@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "audiotp-media-api",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-10-12",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "secrets": {"required": ["SIGNING_KEY", "GROUP_CODE_SHA256"]},
+  "r2_buckets": [{"binding": "MEDIA", "bucket_name": "audiotp-media"}],
+  "ratelimits": [
+    {"name": "LOGIN_LIMITER", "namespace_id": "24101201", "simple": {"limit": 10, "period": 60}},
+    {"name": "REQUEST_LIMITER", "namespace_id": "24101202", "simple": {"limit": 180, "period": 60}}
+  ],
+  "vars": {
+    "SERVING_ENABLED": "false",
+    "AUTH_EPOCH": "1",
+    "ALLOWED_ORIGINS": "http://tauri.localhost,https://tauri.localhost,tauri://localhost",
+    "SESSION_SECONDS": "43200"
+  },
+  "observability": {"enabled": false}
+}

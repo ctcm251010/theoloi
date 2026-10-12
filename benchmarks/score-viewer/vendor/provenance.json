@@ -1,0 +1,35 @@
+{
+  "pdfjsVersion": "6.4.299",
+  "assets": [
+    {
+      "file": "pdf.mjs",
+      "url": "https://unpkg.com/pdfjs-dist@6.4.299/build/pdf.mjs",
+      "bytes": 860818,
+      "sha256": "dd13af821c9c3e1778653340d6539a1ba07bc56cba40073a4c727864cf0c232a"
+    },
+    {
+      "file": "pdf.worker.mjs",
+      "url": "https://unpkg.com/pdfjs-dist@6.4.299/build/pdf.worker.mjs",
+      "bytes": 2229713,
+      "sha256": "07ceb740d746e5d9012fcf9f27d5c7dea09f7d2f5e74f5c8109e5787551a2333"
+    },
+    {
+      "file": "PDFJS-LICENSE",
+      "url": "https://unpkg.com/pdfjs-dist@6.4.299/LICENSE",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+    },
+    {
+      "file": "NotoSans-Regular.ttf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-fonts/main/hinted/ttf/NotoSans/NotoSans-Regular.ttf",
+      "bytes": 569208,
+      "sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5"
+    },
+    {
+      "file": "NOTO-LICENSE",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-fonts/main/LICENSE",
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    }
+  ]
+}

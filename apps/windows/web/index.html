@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>AudioTP</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-library" viewBox="0 0 24 24"><path d="M4 4v16M8 4v16M13 4v16M17 4l4 15"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 5.6a5.5 5.5 0 0 0-8 .2L12 7l-.8-1.2a5.5 5.5 0 0 0-8-.2c-2 2.1-1.8 5.6.4 7.8L12 21l8.4-7.6c2.2-2.2 2.4-5.7.4-7.8Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M5 5v14m14-14L8 12l11 7Z"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M19 5v14M5 5l11 7-11 7Z"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 4 6 8H3v8h3l5 4Zm4 4a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-muted" viewBox="0 0 24 24"><path d="M11 4 6 8H3v8h3l5 4Zm5 5 6 6m0-6-6 6"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m16 2 4 4-4 4M4 11V8a2 2 0 0 1 2-2h14M8 22l-4-4 4-4m12-1v3a2 2 0 0 1-2 2H4"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 5h3c4 0 8 14 12 14h3m-4-4 4 4-4 4M3 19h3c4 0 8-14 12-14h3m-4-4 4 4-4 4"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 17V5l11-2v12M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  </defs></svg>
+  <a class="skip-link" href="#main">Đến nội dung chính</a>
+  <div class="app-shell">
+    <header class="app-header">
+      <a class="brand" href="./index.html" aria-label="AudioTP trang chủ"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg><span>AudioTP</span></a>
+      <button id="settings-toggle" class="icon-button" aria-label="Cài đặt" aria-haspopup="dialog" aria-controls="settings-dialog"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg></button>
+    </header>
+    <nav class="nav-list" aria-label="Điều hướng chính">
+      <button class="nav-item active" data-view="all" aria-current="page">Thư viện</button>
+      <button class="nav-item" data-view="favourites">Yêu thích</button>
+      <button class="nav-item" data-view="history">Gần đây</button>
+    </nav>
+    <main id="main" tabindex="-1">
+      <h1 id="page-title" class="sr-only">Thư viện</h1>
+      <div class="search-toolbar">
+        <label class="search-box"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="Tìm số hoặc tên bài ca..." aria-label="Tìm số hoặc tên bài ca" autocomplete="off"></label>
+        <button id="filters-toggle" class="filter-button" aria-haspopup="dialog" aria-controls="filters-dialog" aria-label="Bộ lọc"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg><span>Bộ lọc</span></button>
+      </div>
+      <div id="demo-notice" class="connection-notice" hidden><p>Chưa kết nối thư viện.</p><button id="connection-open" class="text-button">Kết nối</button></div>
+      <section class="library-section" aria-label="Danh mục âm thanh">
+        <div class="tabs" role="tablist" aria-label="Loại âm nhạc">
+          <button id="tab-guide" role="tab" aria-selected="true" aria-controls="catalog-panel" data-mode="guide" tabindex="0">Hướng dẫn</button>
+          <button id="tab-instrumental" role="tab" aria-selected="false" aria-controls="catalog-panel" data-mode="instrumental" tabindex="-1">Nhạc đệm</button>
+          <button id="tab-silent" role="tab" aria-selected="false" aria-controls="catalog-panel" data-mode="silent" tabindex="-1">Ngẫm nghĩ</button>
+        </div>
+        <section id="quick-section" class="quick-section" aria-labelledby="quick-heading">
+          <div class="quick-heading"><h2 id="quick-heading">Nghe nhanh</h2><button id="quick-toggle" class="text-button" aria-label="Thu gọn Nghe nhanh" aria-expanded="true" aria-controls="quick-cards">Thu gọn</button></div>
+          <div id="quick-cards" class="quick-cards"></div>
+        </section>
+        <div id="catalog-panel" role="tabpanel" aria-labelledby="tab-guide">
+          <div class="active-filters"><button id="clear-filters" class="text-button" hidden>Xóa bộ lọc</button></div>
+          <div id="catalog-state" class="catalog-state" role="status"><span class="loading-ring" aria-hidden="true"></span><h2>Đang mở thư viện</h2></div>
+          <div id="track-table" class="track-table" role="table" aria-label="Danh sách bài" hidden>
+            <div class="table-head" role="row"><span role="columnheader">Bài</span><span role="columnheader">Tên bài ca</span><span role="columnheader" class="duration-head">Thời lượng</span><span role="columnheader" class="sr-only">Yêu thích</span></div>
+            <div id="track-list" role="rowgroup"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer class="player" aria-label="Trình phát âm thanh">
+    <div class="now-playing"><div class="now-info"><strong id="now-title">Chọn một bài để bắt đầu</strong><span id="now-subtitle"></span></div></div>
+    <div class="playback">
+      <div class="transport"><button id="previous" class="icon-button" aria-label="Bài trước" disabled><svg class="icon" aria-hidden="true"><use href="#i-prev"/></svg></button><button id="play-toggle" class="main-play" aria-label="Phát nhạc" disabled><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></button><button id="next" class="icon-button" aria-label="Bài tiếp theo" disabled><svg class="icon" aria-hidden="true"><use href="#i-next"/></svg></button></div>
+      <div class="timeline"><span id="elapsed">0:00</span><input type="range" id="seek" min="0" max="0" step="0.1" value="0" aria-label="Vị trí phát" disabled><span id="duration">0:00</span></div>
+    </div>
+    <div class="player-actions"><div class="volume"><button id="mute" class="icon-button" aria-label="Tắt tiếng" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-volume"/></svg></button><input id="volume" type="range" min="0" max="1" step="0.01" value="0.7" aria-label="Âm lượng"></div><button id="playback-toggle" class="icon-button" aria-label="Tùy chọn phát" aria-haspopup="dialog" aria-controls="playback-dialog"><svg class="icon" aria-hidden="true"><use href="#i-more"/></svg></button></div>
+    <div class="player-feedback"><span id="player-status" role="status" aria-live="polite"></span><button id="retry-play" class="text-button" hidden>Thử phát lại</button></div>
+  </footer>
+  <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
+    <div class="dialog-heading"><h2 id="settings-title">Cài đặt</h2><button class="icon-button" data-close-dialog="settings-dialog" aria-label="Đóng cài đặt" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <div class="setting-row"><span>Giao diện</span><button id="theme-toggle" class="text-button"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg><span>Giao diện sáng</span></button></div>
+    <div class="setting-row"><label for="demo-mode">Chế độ nghe</label><select id="demo-mode"><option value="listen" disabled>Nghe nhạc</option><option value="catalog" selected>Chỉ xem danh mục</option></select></div>
+    <p id="connection-status" class="setting-status" role="status">Chưa kết nối thư viện.</p>
+    <details id="connection-settings"><summary>Kết nối thư viện</summary><form id="connection-form"><label>Địa chỉ thư viện<input id="api-base" type="url" placeholder="https://…" autocomplete="url" required></label><label>Mã truy cập<input id="access-code" type="password" autocomplete="off" required minlength="24" maxlength="256"></label><div class="dialog-actions"><button id="connect-button" class="primary-button" type="submit">Kết nối</button><button id="disconnect" class="text-button" type="button" hidden>Ngắt kết nối</button></div></form></details>
+    <p id="build-version" class="version">AudioTP 0.2.0</p>
+  </dialog>
+  <dialog id="filters-dialog" aria-labelledby="filters-title">
+    <div class="dialog-heading"><h2 id="filters-title">Bộ lọc</h2><button class="icon-button" data-close-dialog="filters-dialog" aria-label="Đóng bộ lọc" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <label class="field">Chủ đề<select id="category"><option value="">Tất cả chủ đề</option></select></label>
+    <label class="field">Phần danh mục<select id="section"><option value="">Tất cả các phần</option><option value="main">Phần chính</option><option value="appendix">Phụ lục</option></select></label>
+    <div class="dialog-actions"><button id="reset-filters" class="text-button">Đặt lại</button><button class="primary-button" data-close-dialog="filters-dialog">Xong</button></div>
+  </dialog>
+  <dialog id="playback-dialog" aria-labelledby="playback-title">
+    <div class="dialog-heading"><h2 id="playback-title">Tùy chọn phát</h2><button class="icon-button" data-close-dialog="playback-dialog" aria-label="Đóng tùy chọn phát" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <button id="now-favourite" class="option-button" aria-label="Thêm bài đang nghe vào yêu thích" aria-pressed="false" disabled><svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>Yêu thích bài đang nghe</button>
+    <button id="shuffle" class="option-button" aria-label="Phát ngẫu nhiên" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg>Phát ngẫu nhiên</button>
+    <button id="repeat" class="option-button" aria-label="Lặp lại một bài" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-repeat"/></svg>Lặp lại một bài</button>
+    <button id="continuous" class="option-button" aria-label="Phát liên tục" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-next"/></svg>Phát liên tục</button>
+  </dialog>
+  <audio id="audio" preload="metadata" crossorigin="anonymous"></audio>
+  <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>

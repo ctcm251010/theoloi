@@ -1,0 +1,12 @@
+# Deterministic source text on Windows; production data is not tracked.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.pdf binary
+*.webp binary
+*.avif binary
+*.ttf binary
+*.wav binary

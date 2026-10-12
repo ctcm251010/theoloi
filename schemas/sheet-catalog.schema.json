@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "collectionId", "locale", "sourceSnapshotSha256", "audioCatalogSha256", "observedDate", "surveyScope", "sheets"],
+  "properties": {
+    "schemaVersion": {"const": 1}, "collectionId": {"type": "string", "minLength": 1}, "locale": {"const": "vi"},
+    "sourceSnapshotSha256": {"$ref": "#/$defs/hash"}, "audioCatalogSha256": {"$ref": "#/$defs/hash"},
+    "observedDate": {"type": "string", "format": "date"}, "surveyScope": {"type": "string", "minLength": 1},
+    "sheets": {"type": "object", "additionalProperties": {"$ref": "#/$defs/sheet"}}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}(?![\\s\\S])"},
+    "text": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "nullableText": {"type": ["string", "null"]},
+    "url": {"type": ["string", "null"], "format": "uri", "pattern": "^https://[^\\s@?#]+(?![\\s\\S])"},
+    "permissions": {"type": "object", "additionalProperties": false, "required": ["store", "convert", "serve", "upload"], "properties": {"store": {"type": "boolean"}, "convert": {"type": "boolean"}, "serve": {"type": "boolean"}, "upload": {"type": "boolean"}}},
+    "rights": {"type": "object", "additionalProperties": false, "required": ["status", "evidence", "evidenceUrl", "permissions"], "properties": {"status": {"enum": ["unknown", "restricted", "confirmed"]}, "evidence": {"$ref": "#/$defs/nullableText"}, "evidenceUrl": {"$ref": "#/$defs/url"}, "permissions": {"$ref": "#/$defs/permissions"}}},
+    "page": {"type": "object", "additionalProperties": false, "required": ["pageNumber", "sourceUrl", "mediaType"], "properties": {"pageNumber": {"type": "integer", "minimum": 1}, "sourceUrl": {"$ref": "#/$defs/url"}, "mediaType": {"enum": ["image/png", "image/jpeg"]}}},
+    "content": {"type": "object", "additionalProperties": false, "required": ["inspectionStatus", "format", "renderer", "pages", "pdfStatus"], "properties": {"inspectionStatus": {"enum": ["observed", "not-observed"]}, "format": {"enum": ["unknown", "image-pages", "pdf"]}, "renderer": {"$ref": "#/$defs/nullableText"}, "pages": {"type": "array", "items": {"$ref": "#/$defs/page"}}, "pdfStatus": {"enum": ["not-observed", "not-found-in-observed-dom", "found"]}}},
+    "link": {"type": "object", "additionalProperties": false, "required": ["songId", "confidence", "evidence", "verificationStatus", "verificationEvidence"], "properties": {"songId": {"$ref": "#/$defs/text"}, "confidence": {"type": "number", "minimum": 0, "maximum": 1}, "evidence": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}}, "verificationStatus": {"enum": ["needs-review", "verified", "rejected"]}, "verificationEvidence": {"$ref": "#/$defs/nullableText"}}},
+    "sheet": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "provider", "sourcePostId", "sourcePageUrl", "rawTitle", "title", "normalizedTitle", "sourceGroup", "sourceNumber", "displayNumber", "locale", "edition", "usageRights", "observedContent", "originalPdf", "audioLinks", "matchingStatus", "reviewIssues"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*:vi:[A-Za-z0-9:._-]+(?![\\s\\S])"},
+        "provider": {"type": "string", "pattern": "^[a-z][a-z0-9-]*(?![\\s\\S])"},
+        "sourcePostId": {"type": ["integer", "null"], "minimum": 1}, "sourcePageUrl": {"$ref": "#/$defs/url"},
+        "rawTitle": {"$ref": "#/$defs/text"}, "title": {"$ref": "#/$defs/text"}, "normalizedTitle": {"$ref": "#/$defs/text"},
+        "sourceGroup": {"enum": ["main", "appx", "numbered-appendix", "local"]},
+        "sourceNumber": {"type": "integer", "minimum": 1}, "displayNumber": {"type": ["integer", "null"], "minimum": 1},
+        "locale": {"const": "vi"}, "edition": {"$ref": "#/$defs/nullableText"}, "usageRights": {"$ref": "#/$defs/rights"},
+        "observedContent": {"$ref": "#/$defs/content"}, "originalPdf": {"$ref": "#/$defs/url"},
+        "audioLinks": {"type": "array", "items": {"$ref": "#/$defs/link"}},
+        "matchingStatus": {"enum": ["candidate", "unmatched", "conflict", "ambiguous"]},
+        "reviewIssues": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/text"}}
+      }
+    }
+  }
+}
