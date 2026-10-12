@@ -1,6 +1,6 @@
 # THEOLOI — Phase 00: Repository Foundation
 
-Status: **READY FOR REVIEW**. Ngày 12/10/2026, Asia/Bangkok. Tests và integrity hoàn tất; final review/publication đang được xác minh.
+Status: **DONE**. Ngày 12/10/2026, Asia/Bangkok. Nghiệm thu source repository/clean-clone trong phạm vi Phase 00; không phải nghiệm thu Windows EXE hoặc live Cloudflare.
 
 ## Mục tiêu / phạm vi
 
@@ -14,8 +14,8 @@ Xác minh source monorepo từ GitHub có thể phát triển trong clone sạch
 - [x] Cài dependency vào clone riêng theo SETUP và package-lock, kiểm tra không thay lockfiles/source.
 - [x] Chạy frontend, Worker service/source-only, Python synthetic/offline và benchmark khả thi.
 - [x] Kiểm tra path portability, thiếu private inputs và giới hạn native/live.
-- [ ] Self-review docs/acceptance, audit staged/history, commit/push và xác minh remote SHA.
-- [ ] Báo cáo và đề xuất Phase 01; dừng chờ người dùng.
+- [x] Self-review docs/acceptance và review độc lập không có finding; audit staged/history, commit/push source và xác minh remote SHA.
+- [x] Ghi báo cáo và đề xuất Phase 01; dừng chờ người dùng, không có Phase 01 task đang chạy.
 
 ## Dependency / rủi ro / acceptance
 
@@ -23,8 +23,8 @@ Dependency: Git remote được phép truy cập; Python/Node/npm; các registry
 
 | Tiêu chí | Bằng chứng / trạng thái |
 |---|---|
-| GitHub/main hoạt động, giữ history | Clone baseline thành công; remote SHA đã khớp ở task trước, kiểm tra lại cuối phase |
-| Không commit secret/media/private inputs | Audit exact tracked index + Gitleaks trước push |
+| GitHub/main hoạt động, giữ history | Clone baseline thành công; source commit11543ed8071d150b2d0a01871dd95906ba13b6ac trên local/remote bằng nhau, clone fast-forward tới đúng SHA |
+| Không commit secret/media/private inputs | Exact index185 files/8,506,287 bytes,0 forbidden paths/0 content findings; Gitleaks staged44.24KB và4-commit history5.16MB:0 leaks |
 | Setup đủ rõ / dependencies tái lập | Venv Python3.14.4 mới, pip install hai requirements PASS, pip check PASS; npm ci Windows2/Worker39 packages PASS, tracked lockfiles không đổi; postinstall warnings riêng bên dưới |
 | Clean clone chạy test phù hợp | Frontend37 PASS; Worker service12 PASS; metrics1 test-file PASS; Python94 tổng:92 PASS/2 SKIP/0 lỗi. Lệnh thật trong SETUP |
 | Không regression do refactor | 0 file moved; full Python workspace170 tổng:168 PASS/2 SKIP/0 lỗi,105.196s; manifest pin test chạy thật trong workspace, không skip |
@@ -44,11 +44,13 @@ Npm ci Worker cảnh báo postinstall esbuild/workerd bị chặn bởi allowScr
 
 Fresh integrity:983/983 media size/SHA đúng manifest,18/18 original metadata/state hashes không đổi. Không thêm dữ liệu private vào clone; dependencies chỉ trong clone .venv/node_modules ignored.
 
-Local evidence (ignored): `logs/repository-audit/phase00-*.txt`, `phase00-integrity.json`; clean clone nằm `tmp/phase00-clean-clone-20261012`. Hai test fixes được chép vào clone để nghiệm thu trước commit; sau publish phải fast-forward clone tới commit đó và xác nhận tracked tree sạch. Đây không phải kiểm thử native app/live R2.
+Local evidence (ignored): `logs/repository-audit/phase00-*.txt`, `phase00-integrity.json`; clean clone nằm `tmp/phase00-clean-clone-20261012`. Hai test fixes được chép vào clone để nghiệm thu trước commit. Sau publish, overlay tạm được giữ trong clone stash (không xóa), clone fast-forward tới11543ed, tracked tree sạch; Python suite từ commit đã publish chạy lại94 tests/92 PASS/2 SKIP/0 lỗi trong46.176s. Đây không phải kiểm thử native app/live R2.
 
 ## Git / review
 
-Baseline remote:748d180404c44a2cd35b9c40fb44e81e7bac09cc. Chỉ docs/workflow và hai test files thay đổi. Final review, exact-index audit/Gitleaks, push và clean-clone fast-forward đang chờ hoàn tất; SHA cuối được bàn giao sau verify. Không force/reset, không thay R2 hoặc credential.
+Baseline remote:748d180404c44a2cd35b9c40fb44e81e7bac09cc. Chỉ docs/workflow và hai test files thay đổi. Review độc lập không có finding; diff-check các file thay đổi PASS. [Source commit11543ed](https://github.com/ctcm251010/theoloi/commit/11543ed8071d150b2d0a01871dd95906ba13b6ac) đã push và verify bằng ls-remote + clone thực tế. Commit docs kết thúc phase theo sau, SHA cuối được bàn giao sau verify; không cần lặp tests khi chỉ cập nhật ledger kết quả. Không force/reset, không thay R2 hoặc credential.
+
+User acceptance phase mới: chưa yêu cầu hoặc nhận nghiệm thu mới từ người dùng; DONE ở đây là acceptance kỹ thuật Phase 00 đã nêu. Native Windows runtime/live Cloudflare: NOT RUN. Full Worker typecheck clone: FAIL/precondition thiếu private inputs, giữ nguyên giới hạn công khai.
 
 ## Đề xuất sau nghiệm thu
 

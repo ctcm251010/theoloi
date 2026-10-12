@@ -4,7 +4,7 @@
 
 | Phase | Mục tiêu | Trạng thái |
 |---|---|---|
-| 00 — Repository Foundation | Source audit, GitHub, setup và clean-clone validation | READY FOR REVIEW |
+| 00 — Repository Foundation | Source audit, GitHub, setup và clean-clone validation | DONE |
 | 01 — Cloudflare R2 & Online Audio | Audit B10, API private/Range/auth, client online, kế hoạch deploy/rollback và live E2E | NOT STARTED |
 | 02 — Windows Application & Installer | Tauri 2/WebView2, native build/EXE/NSIS, máy đích không cần workspace/Python/Node | NOT STARTED |
 | 03 — Closed Beta & Automatic Updates | Beta/máy khác, release artifacts/hash, updater có ký và recovery | NOT STARTED |
