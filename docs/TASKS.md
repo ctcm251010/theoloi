@@ -9,7 +9,7 @@
 - [x] Python 167 PASS/2 SKIP, frontend 37 PASS, Worker 15 PASS + dry-run/typecheck, metrics 1 PASS, validators và full 983 hashes PASS, 18 input/state hashes không đổi.
 - [ ] Browser UI smoke mới — BLOCKED, Browser Use inventory rỗng; HTTP local playback PASS.
 - [ ] Native build — BLOCKED preflight: thiếu cargo/rustc/MSVC/Windows SDK; không coi là PASS.
-- [ ] Commit/push và xác minh remote SHA.
+- [x] Commit/push source main thành công: `4dd8065fb6322a0c828fe9e3969db414b0a53d35`; `ls-remote` khớp local HEAD. Commit docs bàn giao sau đó không thay runtime/data.
 
 ## Follow-up
 

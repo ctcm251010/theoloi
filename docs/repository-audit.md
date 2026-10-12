@@ -106,7 +106,9 @@ SHA là integrity evidence, không phải quyền phân phối. Toàn bộ per-f
 
 ## Git / giới hạn vận hành
 
-Branch `main`, remote `https://github.com/ctcm251010/theoloi.git`. Commit/push chỉ sau audit cuối; trạng thái cập nhật ở TASKS và báo cáo bàn giao, không suy từ fetch thành công. Verify bằng `git ls-remote origin refs/heads/main` so với local HEAD.
+Branch `main`, remote `https://github.com/ctcm251010/theoloi.git`. **Push source thành công**: commit `4dd8065fb6322a0c828fe9e3969db414b0a53d35` (`chore(repo): organize Theoloi monorepo and initialize project`), 179 files / 8,460,135 staged bytes. `git ls-remote origin refs/heads/main` đã trả đúng SHA bằng local HEAD, không suy từ fetch. Không force-push. Follow-up documentation commit ghi nhận kết quả sau source publication; SHA cuối cùng trong báo cáo bàn giao.
+
+[Repository](https://github.com/ctcm251010/theoloi) · [Source commit đã verify](https://github.com/ctcm251010/theoloi/commit/4dd8065fb6322a0c828fe9e3969db414b0a53d35).
 
 Git init trong sandbox tạo owner .git khác chủ workspace; scoped Git override chỉ tin đúng đường dẫn cho tiến trình hiện tại, không global safe.directory. Auto-review đã từ chối đổi owner vì chưa có explicit approval; không đổi ACL/owner. Nếu user chưa cho phép sửa owner, lệnh Git có thể cần `git -c safe.directory=D:/Workspace/AudioTP ...` trên checkout này; clone mới bình thường không bị vấn đề đó. Đây là trở ngại tool, không phải secret hoặc hỏng history.
 
