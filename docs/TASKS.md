@@ -1,5 +1,10 @@
 # THEOLOI tasks
 
+## Tải riêng audio cầu nguyện — DONE local /13-10-2026
+
+- [x] Theo URLour_wish người dùng cung cấp: tải đúng một HLS/7 segment, AAC stream-copy sang `media/prayer/watv/vi/our-wish/our-wish.m4a`;69.427664s,1123614bytes, full decode PASS và SHA-256 lưu trong verification.json cạnh file. Không sửa whitelist pipeline production hoặc gọi fullbatch.
+- [x] Catalog/manifest và hai SQLite gốc hash giữ nguyên; không đăng ký assetId, sửa Nghe nhanh, upload R2 hoặc build EXE. Audio/verification/evidence ignored không đưa vào Git. Bước tiếp theo là nghe xác nhận nội dung và chốt phạm vi tích hợp riêng; không tự bắt đầu.
+
 ## Task phát hành1.0.0 — DONE
 
 - [x] User duyệt review/merge/GitHub Release; repository private giữ nguyên, không Cloudflare mutation.
