@@ -1,5 +1,15 @@
 # THEOLOI tasks
 
+## AudioTP1.0.1 — IN PROGRESS
+
+- [x] Người dùng xác nhận đúng bản cầu nguyện và quyền phục vụ nhóm AudioTP.
+- [x] Registry/manifest/state upload riêng, dry-run/retry/hash/Content-Type test; một object prayer uploaded/verified, không tải lại nguồn.
+- [x] Worker supplementary/update API và frontend Nghe nhanh/player chung; 67 frontend,35 Worker/typecheck PASS; Python223 PASS/4 SKIP.
+- [x] Native updater ký file và ràng buộc phiên bản; fixture tự tạo kiểm tra signature/tamper/version replay/header. Đang kiểm chứng lại Rust/release build.
+- [ ] Build EXE/NSIS1.0.1 ký updater, artifact/hash/secret scan và review cuối.
+- [ ] Publish installer private R2, deploy API giữ auth epoch3/serving, smoke live có giới hạn.
+- [ ] Git/release1.0.1 và bàn giao; nghiệm thu native cập nhật/cài đặt trên máy khác ghi riêng.
+
 ## Tải riêng audio cầu nguyện — DONE local /13-10-2026
 
 - [x] Theo URLour_wish người dùng cung cấp: tải đúng một HLS/7 segment, AAC stream-copy sang `media/prayer/watv/vi/our-wish/our-wish.m4a`;69.427664s,1123614bytes, full decode PASS và SHA-256 lưu trong verification.json cạnh file. Không sửa whitelist pipeline production hoặc gọi fullbatch.

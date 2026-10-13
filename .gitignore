@@ -93,6 +93,8 @@ coverage/
 /delivery/sheet-manifest.vi.json
 /delivery/sheet-mapping.vi.json
 /delivery/sheet-verified-mapping.vi.json
+/delivery/prayer-manifest.vi.json
+/delivery/windows-update.json
 /config/r2.json
 # Historical operational reports contain local account identifiers; do not publish.
 /docs/r2-setup-report.md

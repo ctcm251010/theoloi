@@ -1,6 +1,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod remember;
+mod update_policy;
+mod updater;
+#[cfg(test)]
+mod updater_tests;
 use std::sync::Mutex;
 use tauri::Manager;
 
@@ -99,12 +103,22 @@ fn main() {
     // Bundled frontend only. No general shell/fs/network plugin or R2 credential.
     tauri::Builder::default()
         .manage(Mutex::new(()))
+        .manage(updater::PendingUpdates::default())
         .invoke_handler(tauri::generate_handler![
             save_access_code,
             read_access_code,
-            forget_access_code
+            forget_access_code,
+            updater::check_update,
+            updater::install_update,
+            updater::clear_update
         ])
         .setup(|app| {
+            // The updater requires a public key. LOCAL/TEST builds intentionally have no plugin
+            // configuration, so leave it unregistered rather than failing application startup.
+            if updater::configured(&app.config().plugins) {
+                app.handle()
+                    .plugin(tauri_plugin_updater::Builder::new().build())?;
+            }
             let config = app
                 .config()
                 .app

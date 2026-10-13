@@ -50,6 +50,7 @@
         <button id="filters-toggle" class="filter-button" aria-haspopup="dialog" aria-controls="filters-dialog" aria-label="Bộ lọc"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg><span>Bộ lọc</span></button>
       </div>
       <div id="demo-notice" class="connection-notice" hidden><p>Chưa kết nối thư viện.</p><button id="connection-open" class="text-button">Kết nối</button></div>
+      <div id="update-notice" class="connection-notice update-notice" role="status" hidden><p id="update-message"></p><button id="update-install" class="text-button">Cập nhật</button></div>
       <section class="library-section" aria-label="Danh mục âm thanh">
         <div class="tabs" role="tablist" aria-label="Loại âm nhạc">
           <button id="tab-guide" role="tab" aria-selected="true" aria-controls="catalog-panel" data-mode="guide" tabindex="0">Hướng dẫn</button>
@@ -86,7 +87,9 @@
     <div class="setting-row"><label for="demo-mode">Chế độ nghe</label><select id="demo-mode"><option value="listen" disabled>Nghe nhạc</option><option value="catalog" selected>Chỉ xem danh mục</option></select></div>
     <p id="connection-status" class="setting-status" role="status">Chưa kết nối thư viện.</p>
     <details id="connection-settings"><summary>Kết nối thư viện</summary><form id="connection-form"><label>Địa chỉ thư viện<input id="api-base" type="url" placeholder="https://…" autocomplete="url" required></label><label>Mã truy cập<input id="access-code" type="password" autocomplete="off" required minlength="4" maxlength="256"></label><label id="remember-row" class="remember-row" hidden><input id="remember-access" type="checkbox">Nhớ đăng nhập trên máy này</label><p id="remember-note" class="setting-status" hidden>Windows mã hóa mã truy cập theo tài khoản của bạn. Chỉ bật trên máy cá nhân.</p><div class="dialog-actions"><button id="connect-button" class="primary-button" type="submit">Kết nối</button><button id="disconnect" class="text-button" type="button" hidden>Đăng xuất</button></div></form></details>
-    <p id="build-version" class="version">AudioTP 1.0.0</p>
+    <div class="setting-row"><span>Phiên bản ứng dụng</span><button id="update-check" class="text-button" hidden>Kiểm tra cập nhật</button></div>
+    <p id="update-status" class="setting-status" role="status"></p>
+    <p id="build-version" class="version">AudioTP 1.0.1</p>
   </dialog>
   <dialog id="filters-dialog" aria-labelledby="filters-title">
     <div class="dialog-heading"><h2 id="filters-title">Bộ lọc</h2><button class="icon-button" data-close-dialog="filters-dialog" aria-label="Đóng bộ lọc" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>

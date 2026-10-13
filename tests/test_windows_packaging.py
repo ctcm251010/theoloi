@@ -16,7 +16,7 @@ def web_fixture(root):
     app=root/'apps/windows';(app/'web').mkdir(parents=True);(app/'src-tauri').mkdir()
     config={'version':'0.2.0','build':{'frontendDist':'../web'},'app':{'security':{'capabilities':[]}},'bundle':{'windows':{}}}
     (app/'src-tauri/tauri.conf.json').write_text(json.dumps(config))
-    for name in ['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','favicon.svg']:
+    for name in ['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','supplementary.mjs','app-updates.mjs','favicon.svg']:
         (app/'web'/name).write_text('self-authored fixture')
     catalog={'schemaVersion':1,'revision':'self-authored','tracks':[{'id':'fixture:1','logicalId':'fixture:song:1','mode':'silent','section':None,'number':1,'title':'Tự soạn','category':'Fixture','durationSeconds':2}]}
     (app/'web/catalog.client.json').write_text(json.dumps(catalog))
@@ -25,6 +25,18 @@ def web_fixture(root):
 
 
 class WindowsPackagingTests(unittest.TestCase):
+    def test_signed_updater_requires_pinned_origin_and_public_key_and_is_disabled_in_test(self):
+        m=module()
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);app=web_fixture(root)
+            with patch.object(m,'ROOT',root),patch.object(m,'APP',app):
+                stage,override,_=m.prepare_stage('https://audiotp-media-api.ctcm251010.workers.dev',updater_public_key='fixture-public-key')
+                settings=json.loads(override.read_text())
+                self.assertTrue(settings['bundle']['createUpdaterArtifacts'])
+                self.assertEqual(settings['plugins']['updater']['pubkey'],'fixture-public-key')
+                self.assertIn('supplementary.mjs',{p.name for p in stage.iterdir()})
+                self.assertIn('{{current_version}}',settings['plugins']['updater']['endpoints'][0])
+                with self.assertRaises(ValueError):m.prepare_stage('https://other.test',updater_public_key='fixture-public-key')
     def test_local_library_packages_real_projection_and_pins_loopback_without_test_catalog(self):
         m=module()
         with tempfile.TemporaryDirectory() as tmp:
