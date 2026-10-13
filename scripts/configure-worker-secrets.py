@@ -18,12 +18,14 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--apply',action='store_true',help='user-run interactive Cloudflare mutation after deployment approval')
     parser.add_argument('--account-id',help='explicit Cloudflare account ID; required with --apply')
+    parser.add_argument('--code-only',action='store_true',help='update only the group code hash; preserve the existing signing key')
     args=parser.parse_args()
     cli=ROOT/'workers/media-api/node_modules/wrangler/bin/wrangler.js'
     node=shutil.which('node')
     if not node or not cli.is_file(): parser.error('Install locked Worker npm dependencies first')
     if not args.apply:
-        print('DRY RUN: would set GROUP_CODE_SHA256 and SIGNING_KEY. No secrets read or Cloudflare request made.')
+        names='GROUP_CODE_SHA256' if args.code_only else 'GROUP_CODE_SHA256 and SIGNING_KEY'
+        print(f'DRY RUN: would set {names}. No secrets read or Cloudflare request made.')
         return 0
     if not sys.stdin.isatty(): parser.error('--apply requires your own interactive terminal')
     if not args.account_id or not re.fullmatch(r'[0-9a-f]{32}',args.account_id):
@@ -44,14 +46,19 @@ def main():
             parser.error('Wrangler does not have access to the requested account. No secrets changed.')
     except (OSError,subprocess.SubprocessError,ValueError,TypeError,AttributeError):
         parser.error('Could not verify Wrangler account access. No secrets changed; refresh login and retry.')
-    code=getpass.getpass('Group access code (32+ characters; keep it in your password manager): ')
+    code=getpass.getpass('Group access code (4..256 characters; short codes are easy to guess): ')
     confirm=getpass.getpass('Repeat group access code: ')
-    if code!=confirm or len(code)<32 or len(code)>256: parser.error('Codes must match and contain 32..256 characters')
-    values={'GROUP_CODE_SHA256':hashlib.sha256(code.encode()).hexdigest(),'SIGNING_KEY':secrets.token_hex(32)}
+    if code!=confirm or not 4<=len(code)<=256 or any(ord(c)<32 or 127<=ord(c)<=159 for c in code):
+        parser.error('Codes must match and contain 4..256 characters without control characters')
+    values={'GROUP_CODE_SHA256':hashlib.sha256(code.encode()).hexdigest()}
+    if not args.code_only: values['SIGNING_KEY']=secrets.token_hex(32)
     code=confirm=''
     for name,value in values.items():
         subprocess.run([node,str(cli),'secret','put',name],input=value+'\n',text=True,cwd=ROOT/'workers/media-api',env=env,check=True)
-    print('Configured auth secrets. Rotating SIGNING_KEY invalidates all existing sessions/tickets. R2 credentials were not used.')
+    if args.code_only:
+        print('Updated group code hash only; signing key preserved. Existing sessions remain valid until expiry unless AUTH_EPOCH is increased. R2 credentials were not used.')
+    else:
+        print('Configured auth secrets. Rotating SIGNING_KEY invalidates all existing sessions/tickets. R2 credentials were not used.')
     return 0
 
 

@@ -2,6 +2,16 @@
 
 Ngày: 13/10/2026, Asia/Bangkok. **READY FOR REVIEW**, không đánh dấu DONE trước nghiệm thu nghe thật/native/máy đích. Người dùng đã duyệt deploy API private trong account `ctcm251010`, thao tác bằng member `nguyenducbang.uit`, và chọn tính năng Nhớ đăng nhập.
 
+## Cập nhật mã chung ngắn — 13/10/2026
+
+Theo yêu cầu rõ ràng của người dùng cho nhóm nội bộ, validation API/UI/DPAPI/helper hỗ trợ mã4–256 ký tự. Mã thật không nằm trong source, EXE hoặc tài liệu. Mã ngắn dễ đoán; giới hạn10 lần/phút/IP/location không chống đoán phân tán. Không thay quyền bucket,983 object hoặc credential R2.
+
+Đã cập nhật riêng `GROUP_CODE_SHA256` bằng input ẩn và stdin, giữ nguyên `SIGNING_KEY`. Sau cập nhật hash, deploy epoch3 thu hồi cả phiên/vé cấp trước khi đổi mã; source serving vẫn false, live bật bằng override đã duyệt. Version ID giữ tại `logs/repository-audit/short-code-final-live-deploy.txt`. Không rollback về epoch cũ.
+
+Live smoke nhỏ PASS: mã mới login200, catalog200 đủ485guide/485instrumental/13silent, health200, không auth401, mã sai401. Không tải audio hoặc audit SHA nội dung R2. Test offline: frontend60 PASS, Worker25 PASS/typecheck/dry-run PASS, Python193 total190 PASS/3 symlink SKIP, Rust6 PASS và helper subprocess được parent chạy hai lần. Test RED trước GREEN ở UI/API/DPAPI/helper; independent review không có Important/Critical.
+
+Integrity đọc983 media/2,506,137,889 bytes:0 size/hash mismatch;18 metadata/state:0 thay đổi. Bản app cũ không nhập được mã4 ký tự, cần đóng và mở/cài artifact mới dưới đây, nhập mã được cấp rồi chọn Nhớ đăng nhập. Native playback/restart trên chính artifact mới và máy đích vẫn chờ người dùng nghiệm thu; Phase02 tiếp tục READY FOR REVIEW.
+
 ## API đã triển khai
 
 - `https://audiotp-media-api.ctcm251010.workers.dev`; binding `MEDIA` tới bucket hiện có `audiotp-media`. Bucket vẫn private, không public r2.dev hoặc custom domain. Không upload/sửa/xóa object.
@@ -22,12 +32,12 @@ Logout/bỏ chọn xóa mã đã nhớ; queue và generation ngăn callback cũ 
 
 ## Artifact ONLINE
 
-Artifact cuối có first-run prompt: `release/windows/0.2.0-20261013T040214371062Z/`. Artifact đầu `0.2.0-20261013T034723844708Z` đã được người dùng thử online/remember restart, giữ nguyên để đối chiếu.
+Artifact cuối có first-run prompt và hỗ trợ mã ngắn: `release/windows/0.2.0-20261013T042837062795Z/`. Các artifact trước `0.2.0-20261013T040214371062Z` và `0.2.0-20261013T034723844708Z` giữ nguyên để đối chiếu; artifact đầu đã được người dùng thử online/remember restart.
 
 | File | Bytes | SHA-256 |
 |---|---:|---|
-| `AudioTP.exe` | 3,188,736 | `de884c755d6485a1784c1c1ea3140f5d50085db9696b172cb1755d436df5469e` |
-| `AudioTP_0.2.0_x64-setup.exe` | 1,161,081 | `150fd2796dc3c7e7afa1af8814d80930ad0542204b0d5c012386950ad14430be` |
+| `AudioTP.exe` | 3,188,736 | `2f78bc7feae8449aa020cb9a762536b47576b42752a5ac52cf3c788eafeca9b5` |
+| `AudioTP_0.2.0_x64-setup.exe` | 1,161,320 | `3d255ce67531c8ddc3a51c33c080b80755d9dc5e8d07d4b177c47818fc6eadff` |
 
 Identifier `org.audiotp.desktop`, pinned API HTTPS thực. Stage983 tracks485/485/13,0 test IDs,0 M4A/WAV; app/api/remember/index/styles khớp source test. Source tauri config không bị builder sửa để tạo endpoint; override stage riêng. Release chưa ký.
 

@@ -1,5 +1,10 @@
 # THEOLOI — Development changelog
 
+## 2026-10-13 — Mã chung ngắn cho nhóm nội bộ
+
+- Theo lựa chọn rõ ràng của người dùng: API/UI/DPAPI/helper nhận mã4–256 ký tự; không nhúng mã thật. Giữ rate limit, exact match và R2 private. Helper `--code-only` giữ signing key; sau đổi hash tăng epoch3 thu hồi phiên/vé cũ.
+- ONLINE EXE/NSIS mới042837062795Z; live login/catalog983 smoke PASS. Frontend60, Worker25/typecheck, Python190 PASS3 SKIP, Rust6 PASS; review không Important/Critical.983 media và18 metadata/state nguyên vẹn. Native/máy đích trên artifact mới còn chờ nghiệm thu.
+
 ## 2026-10-13 — ONLINE Beta và Nhớ đăng nhập
 
 - Worker đã deploy theo phê duyệt vào account đích, bucket giữ private; live health/auth/CORS5 checks PASS. Không tải/upload thêm audio hoặc đổi credential R2.

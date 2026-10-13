@@ -19,7 +19,7 @@ fn valid_base(base: &str) -> bool {
 }
 
 fn valid_code(code: &str) -> bool {
-    (24..=256).contains(&code.chars().count()) && !code.chars().any(char::is_control)
+    (4..=256).contains(&code.chars().count()) && !code.chars().any(char::is_control)
 }
 
 #[cfg(windows)]
@@ -247,8 +247,25 @@ mod tests {
         ] {
             assert!(super::save(&dir, base, "synthetic-only-access-code-for-native-test").is_err());
         }
-        assert!(super::save(&dir, "https://library.test", "short").is_err());
+        assert!(super::save(&dir, "https://library.test", "123").is_err());
         assert!(!dir.exists());
+    }
+
+    #[test]
+    fn remembers_short_shared_code_and_keeps_validation_boundaries() {
+        let dir = std::env::temp_dir().join(format!("audiotp-short-code-{}", std::process::id()));
+        let base = "https://library.test";
+        let code = "4826"; // Synthetic fixture, never the deployed access code.
+        super::save(&dir, base, code).unwrap();
+        assert_eq!(super::read(&dir, base).unwrap().as_deref(), Some(code));
+        assert!(super::valid_code(&"x".repeat(256)));
+        for invalid in ["", "123", "ab\nc", &"x".repeat(257)] {
+            assert!(!super::valid_code(invalid));
+        }
+        super::forget(&dir).unwrap();
+        assert_eq!(super::read(&dir, base).unwrap(), None);
+        std::fs::remove_file(dir.join("access-code.lock")).unwrap();
+        std::fs::remove_dir(dir).unwrap();
     }
 
     #[test]

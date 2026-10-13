@@ -2,6 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {RememberedAccess} from '../web/remember-access.mjs';
 import {MediaAPI} from '../web/api-client.mjs';
+import {readFile} from 'node:fs/promises';
+
+test('connection form accepts a four-character shared code without embedding one',async()=>{
+ const html=await readFile(new URL('../web/index.html',import.meta.url),'utf8');
+ const input=html.match(/<input\b[^>]*id="access-code"[^>]*>/)?.[0];
+ assert.ok(input);assert.match(input,/minlength="4"/);assert.match(input,/maxlength="256"/);
+ assert.doesNotMatch(input,/\bvalue=/);
+});
 
 test('login rejection carries only HTTP status for clearing revoked saved access',async()=>{
  const api=new MediaAPI('https://library.test',{fetcher:async()=>({ok:false,status:401})});

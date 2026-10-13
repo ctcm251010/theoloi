@@ -2,6 +2,8 @@
 
 ## Phase02 online follow-up — READY FOR REVIEW /13-10-2026
 
+- [x] Theo yêu cầu đổi mã chung ngắn: API/UI/DPAPI/helper4–256; code-only giữ signing key; live hash cập nhật và epoch3 thu hồi phiên trước đổi mã; login/catalog983 smoke PASS. Frontend60/Worker25/Python190 PASS3 SKIP/Rust6 PASS; build ONLINE mới tại042837062795Z, không đổi983 media/18 metadata. Chi tiết [nghiệm thu](phase02-online-beta.md).
+
 - [x] Người dùng duyệt bốn bước online; xác minh account/bucket private/member Active bằng Chrome Bang, không mời lại hoặc tăng quyền.
 - [x] Chặn helper secrets chạy sai account; sáu test mock PASS và dry-run không network.
 - [x] Người dùng Authorize đúng account và bootstrap secret; deploy disabled rồi serving authenticated; health/auth/CORS5 checks PASS, không thay bucket.

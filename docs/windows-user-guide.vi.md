@@ -2,6 +2,8 @@
 
 Lần đầu mở bản ONLINE, phần **Kết nối thư viện** tự hiện để bạn dán mã và chọn Nhớ đăng nhập. Nếu đã nhớ mã và tự kết nối thành công, app vào thư viện trực tiếp. Bạn luôn có thể mở lại phần kết nối trong Cài đặt.
 
+Bản ONLINE mới hỗ trợ mã chung ngắn từ 4 ký tự theo lựa chọn của người quản lý. Mã không có sẵn trong app: nhập mã được cấp một lần rồi chọn Nhớ đăng nhập. Khi quản lý đổi mã, hãy dùng bản app mới; mã cũ đã lưu sẽ bị từ chối và app yêu cầu nhập lại. Không coi mã ngắn là bảo vệ mạnh hoặc chia sẻ mã ra ngoài nhóm nội bộ.
+
 **Bản ONLINE:** dùng API HTTPS đã cấu hình và thư viện R2 private; máy người nghe không cần workspace, Node, Python hoặc media local. Bản LOCAL cũ mở bằng `Mo-AudioTP.cmd` chỉ dùng trên máy phát triển; bản TEST chỉ có âm tự tạo. Chọn đúng installer ONLINE do người quản lý bàn giao.
 
 Nhận bản cài từ người quản lý thư viện. Kết nối Internet, cài và mở AudioTP. Nếu máy thiếu Microsoft Edge WebView2, bộ cài có thể đề nghị cài runtime này; cần Internet. Bản EXE portable cũng cần WebView2 trên máy.

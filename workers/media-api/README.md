@@ -74,14 +74,16 @@ npm.cmd exec -- wrangler login
 
 Đăng nhập Cloudflare bằng browser của chính bạn, không gửi token qua chat. **Cấu hình required secrets trước lần deploy đầu tiên**; deploy sẽ bị từ chối nếu thiếu secrets.
 
+Mã nhóm hiện hỗ trợ 4–256 ký tự, so khớp chính xác (không trim), không ký tự điều khiển. Người quản lý đã chọn mã ngắn cho nhóm nội bộ; rate limiting vẫn chỉ theo IP/location, không bảo đảm chống đoán phân tán. Không nhúng mã/hash thật vào source, EXE hoặc ví dụ. Cập nhật chỉ mã bằng `--code-only` giữ nguyên signing key; đổi `AUTH_EPOCH` sang giá trị mới để thu hồi phiên/vé cũ.
+
 Tạo hai secret auth riêng bằng script interactive đã có (không dùng hoặc thay R2 credentials):
 
 ```powershell
 cd D:\Workspace\AudioTP
-.\.venv\Scripts\python.exe -X utf8 scripts/configure-worker-secrets.py --apply
+.\.venv\Scripts\python.exe -X utf8 scripts/configure-worker-secrets.py --apply --account-id $env:CLOUDFLARE_ACCOUNT_ID
 ```
 
-Script hỏi mã nhóm 32–256 ký tự hai lần với input ẩn, chỉ gửi hash mã và signing key ngẫu nhiên qua stdin của Wrangler, không in/lưu các giá trị. Giữ mã nhóm trong password manager để cấp cho đúng người; chạy lại script sẽ đổi signing key và thu hồi phiên cũ. Chưa chạy `--apply` trong Codex; chỉ test dry-run. [Worker secrets](https://developers.cloudflare.com/workers/configuration/secrets/)
+Script hỏi mã nhóm 4–256 ký tự hai lần với input ẩn, chỉ gửi hash mã và signing key ngẫu nhiên qua stdin của Wrangler, không in/lưu các giá trị. Không có `--code-only` sẽ đổi signing key; có `--code-only` chỉ đổi hash mã và giữ phiên hiện tại tới khi hết hạn hoặc tăng epoch. Dry-run là mặc định. [Worker secrets](https://developers.cloudflare.com/workers/configuration/secrets/)
 
 Nếu Worker chưa tồn tại, Wrangler secret put có thể tạo draft Worker tối thiểu; việc này cũng cần quyền deploy đã duyệt. Sau khi secrets tồn tại, chạy `npm.cmd run deploy` trong workers/media-api với serving vẫn false, ghi đúng URL/version trả về. Secret put cho Worker đã tồn tại có thể deploy thay đổi ngay; không chạy lại helper chỉ để kiểm tra.
 

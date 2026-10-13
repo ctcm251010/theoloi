@@ -118,7 +118,7 @@ export function createService(client,allowlist,{now=epochSeconds}={}){
    if(login){
     if(request.method!=='POST')return finish(error(405,'method_not_allowed',{Allow:'POST'}));
     let data;try{data=await boundedJSON(request);}catch{return finish(error(400,'invalid_body'));}
-    if(typeof data?.code!=='string' || data.code.length<24 || data.code.length>256)return finish(error(401,'invalid_access_code'));
+    if(typeof data?.code!=='string' || data.code.length<4 || data.code.length>256 || /[\u0000-\u001f\u007f-\u009f]/.test(data.code))return finish(error(401,'invalid_access_code'));
     const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',encoder.encode(data.code)));
     const expected=Uint8Array.from(env.GROUP_CODE_SHA256.match(/../g) || [],h=>parseInt(h,16));
     if(!timingSafeEqual(digest,expected))return finish(error(401,'invalid_access_code'));

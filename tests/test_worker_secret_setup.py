@@ -75,5 +75,26 @@ class WorkerSecretSetupTests(unittest.TestCase):
                 with self.assertRaises(SystemExit):m.main()
                 prompt.assert_not_called();run.assert_not_called()
 
+    def test_code_only_update_accepts_short_code_without_rotating_signing_key(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            m=self.setup_module(Path(tmp));code='4826';account='a'*32
+            identity=m.subprocess.CompletedProcess([],0,stdout=json.dumps({'loggedIn':True,'accounts':[{'id':account}]}),stderr='')
+            with patch.object(m.sys,'argv',['setup','--apply','--code-only','--account-id',account]),patch.object(m.sys.stdin,'isatty',return_value=True),patch.object(m.shutil,'which',return_value='node'),patch.object(m.getpass,'getpass',side_effect=[code,code]),patch.object(m.secrets,'token_hex') as generate,patch.object(m.subprocess,'run',side_effect=[identity,None]) as run:
+                self.assertEqual(m.main(),0);self.assertEqual(run.call_count,2);generate.assert_not_called()
+                write=run.call_args_list[1]
+                self.assertEqual(write.args[0][-3:],['secret','put','GROUP_CODE_SHA256'])
+                self.assertEqual(write.kwargs['input'],hashlib.sha256(code.encode()).hexdigest()+'\n')
+                self.assertNotIn(code,' '.join(write.args[0]))
+                self.assertEqual(write.kwargs['env']['CLOUDFLARE_ACCOUNT_ID'],account)
+
+    def test_invalid_code_or_confirmation_never_writes_secrets(self):
+        for code,confirm in [('123','123'),('x'*257,'x'*257),('ab\nc','ab\nc'),('4826','4827')]:
+            with self.subTest(length=len(code)),tempfile.TemporaryDirectory() as tmp:
+                m=self.setup_module(Path(tmp));account='a'*32
+                identity=m.subprocess.CompletedProcess([],0,stdout=json.dumps({'loggedIn':True,'accounts':[{'id':account}]}),stderr='')
+                with patch.object(m.sys,'argv',['setup','--apply','--code-only','--account-id',account]),patch.object(m.sys.stdin,'isatty',return_value=True),patch.object(m.shutil,'which',return_value='node'),patch.object(m.getpass,'getpass',side_effect=[code,confirm]),patch.object(m.subprocess,'run',return_value=identity) as run:
+                    with self.assertRaises(SystemExit):m.main()
+                    self.assertEqual(run.call_count,1)
+
 
 if __name__=='__main__':unittest.main()

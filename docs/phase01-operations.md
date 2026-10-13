@@ -73,7 +73,7 @@ cd workers\media-api
 npm.cmd exec -- wrangler login
 ```
 
-**Bootstrap secrets trước deploy đầu:** `secrets.required` làm deploy fail nếu chưa có secret. Helper hiện có chỉ chạy khi chính bạn dùng `--apply`; nhập group code32–256 ký tự với input ẩn, giữ trong password manager. Nó gửi hash/key qua stdin, không đọc R2 credential. Wrangler có thể tạo draft Worker chưa có code phục vụ nếu Worker chưa tồn tại; đây cũng là thay đổi Cloudflare nằm trong phê duyệt deploy. Source CLI đã được review, helper mới chỉ có test mock, chưa chứng minh bootstrap live.
+**Bootstrap secrets trước deploy đầu:** `secrets.required` làm deploy fail nếu chưa có secret. Helper dùng `--apply` yêu cầu terminal tương tác; nhập group code4–256 ký tự với input ẩn. Nó gửi hash/key qua stdin, không đọc R2 credential. `--code-only` giữ signing key, chỉ đổi hash mã; tăng epoch mới nếu cần thu hồi phiên cũ. Mã ngắn chỉ phù hợp lựa chọn nhóm nội bộ đã được chấp nhận, không chống đoán phân tán. Wrangler có thể tạo draft Worker khi chưa tồn tại; mọi mutation live cần phạm vi phê duyệt phù hợp.
 
 ```powershell
 cd D:\Workspace\AudioTP
