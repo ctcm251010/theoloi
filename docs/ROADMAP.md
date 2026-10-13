@@ -5,12 +5,14 @@
 | Phase | Mục tiêu | Trạng thái |
 |---|---|---|
 | 00 — Repository Foundation | Source audit, GitHub, setup và clean-clone validation | DONE |
-| 01 — Cloudflare R2 & Online Audio | API private đã deploy được duyệt; health/auth/CORS PASS, authenticated R2 playback còn pending, xem [ONLINE](phase02-online-beta.md) | READY FOR REVIEW |
-| 02 — Windows Application & Installer | EXE/NSIS ONLINE HTTPS thật, DPAPI Nhớ đăng nhập; portable startup PASS, native playback/restart/installer/máy đích pending, xem [ONLINE](phase02-online-beta.md) | READY FOR REVIEW |
+| 01 — Cloudflare R2 & Online Audio | API private đã deploy/user xác nhận online; PR#1 đã merge, formal Range/R2 metadata còn pending | READY FOR REVIEW |
+| 02 — Windows Application & Installer | PR#2 đã merge, EXE/NSIS1.0.0/DPAPI; user thử bản trước ổn, bản1.0/máy khác/installer còn chờ nghiệm thu; [Release task](release-1.0.0-report.md) | READY FOR REVIEW |
 | 03 — Closed Beta & Automatic Updates | Beta/máy khác, release artifacts/hash, updater có ký và recovery | NOT STARTED |
 | 04 — Android & iOS | ADR React Native/Tauri Mobile; Android/background audio; iOS theo môi trường thực tế | NOT STARTED |
 | 05 — THEOLOI Ecosystem | Ưu tiên từng MVP: bản nhạc/lời, sách, kế hoạch đọc, công cụ thờ phượng | NOT STARTED |
 
 Source của các module Phase 01/02 đã có một phần; NOT STARTED ở đây chỉ đợt nghiệm thu theo master mới, không có nghĩa viết lại từ đầu. Sheets/mapping hiện có tiếp tục được giữ; nguồn/quyền còn thiếu nằm trong [BACKLOG](BACKLOG.md).
+
+Task riêng1.0.0 được người dùng duyệt: review/merge/tag/build đã hoàn tất; GitHub draft đã lưu, upload/publish đang chờ quyền Chrome. Không đồng nghĩa bắt đầu toàn bộ Phase03/updater/Closed Beta.
 
 Hoàn thành một phase thì test, đối chiếu acceptance, cập nhật tài liệu/Git, đề xuất phase tiếp theo và chờ người dùng. Production Cloudflare, chi phí mới và quyền phân phối phải được phê duyệt riêng. Mock/local không chứng minh live. Chỉ triển khai nhiều phase khi người dùng giao rõ phạm vi đó.

@@ -1,12 +1,13 @@
 # THEOLOI tasks
 
-## Task phát hành1.0.0 — IN PROGRESS
+## Task phát hành1.0.0 — BLOCKED ở upload
 
 - [x] User duyệt review/merge/GitHub Release; repository private giữ nguyên, không Cloudflare mutation.
 - [x] Review độc lập Phase01/02 không Critical/Important; PR#1 merge6158cf9.
 - [x] App version1.0.0 đồng bộ, build EXE/NSIS, Python190 PASS3 SKIP/frontend60/Worker25/typecheck/Rust6;983media/18metadata nguyên vẹn, stage secret scan sạch.
-- [ ] Audit index/history, commit/push release branch, merge Windows vào main, xác minh merged tree.
-- [ ] Tagv1.0.0, upload đúng4file Release, publish và xác minh bằng chứng; không media/credential.
+- [x] Audit index/history sạch, release branchc783ad9; PR#2 merge0f49c91, tree khớp source đã test/build; main frontend60 PASS.
+- [x] Tagv1.0.0 đã push/remoteSHAkhớp; clean-clone frontend60/Worker22 PASS3 private-input SKIP/typecheck PASS.
+- [ ] Upload đúng4file Release/publish/xác minh. Draft đã lưu; BLOCKER: extension Chrome thiếu Allow access to file URLs, chờ user bật hoặc tự upload; không tự mở rộng quyền.
 
 ## Phase02 online follow-up — READY FOR REVIEW /13-10-2026
 
