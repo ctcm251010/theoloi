@@ -13,6 +13,6 @@
 
 Source của các module Phase 01/02 đã có một phần; NOT STARTED ở đây chỉ đợt nghiệm thu theo master mới, không có nghĩa viết lại từ đầu. Sheets/mapping hiện có tiếp tục được giữ; nguồn/quyền còn thiếu nằm trong [BACKLOG](BACKLOG.md).
 
-Task riêng1.0.0 được người dùng duyệt: review/merge/tag/build đã hoàn tất; GitHub draft đã lưu, upload/publish đang chờ quyền Chrome. Không đồng nghĩa bắt đầu toàn bộ Phase03/updater/Closed Beta.
+Task riêng1.0.0 được người dùng duyệt đã DONE: review/merge/tag/build và [GitHub Release](https://github.com/ctcm251010/theoloi/releases/tag/v1.0.0) có đủ installer/portable/hướng dẫn/hash, digestGitHub khớp local. Không đồng nghĩa bắt đầu toàn bộ Phase03/updater/Closed Beta hoặc đã nghiệm thu máy đích.
 
 Hoàn thành một phase thì test, đối chiếu acceptance, cập nhật tài liệu/Git, đề xuất phase tiếp theo và chờ người dùng. Production Cloudflare, chi phí mới và quyền phân phối phải được phê duyệt riêng. Mock/local không chứng minh live. Chỉ triển khai nhiều phase khi người dùng giao rõ phạm vi đó.

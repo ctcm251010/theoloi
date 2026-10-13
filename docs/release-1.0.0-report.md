@@ -25,9 +25,13 @@ Ngày13/10/2026, Asia/Bangkok. Người dùng xác nhận bản ONLINE/mã ngắ
 - Release sourcec783ad96f4ef4288c8e03ec76d90d120ea900282; merged tree khớp toàn bộ source branch đã build/test. Frontend trên main60 PASS sau merge.
 - Annotated tagv1.0.0 trỏ tới main0f49c91925f676b3ace8c31ab86f5321099c51d0; đã push và đối chiếu remote SHA, không force/update tag. Mọi ledger docs sau đó không đổi runtime artifact.
 
-## Publish — BLOCKED bởi quyền upload Chrome
+## Publish — DONE: bốn file đã có trong Release
 
-Đã lưu [draft Release](https://github.com/ctcm251010/theoloi/releases/edit/untagged-ae2bbccf5c6bc54257e1) với tagv1.0.0/title/notes. Chưa publish và chưa đính kèm binaries. Browser Use file chooser trả lỗi extension thiếu **Allow access to file URLs**; người dùng cần tự bật quyền trong chrome://extensions hoặc tự upload bốn file đã chuẩn bị. Không tự đổi quyền extension, không đọc/export GitHub token và không dùng cách khác để vượt giới hạn này. Đây là lỗi capability upload, không phải secret scan hoặc auto-review rejection.
+Lịch sử: lần upload đầu bị chặn vì extension thiếu Allow access to file URLs; đã lưu draft và người dùng tự publish khi chưa có binaries, nên Assets chỉ có hai gói source GitHub tự tạo. Kết nối Chrome Bang mới đã upload được bằng file chooser chính thức; không tự đổi quyền extension hoặc đọc/export token.
+
+Đã bổ sung đúng bốn file vào [Releasev1.0.0](https://github.com/ctcm251010/theoloi/releases/tag/v1.0.0): installer, portable, HUONG-DAN.md và SHA256SUMS.txt. Assets6 = bốn file upload + hai gói source tự động. GitHub hiển thị digestSHA-256 của cả bốn file; tất cả khớp local, gồm hai binary trong bảng bên dưới. Journal: logs/repository-audit/v1-published-assets.json. Screenshot: tmp/v1-release/release-assets-complete.png. Không đổi tag, source runtime, quyền repository/R2 hoặc nội dung release notes.
+
+Giới hạn kiểm chứng: không tải lại binary sau upload. Một lần Browser Use gặp trang release-assets.githubusercontent.com bị client chặn; đã quay lại trang Release để xác minh link/digest, không nới bảo vệ trình duyệt. Đối chiếu digest GitHub không thay nghiệm thu cài/gỡ hoặc playback máy đích.
 
 ## Artifact
 
@@ -42,4 +46,4 @@ Payload GitHub chỉ gồm hai EXE trên, `SHA256SUMS.txt` và `HUONG-DAN.md`. K
 
 ## Còn chờ nghiệm thu
 
-Merge/tag đã đối chiếu URL/SHA; publish còn chờ quyền upload. Chưa dùng số phiên bản để đánh dấu toàn bộ Phase01/02 DONE. Cần thử trên máy khác: cài/gỡ ONLINE/WebView2 bootstrap, native Play/pause/seek/queue/logout trên1.0.0, mất mạng/reconnect và formal Range/R2 metadata. Chưa ký Authenticode hoặc hỗ trợ updater. Không có quyền phát hành thư viện rộng rãi được suy ra từ việc đưa EXE lên Release private.
+Task review/merge/tag/build/upload Release đã hoàn tất và đối chiếu URL/SHA. Chưa dùng số phiên bản để đánh dấu toàn bộ Phase01/02 DONE. Cần thử trên máy khác: cài/gỡ ONLINE/WebView2 bootstrap, native Play/pause/seek/queue/logout trên1.0.0, mất mạng/reconnect và formal Range/R2 metadata. Chưa ký Authenticode hoặc hỗ trợ updater. Không có quyền phát hành thư viện rộng rãi được suy ra từ việc đưa EXE lên Release.

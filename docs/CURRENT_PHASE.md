@@ -1,8 +1,8 @@
 # THEOLOI — Current phase
 
-## Task phát hành1.0.0 — BLOCKED ở upload /13-10-2026
+## Task phát hành1.0.0 — DONE /13-10-2026
 
-Người dùng xác nhận bản mới thử ổn và yêu cầu merge/phát hành1.0.0. Hai review độc lập không Critical/Important; PR#1/#2 đã MERGED, main/tagv1.0.0 trỏ0f49c91. BuildEXE/NSIS1.0.0, regression/integrity/secret scan và clean-clone tests PASS (SKIP private inputs ghi riêng). Release đã lưu draft, chưa publish: extension Chrome thiếu Allow access to file URLs; đã hỏi người dùng bật quyền hoặc tự upload. [Báo cáo](release-1.0.0-report.md). Không tự bắt đầu updater/Closed Beta hoặc đánh dấu máy khác đã nghiệm thu.
+Người dùng xác nhận bản mới thử ổn và yêu cầu merge/phát hành1.0.0. Hai review độc lập không Critical/Important; PR#1/#2 đã MERGED, tagv1.0.0 trỏ0f49c91; main có docs ledger theo sau. Build/regression/integrity/secret scan/clean-clone tests PASS (SKIP ghi riêng). Người dùng đã publish Release khi chưa có binary; nay đã bổ sung đủ bốn file, Assets6, toàn bộ digestGitHub khớp local. [Release](https://github.com/ctcm251010/theoloi/releases/tag/v1.0.0) · [Báo cáo](release-1.0.0-report.md). Không tự bắt đầu updater/Closed Beta hoặc đánh dấu máy khác đã nghiệm thu.
 
 ## Hiện hành — Phase02 /13-10-2026
 
