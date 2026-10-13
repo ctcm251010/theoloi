@@ -1,14 +1,15 @@
 # THEOLOI tasks
 
-## AudioTP1.0.1 — IN PROGRESS
+## AudioTP1.0.1 — DONE tích hợp/phát hành; native update/máy khác READY FOR REVIEW
 
 - [x] Người dùng xác nhận đúng bản cầu nguyện và quyền phục vụ nhóm AudioTP.
 - [x] Registry/manifest/state upload riêng, dry-run/retry/hash/Content-Type test; một object prayer uploaded/verified, không tải lại nguồn.
 - [x] Worker supplementary/update API và frontend Nghe nhanh/player chung; 67 frontend,35 Worker/typecheck PASS; Python223 PASS/4 SKIP.
-- [x] Native updater ký file và ràng buộc phiên bản; fixture tự tạo kiểm tra signature/tamper/version replay/header. Đang kiểm chứng lại Rust/release build.
-- [ ] Build EXE/NSIS1.0.1 ký updater, artifact/hash/secret scan và review cuối.
-- [ ] Publish installer private R2, deploy API giữ auth epoch3/serving, smoke live có giới hạn.
-- [ ] Git/release1.0.1 và bàn giao; nghiệm thu native cập nhật/cài đặt trên máy khác ghi riêng.
+- [x] Native updater ký file và ràng buộc phiên bản; fixture tự tạo signature/tamper/version replay/header;Rust16 PASS/helper chạy2 subprocess PASS.
+- [x] Build EXE/NSIS1.0.1 ký updater, artifact/hash/secret scan và review; lỗi review đều sửa/test.
+- [x] Publish installer private R2 +GET/hash, deploy API giữ auth epoch3/serving,12 live checks PASS.
+- [x] PR#3 merge/main/tagv1.0.1/Release5file+2source archives;5SHA khớp local. Người dùng xác nhận prayer trên EXE ổn.
+- [ ] Nghiệm thu nút kiểm tra cập nhật native, nâng cấp sang phiên bản sau và cài/gỡ/mạng yếu trên máy khác. Không dùng mock để đánh dấu DONE.
 
 ## Tải riêng audio cầu nguyện — DONE local /13-10-2026
 

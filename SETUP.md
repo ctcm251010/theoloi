@@ -40,6 +40,8 @@ Npm ci của Phase 00 có cảnh báo postinstall esbuild/workerd bị chặn b�
 
 ## Dữ liệu không có trong clone
 
+Từ AudioTP1.0.1, production Worker còn cần ignored `generated/quick-audio.json` và `generated/updates.json`. Registry prayer/preparer và publisher updater nằm trong [báo cáo1.0.1](docs/release-1.0.1-report.md); chuẩn bị bằng các công cụ đã kiểm thử với nguồn được phép, không copy credential hoặc đưa production JSON vào Git. Worker source tests/typecheck vẫn không phụ thuộc các file này. Updater Rust cần MSRV1.90, public key được track riêng; private signing key do quản lý cung cấp qua biến môi trường lúc build.
+
 Người quản lý cung cấp bộ inputs đã review/cấp quyền qua kênh riêng:
 
 - source/snapshots/watv-vi-2026-10-10.audio.json và bookvn-vi-2026-10-12.sheets.json (chỉ metadata, không ảnh/PDF BookVN).

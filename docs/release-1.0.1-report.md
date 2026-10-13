@@ -1,6 +1,6 @@
 # AudioTP 1.0.1 — nghiệm thu kỹ thuật
 
-Ngày 13/10/2026, Asia/Bangkok. Trạng thái: READY FOR REVIEW; bản build và live API đã kiểm chứng, phát hành GitHub/native user acceptance đang hoàn tất.
+Ngày 13/10/2026, Asia/Bangkok. Task tích hợp/phát hành: DONE. Nghiệm thu nâng cấp native sang phiên bản sau/máy Windows khác: READY FOR REVIEW, không đồng nghĩa toàn bộ Closed Beta hoàn tất.
 
 ## Chức năng
 
@@ -21,6 +21,9 @@ Ngày 13/10/2026, Asia/Bangkok. Trạng thái: READY FOR REVIEW; bản build và
 | Browser local thật | Prayer hiển thị1:09/playing, pause/seek/chuyển tab; tìm kiếm ẩn Nghe nhanh; silent shortcut mở13tracks/bài đầu nguồn |
 | Cloudflare live | 12 checks PASS: login/catalog983, supplementary1, prayer ticket/HEAD/Range/full SHA, update newer/current, installer full SHA, denied unauth |
 | Integrity gốc | 983 media/2,506,137,889bytes SHA/size khớp;18 metadata/state hashes không đổi |
+| User native | Người dùng xác nhận “cầu nguyện chúng con mong muốn ổn r nha” sau khi thử EXE1.0.1 |
+| Clone sạch source | Frontend67 PASS; Worker32 PASS/3 private integrations SKIP; typecheck PASS; prayer/publisher/packaging43 PASS/2 symlink SKIP |
+| Git/Release | PR#3 MERGED, tagv1.0.1 trỏ bace536;5 asset upload +2 source archives, cả5 SHA GitHub khớp local; secret/index scan sạch |
 
 Evidence local ignored: `tmp/regression-1.0.1-{python,frontend,worker,rust}.log`, `tmp/build-1.0.1.log`, `tmp/deploy-1.0.1.log`, `logs/repository-audit/v1.0.1-{integrity,live-smoke}.json`. Live verification tải khoảng2.97MB qua API để kiểm tra, không lưu bản sao media. Không phải full R2 content audit.
 
@@ -42,7 +45,13 @@ Public updater key `config/audiotp-updater.pub` có thể commit. Private signin
 
 Review đã phát hiện và sửa: lỗi đóng S3 client thoát sanitizer; HEAD prayer thiếu kiểm tra Content-Type; banner lỗi cập nhật biến mất vào dialog đóng; LOCAL/TEST hiện nhầm nút cập nhật; preview thiếu module remember-access. Regression hiện PASS. Release compiler phát hiện serde_json chỉ ở dev-dependencies; đã chuyển vào dependencies và build NSIS PASS.
 
-EXE đã mở ngoài workspace với PATH chỉ System32; điều này chứng minh startup, không thay thế test thao tác native/máy Windows sạch. CUA không cung cấp native app control trong phiên này. User acceptance prayer/kiểm tra cập nhật đang chờ; nâng cấp thực tế1.0.1→phiên bản sau và cài/gỡ trên máy khác chưa nghiệm thu. Không tuyên bố toàn Phase01/02/03 DONE hoặc tự chuyển phase.
+EXE đã mở ngoài workspace với PATH chỉ System32; người dùng sau đó xác nhận phát bài cầu nguyện ổn. Lần thử đầu người dùng báo bấm được nhưng chưa phát; sau đó xác nhận phát được trước khi có thay đổi code khác. Không tái hiện được và chưa xác định nguyên nhân lần đầu, không nhận là một bug đã tìm/sửa root cause. CUA không cung cấp native app control trong phiên này. Nút kiểm tra cập nhật native, nâng cấp thực tế1.0.1→phiên bản sau và cài/gỡ trên máy khác chưa được người dùng xác nhận. Không tuyên bố toàn Phase01/02/03 DONE hoặc tự chuyển phase.
+
+Full Python discover trong clone không private inputs đã chạy và FAIL:222 tests,36 FileNotFoundError và1 assertion do thiếu snapshot/catalog/manifest gốc,5 SKIP;180 PASS. Đây là giới hạn private-input được SETUP.md ghi sẵn, không phải full clone PASS. Các module mới chạy riêng và Worker source/typecheck đều PASS như bảng trên; không copy private datasets hoặc tạo dữ liệu giả để che lỗi. Log `tmp/clone-1.0.1-python.log` giữ chi tiết từng test.
+
+## GitHub đã phát hành
+
+[Release1.0.1](https://github.com/ctcm251010/theoloi/releases/tag/v1.0.1), [PR#3](https://github.com/ctcm251010/theoloi/pull/3). Source `ac4537ce8a4228f367923863327c985f0961f324` merge thành `bace53634612ccc5c94ec69f25efd0b31499aecc`, tree giống source đã build/test; tag không di chuyển. Docs ledger theo sau không đổi runtime. Assets gồm setup/portable/.sig/HUONG-DAN/SHA256SUMS, không media/credential. Evidence `logs/repository-audit/v1.0.1-published-assets.json`, ảnh `tmp/release-1.0.1-assets.png`. Private repository giữ nguyên; người dùng phổ thông nhận setup từ quản lý, các bản sau tải qua API xác thực không cần GitHub account.
 
 ## Vận hành bản tiếp theo
 

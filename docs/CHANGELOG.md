@@ -2,7 +2,7 @@
 
 ## 2026-10-13 — AudioTP1.0.1 prayer và updater có chữ ký
 
-Thêm một prayer asset riêng qua supplementary API, giữ nguyên983 audio. Nghe nhanh phát đúng “Cầu nguyện chúng con mong muốn”; updater xác thực và kiểm tra chữ ký/phiên bản trước cài đặt. EXE/NSIS build PASS; live API12checks PASS;223Python/67frontend/35Worker/16Rust PASS (SKIP có lý do). [Báo cáo](release-1.0.1-report.md) ghi acceptance/release còn pending, không đánh dấu toàn bộ Closed Beta DONE.
+Thêm một prayer asset riêng qua supplementary API, giữ nguyên983 audio. Nghe nhanh phát đúng “Cầu nguyện chúng con mong muốn”; updater xác thực và kiểm tra chữ ký/phiên bản trước cài đặt. EXE/NSIS build PASS; live API12checks PASS;223Python/67frontend/35Worker/16Rust PASS (SKIP có lý do). PR#3 merge/tagv1.0.1/Release có đủ5file,5SHA GitHub khớp local; người dùng xác nhận prayer EXE ổn. [Báo cáo](release-1.0.1-report.md) ghi native upgrade/máy khác còn pending, không đánh dấu toàn bộ Closed Beta DONE.
 
 ## 2026-10-13 — AudioTP1.0.0 Windows nội bộ
 
