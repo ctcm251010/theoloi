@@ -30,14 +30,14 @@ Dashboard Workers plans xác minh **Free / Current plan**; không bấm Upgrade 
 
 ## 3. Installer và máy đích
 
-- [ ] Bàn giao installer/hash/hướng dẫn WebView2; không yêu cầu Node/Python/thư viện local trên máy đích.
+- [x] Bàn giao installer/hash/hướng dẫn WebView2; không yêu cầu Node/Python/thư viện local trên máy đích.
 - [ ] Native cài/gỡ/startup và phát thực tế; báo rõ phần cần người dùng nghiệm thu khi công cụ không expose native UI.
 
 ## 4. Access và nghiệm thu
 
 - [ ] Mã nhóm trao riêng qua kênh người quản lý; nhập lúc chạy, chỉ giữ RAM.
 - [ ] Kiểm tra nghe/pause/seek/resume, đổi variant/tab, lỗi mạng và khởi động lại trên máy đích.
-- [ ] Roadmap/report/secret scan/integrity/Git; chỉ DONE phần có bằng chứng. Phase01 live và Phase02 target acceptance giữ pending khi chưa kiểm tra.
+- [x] Roadmap/report/secret scan/integrity/Git; source đã push. Giữ Phase01 formal live checks và Phase02 target acceptance pending khi chưa kiểm tra.
 
 ## Bổ sung được người dùng duyệt — Nhớ đăng nhập
 
@@ -46,5 +46,7 @@ Dashboard Workers plans xác minh **Free / Current plan**; không bấm Upgrade 
 - [x] Reviewer tìm ra stale staging sau crash; RED test, OS cross-process lock/recovery/logout cleanup, native subprocess tests và re-review PASS.
 - [x] Frontend58, Worker24/typecheck, Python188 PASS/3 SKIP, Rust5 PASS + helper chạy2 lần;983 media/18 metadata giữ nguyên.
 - [ ] Người dùng kiểm tra native login/Play/seek/remember restart/logout. Không dùng unit/DPAPI/startup để thay UI acceptance.
+
+User đã xác nhận bản ONLINE đầu hoạt động và tự kết nối sau restart. Formal Range/metadata trực tiếp và installer/máy đích vẫn pending. Bản cuối040214 bổ sung first-connect prompt theo feedback, frontend59 PASS/targeted review sạch; artifact/stage hashes đã kiểm tra.
 
 Chi tiết artifact/bằng chứng tại [báo cáo ONLINE](../../phase02-online-beta.md).

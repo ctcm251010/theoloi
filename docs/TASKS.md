@@ -10,7 +10,7 @@
 - [x] Build ONLINE EXE/NSIS, stage983 real IDs/0 media, portable TEMP/PATH tối thiểu startup; đã mở cho user nhập mã.
 - [x] User xác nhận ONLINE hoạt động/tự kết nối lại sau restart; bổ sung auto form lần đầu theo feedback, frontend59 PASS và targeted review sạch; rebuild artifact cuối.
 - [ ] User nghiệm thu Play/seek/restart nhớ/xóa/native và installer/máy đích. Không dùng kết quả LOCAL/TEST thay live acceptance.
-- [ ] Cập nhật nghiệm thu/integrity/secret scan/Git theo [checklist](superpowers/plans/2026-10-13-phase02-live-online.md); không Phase03.
+- [x] Cập nhật nghiệm thu/integrity/secret scan/Git theo [checklist](superpowers/plans/2026-10-13-phase02-live-online.md); source và test fix đã push; không Phase03.
 
 ## Phase01 — 13/10/2026 / READY FOR REVIEW
 

@@ -41,8 +41,10 @@ Người dùng đã trực tiếp thử artifact đầu và phản hồi “ổn
 - Test native DPAPI thật với mã tự tạo: ciphertext không lộ plaintext, origin khác/ciphertext hỏng bị từ chối, overwrite, crash recovery, logout và khóa hai process. Không dùng mã người dùng trong tests.
 - Independent review phát hiện staging bị kẹt sau crash; đã tái hiện RED, sửa bằng OS lock/recovery và re-review không còn Critical/Important.
 - 983 media/2,506,137,889 bytes SHA/size giữ nguyên; catalog/manifest hash khớp mốc cũ.18 metadata/state kiểm tra riêng với baseline. Không download/upload thêm hoặc chạy lại B10.
-- Pending: login mã thật/catalog qua native, HEAD/Range/full playback từ R2, pause/seek/variant/queue, nhớ/xóa sau restart trên UI native, cài/gỡ installer ONLINE và máy đích sạch. Các kết quả TEST/LOCAL trước không thay thế những mục này.
+- User đã xác nhận hoạt động ONLINE và auto reconnect sau restart. Pending: formal HEAD/Range/R2 metadata, thao tác riêng pause/seek/variant/queue/logout chưa có biên bản chi tiết, first-connect prompt của artifact cuối, cài/gỡ installer ONLINE và máy đích sạch. Các kết quả TEST/LOCAL trước không thay thế những mục này.
 - Source/secret scan/Git cập nhật trong final handoff. Giữ `.env.example` người dùng đang sửa ngoài commit công việc này; không đọc/in nội dung sửa đó.
+
+Source runtime `f324ed9` đã push, clone frontend59 PASS, Worker21 PASS/3 private SKIP/typecheck PASS. Khi chạy Windows Python integration trong clone, test catalog cũ lỗi do thiếu private JSON; đã sửa phân loại bằng explicit SkipTest (`b5663ae`), không thêm/fake dữ liệu. Workspace5 catalog integration vẫn PASS; clone Windows Python46 total/43 PASS/3 SKIP, helper account6 PASS. Runtime artifact không thay đổi bởi commit test-only này. Gitleaks staged/history không leak, exact-index không có media/credential/private operational paths; remote SHA đã kiểm tra. Docs ledger theo sau không đổi runtime.
 
 ## Bàn giao và bước tiếp theo
 
