@@ -27,7 +27,7 @@ npm.cmd test --prefix workers/media-api
 node --test benchmarks/score-viewer/metrics.test.mjs
 Push-Location tests
 try {
-  & '..\.venv\Scripts\python.exe' -X utf8 -m unittest test_verify_r2 test_r2 test_sheet_files test_windows_preview test_windows_build test_worker_secret_setup test_score_benchmark -v
+  & '..\.venv\Scripts\python.exe' -X utf8 -m unittest test_verify_r2 test_r2 test_sheet_files test_windows_preview test_windows_build test_windows_packaging test_windows_local_launcher test_worker_secret_setup test_score_benchmark -v
   if ($LASTEXITCODE -ne 0) { throw 'Source-only Python tests failed' }
 } finally { Pop-Location }
 ```

@@ -1,6 +1,31 @@
 import test from 'node:test';
+import {shouldPromptConnection} from '../web/ui-core.mjs';
+
+test('first online launch exposes connection unless restored or already connecting',()=>{
+ assert.equal(shouldPromptConnection({mode:'remote'}),true);
+ assert.equal(shouldPromptConnection({mode:'remote',connected:true}),false);
+ assert.equal(shouldPromptConnection({mode:'remote',pending:true}),false);
+ for(const mode of ['local-library','test-fixtures','catalog-only',undefined])assert.equal(shouldPromptConnection({mode}),false);
+});
 import assert from 'node:assert/strict';
-import { shortcutAction, libraryView, quickPresentation, QuickPanelState, quickPlaybackPlan } from '../web/ui-core.mjs';
+import { shortcutAction, libraryView, quickPresentation, QuickPanelState, quickPlaybackPlan, connectionPolicy, shouldBootstrapLocal } from '../web/ui-core.mjs';
+test('real local library is pinned and auto-connects only from native or loopback frontend',()=>{
+ const config={mode:'local-library',apiBase:'http://127.0.0.1:8872'};
+ assert.deepEqual(connectionPolicy(config),{enabled:true,base:config.apiBase,locked:true,test:false});
+ for(const origin of ['http://tauri.localhost','https://tauri.localhost','tauri://localhost','http://127.0.0.1:8873'])assert.equal(shouldBootstrapLocal(config,origin),true);
+ for(const origin of ['https://evil.test','http://tauri.localhost.evil','http://localhost:8873'])assert.equal(shouldBootstrapLocal(config,origin),false);
+ for(const apiBase of ['https://media.test','http://evil.test','http://127.0.0.1:8872/path','http://user@127.0.0.1:8872'])assert.equal(shouldBootstrapLocal({...config,apiBase},'http://tauri.localhost'),false);
+ assert.equal(shouldBootstrapLocal({mode:'remote',apiBase:config.apiBase},'http://tauri.localhost'),false);
+ assert.equal(shouldBootstrapLocal({mode:'local-files',apiBase:config.apiBase},config.apiBase),true);
+ assert.equal(shouldBootstrapLocal({mode:'local-files',apiBase:config.apiBase},'http://tauri.localhost'),false);
+});
+test('catalog-only packaging disables connection, remote pins its origin, preview remains usable',()=>{
+ assert.deepEqual(connectionPolicy({mode:'catalog-only'}),{enabled:false,base:'',locked:true,test:false});
+ assert.deepEqual(connectionPolicy({mode:'remote',apiBase:'https://media.test'}),{enabled:true,base:'https://media.test',locked:true,test:false});
+ assert.deepEqual(connectionPolicy({mode:'test-fixtures',apiBase:'http://127.0.0.1:8870'}),{enabled:true,base:'http://127.0.0.1:8870',locked:true,test:true});
+ assert.deepEqual(connectionPolicy({mode:'local-files',apiBase:'http://127.0.0.1:8766'}),{enabled:true,base:'http://127.0.0.1:8766',locked:false,test:false});
+ assert.deepEqual(connectionPolicy({}),{enabled:true,base:'',locked:false,test:false});
+});
 test('keyboard shortcuts never intercept forms, buttons or editable ancestors',()=>{
  for(const tag of ['INPUT','SELECT','TEXTAREA','BUTTON','A'])assert.equal(shortcutAction({key:' ',target:{closest:()=>({tagName:tag})}}),null);
  assert.equal(shortcutAction({key:' ',target:{closest:()=>null}}),'toggle');

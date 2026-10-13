@@ -1,5 +1,23 @@
 import {canPlayQuick} from './catalog.mjs';
 
+export function shouldPromptConnection({mode,connected=false,pending=false}={}){return mode==='remote' && !connected && !pending;}
+
+export function connectionPolicy(config={}){
+ const enabled=config.mode!=='catalog-only';
+ return {enabled,base:enabled && typeof config.apiBase==='string'?config.apiBase:'',locked:['catalog-only','remote','test-fixtures','local-library'].includes(config.mode),test:config.mode==='test-fixtures'};
+}
+
+export function shouldBootstrapLocal(config,pageOrigin){
+ if(config.mode==='local-files')return config.apiBase===pageOrigin;
+ if(config.mode!=='local-library')return false;
+ try{
+  const api=new URL(config.apiBase),page=new URL(pageOrigin);
+  const native=['http://tauri.localhost','https://tauri.localhost','tauri://localhost'].includes(pageOrigin);
+  const loopback=page.protocol==='http:' && page.hostname==='127.0.0.1' && !!page.port && page.origin===pageOrigin;
+  return api.protocol==='http:' && api.hostname==='127.0.0.1' && !!api.port && api.origin===config.apiBase && (native || loopback);
+ }catch{return false;}
+}
+
 // User intent outlives search, seek and track changes. No timers or DOM effects.
 export class QuickPanelState {
  constructor({manualCollapsed=false}={}){this.manualCollapsed=!!manualCollapsed;this.autoHidden=false;this.query='';}

@@ -1,11 +1,11 @@
 # AudioTP private media API 0.2
 
-Worker source đã có; **chưa deploy Cloudflare**, chưa xác minh live E2E. R2 bucket vẫn private. Chỉ `MEDIA.head/get` được dùng; không có LIST/PUT/DELETE/COPY trong Worker. Server allowlist được xuất nguyên assetId/objectKey từ manifest đã pin; client không gửi hoặc nhận object key.
+Worker đã deploy theo phê duyệt vào account đích; health/auth/CORS live PASS và người dùng báo ONLINE hoạt động/tự kết nối lại. Kiểm tra authenticated Range/R2 đầy đủ còn pending, không coi health là storage probe. R2 bucket vẫn private. Chỉ `MEDIA.head/get` được dùng; không LIST/PUT/DELETE/COPY. Server allowlist giữ nguyên assetId/objectKey; client không gửi/nhận object key. [ONLINE report](../../docs/phase02-online-beta.md).
 
 ## Routes và xác thực
 
 - `GET/HEAD /v1/health`: readiness không đọc R2; 503 khi serving chưa bật/cấu hình thiếu. `storage: not-probed` không chứng minh bucket đang truy cập được.
-- `POST /v1/auth/login`, JSON `{ "code": "mã nhóm do người quản lý cấp" }`: trả phiên HMAC, mặc định tối đa 12 giờ. Mã đầu vào được SHA-256 và so bằng `timingSafeEqual`; không lưu code/session trên máy người dùng.
+- `POST /v1/auth/login`, JSON `{ "code": "mã nhóm do người quản lý cấp" }`: trả phiên HMAC, mặc định tối đa12 giờ. Mã đầu vào được SHA-256 và so bằng `timingSafeEqual`; session/ticket giữ RAM. Windows client có tùy chọn nhớ group code bằng DPAPI current-user/origin, không plaintext/localStorage; logout xóa mã nhớ.
 - `GET/HEAD /v1/catalog`: Bearer session, metadata 983 asset; không có R2 key, HLS source hoặc đường local.
 - `GET/HEAD /v1/songs/<encoded logicalId>`: metadata các variant của cùng bài; silent giữ ID riêng.
 - `POST /v1/play-tickets`, Bearer + JSON `{ "assetId": "..." }`: vé gắn một asset, revision, session và epoch. TTL = duration + 600 giây, trong khoảng 300–3600 giây và không quá phiên.
@@ -74,14 +74,16 @@ npm.cmd exec -- wrangler login
 
 Đăng nhập Cloudflare bằng browser của chính bạn, không gửi token qua chat. **Cấu hình required secrets trước lần deploy đầu tiên**; deploy sẽ bị từ chối nếu thiếu secrets.
 
+Mã nhóm hiện hỗ trợ 4–256 ký tự, so khớp chính xác (không trim), không ký tự điều khiển. Người quản lý đã chọn mã ngắn cho nhóm nội bộ; rate limiting vẫn chỉ theo IP/location, không bảo đảm chống đoán phân tán. Không nhúng mã/hash thật vào source, EXE hoặc ví dụ. Cập nhật chỉ mã bằng `--code-only` giữ nguyên signing key; đổi `AUTH_EPOCH` sang giá trị mới để thu hồi phiên/vé cũ.
+
 Tạo hai secret auth riêng bằng script interactive đã có (không dùng hoặc thay R2 credentials):
 
 ```powershell
 cd D:\Workspace\AudioTP
-.\.venv\Scripts\python.exe -X utf8 scripts/configure-worker-secrets.py --apply
+.\.venv\Scripts\python.exe -X utf8 scripts/configure-worker-secrets.py --apply --account-id $env:CLOUDFLARE_ACCOUNT_ID
 ```
 
-Script hỏi mã nhóm 32–256 ký tự hai lần với input ẩn, chỉ gửi hash mã và signing key ngẫu nhiên qua stdin của Wrangler, không in/lưu các giá trị. Giữ mã nhóm trong password manager để cấp cho đúng người; chạy lại script sẽ đổi signing key và thu hồi phiên cũ. Chưa chạy `--apply` trong Codex; chỉ test dry-run. [Worker secrets](https://developers.cloudflare.com/workers/configuration/secrets/)
+Script hỏi mã nhóm 4–256 ký tự hai lần với input ẩn, chỉ gửi hash mã và signing key ngẫu nhiên qua stdin của Wrangler, không in/lưu các giá trị. Không có `--code-only` sẽ đổi signing key; có `--code-only` chỉ đổi hash mã và giữ phiên hiện tại tới khi hết hạn hoặc tăng epoch. Dry-run là mặc định. [Worker secrets](https://developers.cloudflare.com/workers/configuration/secrets/)
 
 Nếu Worker chưa tồn tại, Wrangler secret put có thể tạo draft Worker tối thiểu; việc này cũng cần quyền deploy đã duyệt. Sau khi secrets tồn tại, chạy `npm.cmd run deploy` trong workers/media-api với serving vẫn false, ghi đúng URL/version trả về. Secret put cho Worker đã tồn tại có thể deploy thay đổi ngay; không chạy lại helper chỉ để kiểm tra.
 

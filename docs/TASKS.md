@@ -1,5 +1,27 @@
 # THEOLOI tasks
 
+## Task phát hành1.0.0 — IN PROGRESS
+
+- [x] User duyệt review/merge/GitHub Release; repository private giữ nguyên, không Cloudflare mutation.
+- [x] Review độc lập Phase01/02 không Critical/Important; PR#1 merge6158cf9.
+- [x] App version1.0.0 đồng bộ, build EXE/NSIS, Python190 PASS3 SKIP/frontend60/Worker25/typecheck/Rust6;983media/18metadata nguyên vẹn, stage secret scan sạch.
+- [ ] Audit index/history, commit/push release branch, merge Windows vào main, xác minh merged tree.
+- [ ] Tagv1.0.0, upload đúng4file Release, publish và xác minh bằng chứng; không media/credential.
+
+## Phase02 online follow-up — READY FOR REVIEW /13-10-2026
+
+- [x] Theo yêu cầu đổi mã chung ngắn: API/UI/DPAPI/helper4–256; code-only giữ signing key; live hash cập nhật và epoch3 thu hồi phiên trước đổi mã; login/catalog983 smoke PASS. Frontend60/Worker25/Python190 PASS3 SKIP/Rust6 PASS; build ONLINE mới tại042837062795Z, không đổi983 media/18 metadata. Chi tiết [nghiệm thu](phase02-online-beta.md).
+
+- [x] Người dùng duyệt bốn bước online; xác minh account/bucket private/member Active bằng Chrome Bang, không mời lại hoặc tăng quyền.
+- [x] Chặn helper secrets chạy sai account; sáu test mock PASS và dry-run không network.
+- [x] Người dùng Authorize đúng account và bootstrap secret; deploy disabled rồi serving authenticated; health/auth/CORS5 checks PASS, không thay bucket.
+- [x] OAuth user-run thành công; CLI thấy đúng login/account. Read-only xác minh Worker chưa tồn tại; không deploy nhầm account.
+- [x] Nhớ đăng nhập: DPAPI current-user/origin, native IPC giới hạn, queue/logout/checkbox, OS lock/crash recovery; independent re-review không còn Important/Critical.
+- [x] Build ONLINE EXE/NSIS, stage983 real IDs/0 media, portable TEMP/PATH tối thiểu startup; đã mở cho user nhập mã.
+- [x] User xác nhận ONLINE hoạt động/tự kết nối lại sau restart; bổ sung auto form lần đầu theo feedback, frontend59 PASS và targeted review sạch; rebuild artifact cuối.
+- [ ] User nghiệm thu Play/seek/restart nhớ/xóa/native và installer/máy đích. Không dùng kết quả LOCAL/TEST thay live acceptance.
+- [x] Cập nhật nghiệm thu/integrity/secret scan/Git theo [checklist](superpowers/plans/2026-10-13-phase02-live-online.md); source và test fix đã push; không Phase03.
+
 ## Phase01 — 13/10/2026 / READY FOR REVIEW
 
 - [x] Đọc Phase00/context/B10 lịch sử; bảo toàn983 media và18 metadata/state hashes.
@@ -11,7 +33,27 @@
 - [x] Vận hành/chi phí/request/required-secrets bootstrap/rollback/live checklist; không chạy live.
 - [x] Exact-index audit193 files/0 finding, Gitleaks staged/history sạch; source4fc4d8d đã push, remote SHA khớp. Published clone typecheck/Worker21 PASS2 SKIP/frontend49 PASS, working tree sạch; xem Phase01.
 - [ ] User review quyền phục vụ/chi phí/deploy, live API/WebView2 playback không có media local trước DONE.
-- [ ] Phase02 chưa bắt đầu; đề xuất native toolchain/build/NSIS/máy sạch sau review.
+- [x] PR Phase01 #1 OPEN, không merge; Phase02 branch riêng từ637fbd1, không phân kỳ.
+
+## Phase02 — 13/10/2026 / READY FOR REVIEW
+
+- [x] Người dùng cài Rust/MSVC/SDK; preflight READY, WebView2 có sẵn.
+- [x] Staging allowlist/config override, HTTPS production origin, source config không bị builder sửa; artifact freshness/PE/hash và tests offline.
+- [x] Debug catalog-only/TEST fixture rõ ràng, API origin khóa theo bản cài; không fake audio dưới title thật.
+- [x] Native navigation/popup policy và Rust unit test; Cargo.lock tạo từ build thật.
+- [x] Build debug và release/NSIS TEST; cài/gỡ current-user trong tmp, startup WebView2 PASS.
+- [x] Chrome Bang mock playback/seek/tabs/quick/search/reload/favourite/history/network/reconnect/responsive; một player.
+- [x] Final artifact, integrity983/18, source-only verification, secret scan và docs. Source7da2d00; clone Python101 PASS/3 SKIP, frontend52, Worker21 PASS/2 SKIP/typecheck, metrics1.
+- [x] Publish Phase02 branch: source7da2d00 remote SHA khớp; main ef7f50d và Phase01 637fbd1 không đổi. Commit ledger bàn giao theo sau; không merge main.
+- [ ] Native UI interaction, máy Windows sạch, signing và live API acceptance: cần môi trường/quyền riêng; không coi browser/mock là PASS thay thế.
+
+### Phase02 follow-up — thư viện thật trên máy
+
+- [x] Sửa bàn giao TEST-only: LOCAL build dùng đúng public projection của983 audio, không sample/fake asset hoặc sửa catalog/manifest gốc.
+- [x] TDD native local bootstrap/CORS opt-in, anonymous media Origin, tự kết nối/retry không cần mã; production giữ HTTPS.
+- [x] Launcher một lần bấm, hash/port/lifecycle/Windows byte lock; review lỗi mở trùng đã sửa và targeted re-review không còn blocking finding.
+- [x] EXE/NSIS LOCAL build thật, native session/catalog200; giữ app mở cho người dùng, không claim native Play/seek PASS khi CUA không expose native UI.
+- [x] Full Python188 total/185 PASS/3 SKIP, frontend53, Worker24/typecheck; không deploy R2 hoặc Phase03.
 
 ## Repository foundation — 12/10/2026
 

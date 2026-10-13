@@ -2,6 +2,12 @@
 
 Ngày review: 12/10/2026. **Chưa được phê duyệt/chưa chạy deploy hoặc live E2E.** Các lệnh live bên dưới là bàn giao cho người quản lý sau khi duyệt, không phải công việc Codex đã thực hiện.
 
+**Cập nhật 13/10/2026:** người dùng đã duyệt triển khai Worker/API private và bản Windows online trong account `ctcm251010`, thao tác bằng member `nguyenducbang.uit`. Bản review ở trên là lịch sử trước phê duyệt; chưa có bằng chứng deploy/live PASS. Bucket và member Active đã đối chiếu qua dashboard; OAuth Wrangler cũ chưa thấy account đích, đang chờ người dùng Authorize riêng account này. Xem [checklist live](superpowers/plans/2026-10-13-phase02-live-online.md). Không cần mời lại hoặc tăng quyền khi policy hiện có đã bao gồm quản trị.
+
+**Kết quả sau phê duyệt:** OAuth và user-run secrets đã hoàn tất; Worker đã deploy, source serving false được giữ nguyên, live bật bằng `--var SERVING_ENABLED:true`. Endpoint thực `https://audiotp-media-api.ctcm251010.workers.dev`. Health200, no-auth401, wrong-code401, foreign-origin403, preflight204; authenticated R2/native acceptance còn pending. Không chạy lại helper secrets để kiểm tra vì sẽ rotate key. Mã user chọn Nhớ đăng nhập chỉ được native Windows DPAPI lưu mã hóa theo user/origin; session/ticket giữ RAM. Xem [nghiệm thu ONLINE](phase02-online-beta.md).
+
+Để redeploy live đúng cấu hình đã duyệt: set `$env:CLOUDFLARE_ACCOUNT_ID` từ `config/r2.json` đã đối chiếu, tại `workers/media-api` chạy `node node_modules/wrangler/bin/wrangler.js deploy --strict --var SERVING_ENABLED:true`. Deploy không override sẽ đưa serving về false. Emergency stop: source false + override epoch mới chưa dùng; không rollback về epoch cũ hoặc rotate secret chỉ để xem trạng thái. Version IDs giữ trong journal local, không đoán URL/version hoặc mở public bucket.
+
 ## Cấu hình đem review
 
 | Thành phần | Hiện tại / giới hạn |
@@ -67,11 +73,13 @@ cd workers\media-api
 npm.cmd exec -- wrangler login
 ```
 
-**Bootstrap secrets trước deploy đầu:** `secrets.required` làm deploy fail nếu chưa có secret. Helper hiện có chỉ chạy khi chính bạn dùng `--apply`; nhập group code32–256 ký tự với input ẩn, giữ trong password manager. Nó gửi hash/key qua stdin, không đọc R2 credential. Wrangler có thể tạo draft Worker chưa có code phục vụ nếu Worker chưa tồn tại; đây cũng là thay đổi Cloudflare nằm trong phê duyệt deploy. Source CLI đã được review, helper mới chỉ có test mock, chưa chứng minh bootstrap live.
+**Bootstrap secrets trước deploy đầu:** `secrets.required` làm deploy fail nếu chưa có secret. Helper dùng `--apply` yêu cầu terminal tương tác; nhập group code4–256 ký tự với input ẩn. Nó gửi hash/key qua stdin, không đọc R2 credential. `--code-only` giữ signing key, chỉ đổi hash mã; tăng epoch mới nếu cần thu hồi phiên cũ. Mã ngắn chỉ phù hợp lựa chọn nhóm nội bộ đã được chấp nhận, không chống đoán phân tán. Wrangler có thể tạo draft Worker khi chưa tồn tại; mọi mutation live cần phạm vi phê duyệt phù hợp.
 
 ```powershell
 cd D:\Workspace\AudioTP
-.\.venv\Scripts\python.exe -X utf8 scripts/configure-worker-secrets.py --apply
+$r2Config = Get-Content -Raw -Encoding UTF8 config/r2.json | ConvertFrom-Json
+$env:CLOUDFLARE_ACCOUNT_ID = $r2Config.accountId
+.\.venv\Scripts\python.exe -X utf8 scripts/configure-worker-secrets.py --apply --account-id $env:CLOUDFLARE_ACCOUNT_ID
 cd workers\media-api
 npm.cmd run deploy
 ```

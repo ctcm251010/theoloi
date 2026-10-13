@@ -31,6 +31,23 @@ test('login validates code and JSON without reflecting body or secret',async()=>
  assert.equal((await f.request('/v1/auth/login',{method:'POST',headers:{'Content-Type':'text/plain'}})).status,400);
  assert.equal(f.calls.length,0);
 });
+
+test('short shared codes authenticate exactly, preserve rate limiting and never read R2',async()=>{
+ const f=fixture(),shortCode='4826';f.env.GROUP_CODE_SHA256=sha(shortCode);
+ const accepted=await f.request('/v1/auth/login',{method:'POST',body:{code:shortCode}});
+ assert.equal(accepted.status,200);const token=(await accepted.json()).token;
+ assert.equal((await f.request('/v1/catalog',{token})).status,200);
+ for(const supplied of ['', '482', '4827', ' 4826', '4826 ', null, 4826]){
+  assert.equal((await f.request('/v1/auth/login',{method:'POST',body:{code:supplied}})).status,401);
+ }
+ for(const invalid of ['123', 'x'.repeat(257), 'ab\nc']){
+  f.env.GROUP_CODE_SHA256=sha(invalid);
+  assert.equal((await f.request('/v1/auth/login',{method:'POST',body:{code:invalid}})).status,401);
+ }
+ f.env.LOGIN_LIMITER.limit=async()=>({success:false});
+ assert.equal((await f.request('/v1/auth/login',{method:'POST',body:{code:shortCode}})).status,429);
+ assert.equal(f.calls.length,0);
+});
 test('catalog and logical song API contain metadata only and preserve variants',async()=>{
  const f=fixture(),token=await f.login();const r=await f.request('/v1/catalog',{token});assert.equal(r.status,200);
  const text=await r.text();assert.equal(text.includes('objectKey'),false);assert.equal(text.includes('SIGNING_KEY'),false);

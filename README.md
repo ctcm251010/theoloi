@@ -4,9 +4,9 @@ Hệ sinh thái ứng dụng dành cho người theo Kinh Thánh. **AudioTP** l�
 
 ## Trạng thái thực tế
 
-Source Windows 0.2/Worker đã có; AudioTP phát M4A thật qua adapter local chỉ đọc. Thư viện vận hành có 485 guide, 485 instrumental, 13 silent. Người dùng báo B9 upload/verify 983 object; bước này không audit R2 live. Worker chưa có bằng chứng deploy live; chưa có EXE/installer đã build và kiểm thử.
+Bản Windows **AudioTP1.0.0** dùng API HTTPS đã deploy và Cloudflare R2 private, có485 Hướng dẫn,485 Nhạc đệm và13 Nhạc ngẫm nghĩ. Có EXE portable/installer NSIS, Nhớ đăng nhập bằng Windows DPAPI và form kết nối tự hiện khi chưa đăng nhập. Người dùng đã xác nhận bản ONLINE trước phát hành hoạt động, tự kết nối lại và mã ngắn dùng được. Máy Windows khác, bộ cài ONLINE và Range live có biên bản vẫn chờ nghiệm thu. [Bản phát hành](https://github.com/ctcm251010/theoloi/releases) · [Hướng dẫn](docs/windows-user-guide.vi.md) · [Báo cáo1.0.0](docs/release-1.0.0-report.md).
 
-Audio, snapshot website, catalog/manifest vận hành, review decisions, credential và SQLite **không nằm trong GitHub**. Chúng vẫn giữ trên máy hoặc R2 theo cấu hình vận hành. Clone mới chỉ có source; full tests/playback cần bộ dữ liệu đã cấp quyền từ người quản lý. Không tải bù website hoặc fake audio.
+Audio, snapshot website, catalog/manifest vận hành đầy đủ, review decisions, credential và SQLite **không nằm trong GitHub**. EXE chỉ kèm projection metadata phục vụ giao diện, không kèm media, objectKey, URL nguồn hoặc mã truy cập. Clone mới chỉ có source; full tests/playback cần bộ dữ liệu đã cấp quyền từ người quản lý. Không tải bù website hoặc fake audio. Repository vẫn private; người nhận link Release cần quyền repository, hoặc quản lý gửi riêng bộ cài.
 
 ## Các module
 

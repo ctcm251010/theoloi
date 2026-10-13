@@ -1,5 +1,11 @@
 # THEOLOI — Decisions
 
+- **2026-10-13 / Phase02 correction:** TEST-only không đáp ứng nghe Bài ca mới trên máy hiện tại. Bổ sung LOCAL build từ983-track projection thật, identifier riêng, loopback origin bắt buộc và backend read-only opt-in native CORS. Launcher quản lý backend cùng EXE, Windows byte lock ngăn mở trùng; không coi local là bản online độc lập workspace. Production vẫn HTTPS và cần phê duyệt deploy/live riêng.
+
+- **2026-10-13 / Phase02 build:** config override + stage allowlist thay sửa tracked config; exact HTTPS origin production, Cargo.lock/--locked và artifact freshness trước export. Không dùng raw Tauri build để phân phối.
+- **2026-10-13 / Acceptance:** app TEST có identifier riêng, title TEST và âm tự tạo; mock loopback không thay API/R2 thật. Native startup/install khác native UI/playback/máy sạch. CUA không expose native apps nên giữ gate manual review.
+- **2026-10-13 / Security:** native navigation chỉ bundled origin, popup deny; không shell/fs/network plugin. Mã/session/ticket trong RAM; không nhúng credential R2. NSIS currentUser, chưa signing/updater.
+
 - **2026-10-13 / Contracts:** public .d.ts + runtime boundary validation thay typeof private JSON; giữ checkJs, không fake production catalog. Bundle thiếu inputs vẫn fail.
 - **2026-10-13 / Streaming:** auth trước R2, allowlist, HEAD metadata rồi conditional GET, exact returned range/cancel propagation; HEAD bỏ qua Range. Metadata SHA không thay hash remote bytes.
 - **2026-10-13 / Cache/cost:** mọi response private/no-store + CDN no-store; tối đa16 ticket RAM/coalescing, không disk audio cache/prefetch. GET hợp lệ tốn1 HEAD+1 GET; limiter phân tán không phải billing cap.

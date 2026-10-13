@@ -14,7 +14,7 @@
   ],
   "vars": {
     "SERVING_ENABLED": "false",
-    "AUTH_EPOCH": "1",
+    "AUTH_EPOCH": "3",
     "ALLOWED_ORIGINS": "http://tauri.localhost,https://tauri.localhost,tauri://localhost",
     "SESSION_SECONDS": "43200"
   },

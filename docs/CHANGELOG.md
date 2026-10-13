@@ -1,5 +1,35 @@
 # THEOLOI — Development changelog
 
+## 2026-10-13 — AudioTP1.0.0 Windows nội bộ
+
+Người dùng duyệt review/hợp nhất/phát hành GitHub1.0.0; nâng metadata đồng bộ và build EXE/NSIS HTTPS thật. Hai review độc lập không Critical/Important; regression190 Python PASS3 SKIP/frontend60/Worker25/Rust6 PASS,983media/18metadata nguyên vẹn. Xem [báo cáo](release-1.0.0-report.md) cho bằng chứng merge/publish và phần máy khác/signing/updater còn chờ.
+
+## 2026-10-13 — Mã chung ngắn cho nhóm nội bộ
+
+- Theo lựa chọn rõ ràng của người dùng: API/UI/DPAPI/helper nhận mã4–256 ký tự; không nhúng mã thật. Giữ rate limit, exact match và R2 private. Helper `--code-only` giữ signing key; sau đổi hash tăng epoch3 thu hồi phiên/vé cũ.
+- ONLINE EXE/NSIS mới042837062795Z; live login/catalog983 smoke PASS. Frontend60, Worker25/typecheck, Python190 PASS3 SKIP, Rust6 PASS; review không Important/Critical.983 media và18 metadata/state nguyên vẹn. Native/máy đích trên artifact mới còn chờ nghiệm thu.
+
+## 2026-10-13 — ONLINE Beta và Nhớ đăng nhập
+
+- Worker đã deploy theo phê duyệt vào account đích, bucket giữ private; live health/auth/CORS5 checks PASS. Không tải/upload thêm audio hoặc đổi credential R2.
+- Windows Nhớ đăng nhập dùng DPAPI current-user/exact-origin; không localStorage credential, logout và OS lock/crash recovery. Review finding staging bị kẹt đã sửa và re-review sạch.
+- ONLINE EXE/NSIS với983 IDs/0 media, HTTPS thực, portable TEMP/PATH tối thiểu startup PASS. Python188 PASS/3 SKIP, frontend58, Worker24/typecheck, Rust5 + subprocess lock checks.983 media/18 metadata không đổi.
+- Native Play/seek/mã thật/remember restart, authenticated R2 và máy đích vẫn pending; không DONE, merge hoặc Phase03. Giữ riêng thay đổi `.env.example` của người dùng.
+
+## 2026-10-13 — Phase02 correction: thư viện Bài ca mới thật
+
+- LOCAL EXE/NSIS dùng public projection983 audio thật; không TEST catalog hoặc chép media vào app. `Mo-AudioTP.cmd` khởi động backend chỉ đọc+EXE và tự kết nối.
+- Native CORS opt-in exact origins, media anonymous Origin; fix launcher mở trùng bằng Windows byte lock, chỉ dừng backend tự tạo; không proxy/redirect readiness.
+- Native session/catalog200; Python185 PASS/3 SKIP, frontend53, Worker24/typecheck. Native Play/seek/máy sạch/live chưa được claim PASS. Không sửa media/credential/Cloudflare hoặc bắt đầu Phase03.
+
+## 2026-10-13 — Phase02 READY FOR REVIEW
+
+- Phase01 PR#1 OPEN sau khi người dùng cấp quyền repo; không merge, live gate giữ nguyên.
+- Stage/override/metadata allowlist, HTTPS production origin, locked Cargo và artifact PE/freshness/hash. Npm build đi qua builder; mặc định CSP đóng.
+- Native navigation/popup policy, EXE debug/release và NSIS currentUser TEST; cài/gỡ exit0, WebView2 startup và portable TEMP/PATH tối thiểu.
+- App TEST identifier riêng, banner và catalog tự tạo; mock WAV12s có session/ticket/Range. Không phát âm mẫu dưới tên WATV.
+- Python177 PASS/3 SKIP, frontend52, Worker23/typecheck, Rust1, metrics1;983 media/18 metadata nguyên vẹn. Browser mock playback/network/reconnect/UI PASS; native UI/máy sạch/live/signing chưa nghiệm thu. Không deploy/credential/media changes hoặc Phase03.
+
 ## 2026-10-13 — Phase01 READY FOR REVIEW
 
 - Streaming/Range/HEAD/conditional/errors/readiness, CDN no-store, diagnostics không chứa URL/session.

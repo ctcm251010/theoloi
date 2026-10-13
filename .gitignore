@@ -40,6 +40,7 @@ coverage/
 .wrangler/
 /apps/windows/web-release/
 /apps/windows/build-backups/
+/apps/windows/src-tauri/gen/
 /release/
 *.exe
 *.msi
