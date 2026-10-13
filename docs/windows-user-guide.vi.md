@@ -1,4 +1,4 @@
-# AudioTP 0.2 — Hướng dẫn sử dụng
+# AudioTP 1.0 — Hướng dẫn sử dụng
 
 Lần đầu mở bản ONLINE, phần **Kết nối thư viện** tự hiện để bạn dán mã và chọn Nhớ đăng nhập. Nếu đã nhớ mã và tự kết nối thành công, app vào thư viện trực tiếp. Bạn luôn có thể mở lại phần kết nối trong Cài đặt.
 
@@ -24,4 +24,6 @@ App không tự tải toàn thư viện. Phiên bản này không lưu cache aud
 
 Chỉ cập nhật từ bản cài chính thức của người quản lý, đóng app trước khi chạy bản cài mới. Chưa có tự động cập nhật hoặc chữ ký phát hành được kiểm chứng. Khi báo lỗi, gửi phiên bản app, tên/số bài và mô tả thao tác; tránh gửi mã truy cập hoặc URL phát tạm thời.
 
-**Tình trạng bản 0.2:** ONLINE Beta dành cho nghiệm thu có kiểm soát. Không coi build thành công hoặc health200 là đã kiểm tra playback R2, native/máy đích hoặc quyền phân phối rộng rãi. Xem [Phase02](phases/phase-02.md) cho bằng chứng và phần còn pending.
+**Bản 1.0.0:** phát hành nội bộ theo yêu cầu người quản lý, dùng API HTTPS và R2 private. Người quản lý đã xác nhận bản trước hoạt động và đăng nhập bằng mã ngắn; máy Windows khác và cài/gỡ bản ONLINE còn cần thử thực tế. Bản phát hành chưa có Authenticode hoặc tự cập nhật. Version1.0.0 không thay thế bằng chứng nghiệm thu còn thiếu. Xem báo cáo trong repository: docs/phase02-online-beta.md.
+
+**Gửi sang máy khác:** ưu tiên `AudioTP_1.0.0_x64-setup.exe`. Chạy setup để cài app và shortcut; cần Internet nếu bộ cài phải bổ sung WebView2. Có thể gửi `AudioTP.exe` để chạy portable nếu máy đã có WebView2; không cần chạy setup trong trường hợp đó. Máy nghe vẫn cần Internet để đăng nhập và phát nhạc. Repository GitHub hiện private: người nhận link Release cần có quyền repo, hoặc người quản lý gửi riêng file cài. Mã truy cập cấp riêng, không nằm trong release notes.

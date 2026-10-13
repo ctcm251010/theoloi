@@ -1,5 +1,13 @@
 # THEOLOI tasks
 
+## Task phát hành1.0.0 — IN PROGRESS
+
+- [x] User duyệt review/merge/GitHub Release; repository private giữ nguyên, không Cloudflare mutation.
+- [x] Review độc lập Phase01/02 không Critical/Important; PR#1 merge6158cf9.
+- [x] App version1.0.0 đồng bộ, build EXE/NSIS, Python190 PASS3 SKIP/frontend60/Worker25/typecheck/Rust6;983media/18metadata nguyên vẹn, stage secret scan sạch.
+- [ ] Audit index/history, commit/push release branch, merge Windows vào main, xác minh merged tree.
+- [ ] Tagv1.0.0, upload đúng4file Release, publish và xác minh bằng chứng; không media/credential.
+
 ## Phase02 online follow-up — READY FOR REVIEW /13-10-2026
 
 - [x] Theo yêu cầu đổi mã chung ngắn: API/UI/DPAPI/helper4–256; code-only giữ signing key; live hash cập nhật và epoch3 thu hồi phiên trước đổi mã; login/catalog983 smoke PASS. Frontend60/Worker25/Python190 PASS3 SKIP/Rust6 PASS; build ONLINE mới tại042837062795Z, không đổi983 media/18 metadata. Chi tiết [nghiệm thu](phase02-online-beta.md).

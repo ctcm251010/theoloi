@@ -1,5 +1,9 @@
 # THEOLOI — Development changelog
 
+## 2026-10-13 — AudioTP1.0.0 Windows nội bộ
+
+Người dùng duyệt review/hợp nhất/phát hành GitHub1.0.0; nâng metadata đồng bộ và build EXE/NSIS HTTPS thật. Hai review độc lập không Critical/Important; regression190 Python PASS3 SKIP/frontend60/Worker25/Rust6 PASS,983media/18metadata nguyên vẹn. Xem [báo cáo](release-1.0.0-report.md) cho bằng chứng merge/publish và phần máy khác/signing/updater còn chờ.
+
 ## 2026-10-13 — Mã chung ngắn cho nhóm nội bộ
 
 - Theo lựa chọn rõ ràng của người dùng: API/UI/DPAPI/helper nhận mã4–256 ký tự; không nhúng mã thật. Giữ rate limit, exact match và R2 private. Helper `--code-only` giữ signing key; sau đổi hash tăng epoch3 thu hồi phiên/vé cũ.

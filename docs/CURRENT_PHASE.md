@@ -1,5 +1,9 @@
 # THEOLOI — Current phase
 
+## Task phát hành1.0.0 — IN PROGRESS /13-10-2026
+
+Người dùng xác nhận bản mới thử ổn và yêu cầu merge/phát hành1.0.0. Hai review độc lập không Critical/Important; PRPhase01#1 đã merge. BuildEXE/NSIS1.0.0 và regression PASS; đang hoàn tất PRWindows/tag/Release private. [Báo cáo](release-1.0.0-report.md). Không tự bắt đầu updater/Closed Beta hoặc đánh dấu máy khác đã nghiệm thu.
+
 ## Hiện hành — Phase02 /13-10-2026
 
 - **READY FOR REVIEW — ONLINE Beta:** API đã deploy đúng account `ctcm251010`, member `nguyenducbang.uit`; bucket giữ private. Health/auth/CORS5 checks PASS; user xác nhận ONLINE hoạt động và tự kết nối lại. Formal authenticated Range/R2 audit, installer và máy đích còn pending.
