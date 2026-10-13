@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import {existsSync} from 'node:fs';
 import {request as httpRequest} from 'node:http';
 import {createPreviewServer,ReadOnlyFileBucket} from '../local-preview.mjs';
+import * as preview from '../local-preview.mjs';
 const hash=data=>createHash('sha256').update(data).digest('hex');
 test('desktop local access is opt-in and permits only exact native origins with the real 983 catalog',{skip:!existsSync(new URL('../../../delivery/manifest.vi.json',import.meta.url))?'Private manifest/media not available in source-only clone':false},async t=>{
  const servers=[];t.after(async()=>{for(const s of servers){s.closeAllConnections();await new Promise(r=>s.close(r));}});
@@ -63,4 +64,34 @@ test('local file adapter rejects tampered bytes, wrong size and traversal withou
  await writeFile(file,Buffer.alloc(bytes.length,1));await assert.rejects(()=>bucket.head('key'),/hash/);
  await writeFile(file,'short');await assert.rejects(()=>bucket.head('key'),/size/);
  const unsafe=new ReadOnlyFileBucket(root,{assets:{fixture:{...asset,localPath:'media/audio/../../secret'}}});await assert.rejects(()=>unsafe.head('key'),/unsafe/);
+});
+
+test('supplementary local prayer bucket requires exact registered path, key and verified bytes',async t=>{
+ const root=await mkdtemp(path.join(tmpdir(),'audiotp-readonly-'));t.after(()=>{assert.equal(path.dirname(path.resolve(root)),path.resolve(tmpdir()));assert.ok(path.basename(root).startsWith('audiotp-readonly-'));return rm(root,{recursive:true,force:true});});
+ const bytes=Buffer.from('self-authored prayer HTTP bytes'),id='watv:vi:prayer:our-wish';
+ const asset={assetId:id,localPath:'media/prayer/watv/vi/our-wish/our-wish.m4a',objectKey:`audio/v1/watv/vi/prayer/our-wish/${hash(bytes)}.m4a`,bytes:bytes.length,sha256:hash(bytes)};
+ const file=path.join(root,asset.localPath);await mkdir(path.dirname(file),{recursive:true});await writeFile(file,bytes);
+ const bucket=new ReadOnlyFileBucket(root,{assets:{}},{[id]:asset});assert.equal((await bucket.head(asset.objectKey)).size,bytes.length);
+ const result=await bucket.get(asset.objectKey,{range:{offset:1,length:3}});assert.deepEqual(Buffer.from(await new Response(result.body).arrayBuffer()),bytes.subarray(1,4));
+ assert.equal(await bucket.head('audio/v1/watv/vi/prayer/unlisted'),null);
+ for(const patch of [{localPath:'media/prayer/private.m4a'},{localPath:'media/audio/../../secret'},{objectKey:'arbitrary'},{assetId:'other'},{sha256:'bad'}])assert.throws(()=>new ReadOnlyFileBucket(root,{assets:{}},{[id]:{...asset,...patch}}),/unsafe/);
+ assert.throws(()=>new ReadOnlyFileBucket(root,{assets:{original:asset}},{[id]:asset}),/collision/);
+ const originalOnly=new ReadOnlyFileBucket(root,{assets:{[id]:asset}});await assert.rejects(()=>originalOnly.head(asset.objectKey),/unsafe/);
+ await writeFile(file,Buffer.alloc(bytes.length,1));await assert.rejects(()=>bucket.head(asset.objectKey),/hash/);
+});
+
+test('optional quick audio loading defaults empty and refuses mismatched local registry',async t=>{
+ const root=await mkdtemp(path.join(tmpdir(),'audiotp-readonly-'));t.after(()=>{assert.equal(path.dirname(path.resolve(root)),path.resolve(tmpdir()));assert.ok(path.basename(root).startsWith('audiotp-readonly-'));return rm(root,{recursive:true,force:true});});
+ assert.deepEqual(await preview.loadQuickAudio(root),{quickAudio:undefined,assets:{}});
+ const id='watv:vi:prayer:our-wish',digest=hash('opaque'),asset={assetId:id,objectKey:`audio/v1/watv/vi/prayer/our-wish/${digest}.m4a`,bytes:6,sha256:digest};
+ const track={id,logicalId:id,mode:'prayer',section:null,number:null,title:'Cầu nguyện chúng con mong muốn',category:'Cầu nguyện',durationSeconds:69.427664};
+ const quickAudio={schemaVersion:1,revision:'sha256:'+digest,tracks:[track],assets:{[id]:asset}};
+ const folder=path.join(root,'workers/media-api/generated');await mkdir(folder,{recursive:true});await writeFile(path.join(folder,'quick-audio.json'),JSON.stringify(quickAudio));
+ await assert.rejects(()=>preview.loadQuickAudio(root));
+ const assets={[id]:{...asset,localPath:'media/prayer/watv/vi/our-wish/our-wish.m4a'}};
+ const manifest={schemaVersion:1,revision:quickAudio.revision,tracks:[track],assets};await mkdir(path.join(root,'delivery'));await writeFile(path.join(root,'delivery/prayer-manifest.vi.json'),JSON.stringify(manifest));
+ assert.deepEqual(await preview.loadQuickAudio(root),{quickAudio,assets});
+ for(const patch of [{revision:'sha256:'+'0'.repeat(64)},{assets:{[id]:{...assets[id],sha256:'0'.repeat(64)}}},{assets:{[id]:{...assets[id],localPath:'media/prayer/private.m4a'}}},{tracks:[]}]){
+  await writeFile(path.join(root,'delivery/prayer-manifest.vi.json'),JSON.stringify({...manifest,...patch}));await assert.rejects(()=>preview.loadQuickAudio(root));
+ }
 });

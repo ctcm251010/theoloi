@@ -15,4 +15,6 @@ Source của các module Phase 01/02 đã có một phần; NOT STARTED ở đâ
 
 Task riêng1.0.0 được người dùng duyệt đã DONE: review/merge/tag/build và [GitHub Release](https://github.com/ctcm251010/theoloi/releases/tag/v1.0.0) có đủ installer/portable/hướng dẫn/hash, digestGitHub khớp local. Không đồng nghĩa bắt đầu toàn bộ Phase03/updater/Closed Beta hoặc đã nghiệm thu máy đích.
 
+Task riêng1.0.1 do người dùng giao: prayer bổ sung và signed updater đang hoàn tất phát hành, [nghiệm thu](release-1.0.1-report.md). Đây là phần updater của Phase03, không tự mở rộng sang toàn bộ Closed Beta; máy khác/nâng cấp native vẫn cần acceptance riêng.
+
 Hoàn thành một phase thì test, đối chiếu acceptance, cập nhật tài liệu/Git, đề xuất phase tiếp theo và chờ người dùng. Production Cloudflare, chi phí mới và quyền phân phối phải được phê duyệt riêng. Mock/local không chứng minh live. Chỉ triển khai nhiều phase khi người dùng giao rõ phạm vi đó.

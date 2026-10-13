@@ -8,3 +8,11 @@ declare module '*generated/assets.json' {
   const assets: Record<string, import('./contracts').Asset>;
   export default assets;
 }
+declare module '*generated/quick-audio.json' {
+  const quickAudio: import('./contracts').QuickAudio;
+  export default quickAudio;
+}
+declare module '*generated/updates.json' {
+  const updates: import('./contracts').UpdateRelease | null;
+  export default updates;
+}

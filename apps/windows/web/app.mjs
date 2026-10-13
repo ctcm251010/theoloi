@@ -3,16 +3,19 @@ import {Player} from './player.mjs';
 import {MediaAPI,ConnectionGate} from './api-client.mjs';
 import {LibraryStore} from './storage.mjs';
 import {RememberedAccess} from './remember-access.mjs';
+import {validateQuickAudio,applyQuickAudio,trackLabel} from './supplementary.mjs';
+import {AppUpdates} from './app-updates.mjs';
 import {shortcutAction,libraryView,quickPresentation,QuickPanelState,quickPlaybackPlan,connectionPolicy,shouldBootstrapLocal,shouldPromptConnection} from './ui-core.mjs';
 
 const $=id=>document.getElementById(id);
-const modeNames={guide:'Hướng dẫn',instrumental:'Nhạc đệm',silent:'Nhạc ngẫm nghĩ'};
+const modeNames={guide:'Hướng dẫn',instrumental:'Nhạc đệm',silent:'Nhạc ngẫm nghĩ',prayer:'Cầu nguyện'};
 let storage;try{storage=window.localStorage;}catch{}
 const store=new LibraryStore(storage);
 const quickPreference='audiotp.quick-collapsed.v1';
 let manualCollapsed=false;try{manualCollapsed=storage?.getItem(quickPreference)==='true';}catch{}
 const quickPanel=new QuickPanelState({manualCollapsed});
-let tracks=[],quickCards=[],revision='',mode='guide',view='all',visible=[],playbackEnabled=false,loadGeneration=0;
+let tracks=[],quickTracks=[],quickCards=[],revision='',mode='guide',view='all',visible=[],playbackEnabled=false,loadGeneration=0;
+const playbackTracks=()=>[...tracks,...quickTracks];
 const rowNodes=new Map();
 const quickNodes=new Map();
 let activeQuickId='';
@@ -23,6 +26,7 @@ let connection=connectionPolicy();
 let localConnection=false;
 const connections=new ConnectionGate();
 const remembered=new RememberedAccess(window.__TAURI__?.core?.invoke);
+const updates=new AppUpdates(window.__TAURI__?.core?.invoke);
 let restoringAccess=false;
 function canRemember(){return remembered.available && connection.enabled && connection.locked && !connection.test && !localConnection && connection.base.startsWith('https://');}
 async function forgetAccess(){
@@ -108,6 +112,7 @@ async function loadCatalog(){
 }
 
 function renderConnection(){
+ renderUpdates();
  const ready=!!api?.token;
  $('demo-mode').querySelector('option[value="listen"]').disabled=!ready;
  $('demo-mode').value=playbackEnabled?'listen':'catalog';
@@ -119,6 +124,7 @@ function renderConnection(){
  $('demo-notice').hidden=playbackEnabled && !offline && !connection.test;
 }
 function connectionLost({manual=false}={}){
+ updates.clear();quickTracks=[];
  connections.cancel();api?.logout();api=null;sourceKind='none';playbackEnabled=false;activeQuickId='';player.stop();$('connect-button').disabled=false;renderConnection();renderQuick();renderRows();$('connection-settings').open=true;
  setText('connection-status','Phiên truy cập đã hết hạn. Hãy kết nối lại.');
  if(!manual && canRemember() && $('remember-access').checked && !restoringAccess){void restoreAccess().then(ready=>{if(!ready)openDialog('settings-dialog');});}
@@ -126,7 +132,7 @@ function connectionLost({manual=false}={}){
 }
 async function connectLibrary(base,code,{local=false,remember=false,restored=false}={}){
  if(!connection.enabled || (connection.locked && base!==connection.base)){setText('connection-status','Địa chỉ nghe không khớp cấu hình bản cài đặt.');return;}
- playbackEnabled=false;activeQuickId='';player.stop();api?.logout();api=null;
+ updates.clear();quickTracks=[];playbackEnabled=false;activeQuickId='';player.stop();api?.logout();api=null;
  let next;
  const attempt=connections.begin({logout:()=>next?.logout()});
  $('connect-button').disabled=true;setText('connection-status','Đang kết nối…');
@@ -134,6 +140,8 @@ async function connectLibrary(base,code,{local=false,remember=false,restored=fal
   next=new MediaAPI(base,{onUnauthorized:()=>{if(attempt.current())connectionLost();}});
   if(local)await next.localSession();else await next.login(code);
   const data=await next.catalog();const rows=validateCatalog(data);
+  let supplemental=[];
+  try{const quick=await next.quickAudio();if(quick)supplemental=validateQuickAudio(quick);}catch(error){if(error.status===401)throw error;}
   if(!attempt.current()){next.logout();return;}
   let storageWarning='';
   if(canRemember()){
@@ -141,10 +149,11 @@ async function connectLibrary(base,code,{local=false,remember=false,restored=fal
    catch{storageWarning=' Chưa cập nhật được đăng nhập đã lưu; hãy thử lại trước khi đóng app.';}
   }
   if(!attempt.current()){next.logout();return;}
-  api=next;sourceKind=local?'local':'remote';tracks=rows;revision=data.revision;playbackEnabled=true;
+  api=next;sourceKind=local?'local':'remote';tracks=rows;quickTracks=supplemental;revision=data.revision;playbackEnabled=true;
   attempt.complete();
   setText('connection-status',(local?'Đã kết nối thư viện trên máy.':'Đã kết nối thư viện trực tuyến.')+storageWarning);
   $('connection-settings').open=!!storageWarning;
+  if(!local && !connection.test)void updates.check(api.token);
  }catch(error){if(attempt.current()){next?.logout();attempt.complete();if(restored && error.status===401)await forgetAccess();if(attempt.current()){setText('connection-status',error.message);$('connection-settings').open=true;}}}
  finally{code='';if(attempt.current()){$('access-code').value='';$('connect-button').disabled=false;renderConnection();renderQuick();renderCategories();renderRows();}}
 }
@@ -175,15 +184,15 @@ function renderQuick(){
  quickPanel.setAutoHidden(false);
  const container=$('quick-cards');container.replaceChildren();
  quickNodes.clear();
- const cards=quickCards.length?quickCards:[{id:'missing-1',title:'Nhạc ngẫm nghĩ'},{id:'missing-2',title:'Cầu nguyện chúng con mong muốn'},{id:'missing-3',title:'Nhạc không lời cầu nguyện thống thanh'}];
+ const cards=applyQuickAudio(quickCards.length?quickCards:[{id:'missing-1',title:'Nhạc ngẫm nghĩ'},{id:'quick:our-wish-meditation',title:'Cầu nguyện chúng con mong muốn'},{id:'missing-3',title:'Nhạc không lời cầu nguyện thống thanh'}],quickTracks);
  for(const card of cards){
   const node=element('article','quick-item');
-  const eligible=!!quickPlaybackPlan(card,tracks);
+  const eligible=!!quickPlaybackPlan(card,playbackTracks());
   const button=element('button','quick-item-button');button.disabled=!eligible || !playbackEnabled;
   button.title=String(card.reason || 'Chưa có nguồn audio được xác minh.');
   quickNodes.set(card.id,{card,button,node});
   if(eligible)button.addEventListener('click',()=>{
-   const plan=quickPlaybackPlan(card,tracks);if(!plan || !playbackEnabled)return;
+   const plan=quickPlaybackPlan(card,playbackTracks());if(!plan || !playbackEnabled)return;
    if(plan.view)selectView(plan.view);
    if(plan.mode){$('search').value='';$('category').value='';selectMode(plan.mode);}
     if(activeQuickId===card.id && player.state.track && player.state.status!=='ended'){void player.toggle();return;}
@@ -196,8 +205,8 @@ function renderQuick(){
 
 function updateQuickStates(){
  for(const {card,button,node} of quickNodes.values()){
-  const state=quickPresentation(card,tracks,{activeQuickId,status:player.state.status,playbackEnabled});
-  button.disabled=state.disabled || !quickPlaybackPlan(card,tracks);
+  const state=quickPresentation(card,playbackTracks(),{activeQuickId,status:player.state.status,playbackEnabled});
+  button.disabled=state.disabled || !quickPlaybackPlan(card,playbackTracks());
   const copy=element('span','quick-item-copy');copy.append(element('span','quick-item-title',card.title),element('small','',state.label));
   button.replaceChildren(icon(state.icon),copy);
   button.setAttribute('aria-label',`${card.title}: ${state.label}`);button.setAttribute('aria-busy',String(state.busy));
@@ -276,10 +285,11 @@ $('demo-mode').addEventListener('change',()=>{
 
 player.subscribe(state=>{
  const current=state.track,playing=state.status==='playing',loading=['loading','buffering'].includes(state.status);
- setText('now-title',current?`${displayNumber(current)}. ${current.title}`:'Chọn một bài để bắt đầu');
+ setText('now-title',current?trackLabel(current):'Chọn một bài để bắt đầu');
  setText('now-subtitle',current?modeNames[current.mode]:'');
- $('now-title').title=current?`${displayNumber(current)}. ${current.title}`:'';
+ $('now-title').title=current?trackLabel(current):'';
  for(const id of ['play-toggle','previous','next','now-favourite'])$(id).disabled=!current;
+ $('now-favourite').disabled=!current || current.mode==='prayer';
  $('play-toggle').setAttribute('aria-label',playing || loading?'Tạm dừng':'Phát nhạc');setIcon($('play-toggle'),playing || loading?'pause':'play');
  $('now-favourite').setAttribute('aria-pressed',String(!!current && store.favourites.includes(current.id)));
  $('seek').disabled=!state.duration || loading;$('seek').max=String(state.duration);$('seek').value=String(state.position);$('seek').setAttribute('aria-valuetext',`${formatTime(state.position)} trên ${formatTime(state.duration)}`);
@@ -291,7 +301,7 @@ player.subscribe(state=>{
  $('player-status').classList.toggle('sr-only',!['loading','buffering','error','ended'].includes(state.status));
  renderQuickVisibility();
  if(current?.id!==lastTrack || state.status!==lastStatus){updateActiveRows();updateQuickStates();lastTrack=current?.id || '';lastStatus=state.status;}
- if(playing && current && lastRecorded!==current.id){store.record(current,revision);lastRecorded=current.id;if(view==='history')renderRows();}
+ if(playing && current && current.mode!=='prayer' && lastRecorded!==current.id){store.record(current,revision);lastRecorded=current.id;if(view==='history')renderRows();}
 });
 $('play-toggle').addEventListener('click',()=>void player.toggle());$('previous').addEventListener('click',()=>void player.previous());$('next').addEventListener('click',()=>void player.next());
 $('seek').addEventListener('input',()=>player.seek(Number($('seek').value)));$('volume').addEventListener('input',()=>player.setVolume(Number($('volume').value)));$('mute').addEventListener('click',()=>player.toggleMute());$('retry-play').addEventListener('click',()=>void player.retry());
@@ -303,4 +313,22 @@ document.addEventListener('keydown',event=>{
  if(action==='toggle')void player.toggle();else if(action==='forward')player.seek(player.state.position+5);else if(action==='backward')player.seek(player.state.position-5);else if(action==='mute')player.toggleMute();else if(action==='next')void player.next();else if(action==='previous')void player.previous();
 });
 window.addEventListener('pagehide',()=>player.stop());
+function renderUpdates(){
+ const state=updates.state;
+ const enabled=updates.available && connection.enabled && !localConnection && !connection.test && connection.base==='https://audiotp-media-api.ctcm251010.workers.dev';
+ $('update-check').hidden=!enabled;
+ $('update-check').disabled=['checking','installing'].includes(state.status);
+ setText('update-status',state.message);
+ $('update-notice').hidden=!enabled || !['available','installing','error'].includes(state.status);
+ setText('update-message',state.message);
+ $('update-install').disabled=!['available','error'].includes(state.status);
+ setText('update-install',state.status==='installing'?'Đang cập nhật…':state.status==='error'?'Thử lại':'Cập nhật');
+}
+updates.subscribe(renderUpdates);
+$('update-check').addEventListener('click',()=>{if(api?.token)void updates.check(api.token);else setText('update-status','Kết nối thư viện trước khi kiểm tra cập nhật.');});
+$('update-install').addEventListener('click',()=>{if(updates.state.status==='available'){player.pause();void updates.install();}else if(updates.state.status==='error' && api?.token)void updates.check(api.token);});
+// One small authenticated check at login, then at most once per six hours while
+// visible. Never download an installer without the user's click.
+const updateTimer=setInterval(()=>{if(!document.hidden && api?.token && sourceKind==='remote' && !connection.test)void updates.check(api.token);},6*60*60*1000);
+window.addEventListener('pagehide',()=>{clearInterval(updateTimer);updates.clear();});
 void loadCatalog();

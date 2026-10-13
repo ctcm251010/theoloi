@@ -93,10 +93,18 @@ def main(argv=None):
     parser.add_argument('--api-base',help='actual HTTPS API origin, required for release')
     parser.add_argument('--debug',action='store_true',help='native debug; without API, catalog-only and no network playback')
     parser.add_argument('--installer',action='store_true',help='create NSIS installer with release build')
+    parser.add_argument('--updater-public-key',type=Path,help='public .pub key for signed production updater (never the private key)')
     source=parser.add_mutually_exclusive_group()
     source.add_argument('--test-fixtures',action='store_true',help='isolated TEST app with self-authored catalog and loopback mock; never distribute as production')
     source.add_argument('--local-library',action='store_true',help='real authorized catalog through read-only loopback backend on this machine; not an online distribution')
     args=parser.parse_args(argv)
+    updater_key=None
+    if args.updater_public_key:
+        if not (args.build or args.prepare) or args.debug or args.test_fixtures or args.local_library: parser.error('Updater signing requires a production build/prepare')
+        if args.updater_public_key.suffix!='.pub': parser.error('Expected a public .pub file, never a private key')
+        updater_key=args.updater_public_key.read_text(encoding='utf-8').strip()
+        if not updater_key or len(updater_key)>2048 or not re.fullmatch(r'[A-Za-z0-9+/=]+',updater_key): parser.error('Invalid public updater key')
+        if args.build and (not args.installer or not os.environ.get('TAURI_SIGNING_PRIVATE_KEY')): parser.error('Signed updater requires --installer and TAURI_SIGNING_PRIVATE_KEY')
     if args.debug and args.installer: parser.error('Debug builds cannot produce a distribution installer')
     if (args.debug or args.installer or args.api_base or args.test_fixtures or args.local_library) and not (args.build or args.prepare): parser.error('Build options require --build or --prepare')
     origin=None
@@ -107,7 +115,7 @@ def main(argv=None):
         if args.test_fixtures and not origin: parser.error('Test fixtures require a loopback mock API origin')
         if args.local_library and not origin: parser.error('Local library requires an explicit loopback API origin')
     if args.prepare:
-        with exclusive_build(): stage,override,version=prepare_stage(origin,debug=args.debug,test_fixtures=args.test_fixtures,local_library=args.local_library)
+        with exclusive_build(): stage,override,version=prepare_stage(origin,debug=args.debug,test_fixtures=args.test_fixtures,local_library=args.local_library,updater_public_key=updater_key)
         print(json.dumps(dict(status='PREPARED_NOT_COMPILED',stage=str(stage),override=str(override),version=version,debug=args.debug)))
         return 0
     report,tools,npm_cli=preflight()
@@ -115,10 +123,11 @@ def main(argv=None):
     if not args.build: return 2 if report['missing'] else 0
     if report['missing']: return 2
     with exclusive_build():
-        return build_release(origin,args.installer,tools,npm_cli,debug=args.debug,test_fixtures=args.test_fixtures,local_library=args.local_library)
+        return build_release(origin,args.installer,tools,npm_cli,debug=args.debug,test_fixtures=args.test_fixtures,local_library=args.local_library,updater_public_key=updater_key)
 
 
-def prepare_stage(origin,debug=False,test_fixtures=False,local_library=False):
+def prepare_stage(origin,debug=False,test_fixtures=False,local_library=False,updater_public_key=None):
+    if updater_public_key and (debug or test_fixtures or local_library or origin!='https://audiotp-media-api.ctcm251010.workers.dev'): raise ValueError('Updater requires the pinned production HTTPS API origin')
     if local_library and test_fixtures: raise ValueError('Local library cannot use test fixtures')
     if origin is not None: origin=(test_origin if test_fixtures or local_library else api_origin)(origin)
     if test_fixtures and not origin: raise ValueError('Test fixture origin required')
@@ -130,7 +139,7 @@ def prepare_stage(origin,debug=False,test_fixtures=False,local_library=False):
     version=config.get('version')
     if not isinstance(version,str) or not re.fullmatch(r'\d+\.\d+\.\d+',version): raise ValueError('Invalid application version')
     web=(APP/'web').resolve()
-    files=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','favicon.svg']
+    files=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','supplementary.mjs','app-updates.mjs','favicon.svg']
     if not test_fixtures: files+=['catalog.client.json','quick-play.json']
     for name in files:
         source=APP/'web'/name
@@ -162,6 +171,8 @@ def prepare_stage(origin,debug=False,test_fixtures=False,local_library=False):
     csp=f"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'{remote}; connect-src 'self'{remote} ipc: http://ipc.localhost; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'"
     override=backups/(stamp+'.override.json')
     settings={'build':{'frontendDist':'../web-release/'+stamp,'devUrl':None},'app':{'security':{'csp':csp,'devCsp':csp,'capabilities':[]}},'bundle':{'resources':[],'externalBin':[]}}
+    settings['bundle']['createUpdaterArtifacts']=bool(updater_public_key)
+    if updater_public_key: settings['plugins']={'updater':{'pubkey':updater_public_key,'endpoints':[origin+'/v1/updates/windows-x86_64/{{current_version}}'],'requireSignedVersion':True,'windows':{'installMode':'passive'}}}
     if test_fixtures: settings.update(identifier='org.audiotp.acceptance',productName='AudioTP Test')
     if local_library: settings.update(identifier='org.audiotp.local',productName='AudioTP Local')
     override.write_text(json.dumps(settings,indent=2),encoding='utf-8')
@@ -178,8 +189,8 @@ def inspect_artifact(artifact,started):
     return data
 
 
-def build_release(origin,installer,tools,npm_cli,debug=False,test_fixtures=False,local_library=False):
-    stage,override,version=prepare_stage(origin,debug=debug,test_fixtures=test_fixtures,local_library=local_library)
+def build_release(origin,installer,tools,npm_cli,debug=False,test_fixtures=False,local_library=False,updater_public_key=None):
+    stage,override,version=prepare_stage(origin,debug=debug,test_fixtures=test_fixtures,local_library=local_library,updater_public_key=updater_public_key)
     stamp=stage.name
     child_env=os.environ.copy()
     child_env.pop('TAURI_CONFIG',None)
@@ -206,6 +217,12 @@ def build_release(origin,installer,tools,npm_cli,debug=False,test_fixtures=False
         installers=[p for p in installers if p.stat().st_mtime>=started]
         if len(installers)!=1: raise ValueError('Expected exactly one fresh NSIS installer')
         inspected.extend((p.name,inspect_artifact(p,started)) for p in installers)
+        if updater_public_key:
+            signature=Path(str(installers[0])+'.sig')
+            if not signature.is_file() or signature.stat().st_mtime<started: raise ValueError('Missing fresh updater signature')
+            value=signature.read_bytes()
+            if not value.strip() or len(value)>2048: raise ValueError('Invalid updater signature')
+            inspected.append((signature.name,value))
     guide=(ROOT/'docs/windows-user-guide.vi.md').read_bytes()
     if test_fixtures:
         guide=('''# AudioTP TEST — chỉ dùng nghiệm thu

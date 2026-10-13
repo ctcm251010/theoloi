@@ -1,5 +1,9 @@
 # THEOLOI — Current phase
 
+## Task riêng 1.0.1 — IN PROGRESS /13-10-2026
+
+Theo yêu cầu mới: tích hợp một bản cầu nguyện đã được người dùng xác nhận đúng nội dung/quyền phục vụ và thêm updater có chữ ký. Registry/manifest/state riêng; không sửa 983 asset gốc. Prayer đã upload + GET SHA-256 verified; API source giữ catalog cũ, supplementary endpoint riêng. Frontend67, Worker35/typecheck PASS; Python227 tổng/223 PASS/4 symlink SKIP. Rust/signature tests và build release đang xác minh lại. Chưa deploy Worker mới hoặc phát hành GitHub1.0.1. [Checklist](superpowers/plans/2026-10-13-prayer-updater.md). Không triển khai toàn bộ Closed Beta/Phase03.
+
 ## Task phát hành1.0.0 — DONE /13-10-2026
 
 Người dùng xác nhận bản mới thử ổn và yêu cầu merge/phát hành1.0.0. Hai review độc lập không Critical/Important; PR#1/#2 đã MERGED, tagv1.0.0 trỏ0f49c91; main có docs ledger theo sau. Build/regression/integrity/secret scan/clean-clone tests PASS (SKIP ghi riêng). Người dùng đã publish Release khi chưa có binary; nay đã bổ sung đủ bốn file, Assets6, toàn bộ digestGitHub khớp local. [Release](https://github.com/ctcm251010/theoloi/releases/tag/v1.0.0) · [Báo cáo](release-1.0.0-report.md). Không tự bắt đầu updater/Closed Beta hoặc đánh dấu máy khác đã nghiệm thu.

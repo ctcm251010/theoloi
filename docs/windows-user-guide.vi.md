@@ -1,4 +1,4 @@
-# AudioTP 1.0 — Hướng dẫn sử dụng
+# AudioTP 1.0.1 — Hướng dẫn sử dụng
 
 Lần đầu mở bản ONLINE, phần **Kết nối thư viện** tự hiện để bạn dán mã và chọn Nhớ đăng nhập. Nếu đã nhớ mã và tự kết nối thành công, app vào thư viện trực tiếp. Bạn luôn có thể mở lại phần kết nối trong Cài đặt.
 
@@ -16,13 +16,15 @@ Tìm bằng số hoặc tên không dấu; dùng `PL 1` để tìm phụ lục. 
 
 Thanh dưới có phát/dừng, tua và bài trước/sau; desktop có âm lượng. Nút **…** mở ngẫu nhiên, lặp và phát liên tục. Space phát/dừng, ←/→ tua 5 giây, N/P đổi bài, M bật/tắt tiếng khi không nhập văn bản. Điều hướng trên mở Yêu thích/Gần đây; Cài đặt đổi sáng/tối; Bộ lọc chọn chủ đề/phụ lục.
 
-**Nghe nhanh** nằm dưới ba tab. Nhạc ngẫm nghĩ mở danh sách riêng và phát “Tâm Linh Tha Thiết Cầu Nguyện”, bài đầu trong nguồn hiện có. Bấm lại để tạm dừng/phát tiếp; bài tiếp theo tuân theo chế độ phát đã chọn. Hai mục cầu nguyện ghi “Chưa khả dụng” đến khi có nguồn được xác minh, không có âm thanh thay thế. Nhập từ khóa sẽ ẩn Nghe nhanh; xóa từ khóa sẽ hiện lại. Thu gọn thủ công được nhớ, chỉ mở lại khi bạn bấm Mở rộng.
+**Nghe nhanh** nằm dưới ba tab. Nhạc ngẫm nghĩ mở danh sách riêng và phát “Tâm Linh Tha Thiết Cầu Nguyện”, bài đầu trong nguồn hiện có. “Cầu nguyện chúng con mong muốn” phát bản thu riêng dài khoảng 1:09 khi kết nối API có nguồn đã xác minh. Bấm lại để tạm dừng/phát tiếp; tất cả dùng chung player. Mục thống thanh vẫn chưa khả dụng. Bài cầu nguyện không thuộc ba tab đánh số, chưa lưu vào Yêu thích/Gần đây. Nhập từ khóa sẽ ẩn Nghe nhanh; xóa từ khóa sẽ hiện lại. Thu gọn thủ công được nhớ, chỉ mở lại khi bạn bấm Mở rộng.
 
 Nếu mất mạng, chờ kết nối lại và bấm **Thử phát lại**. App cố giữ vị trí khi thử lại. Nếu đã nhớ đăng nhập, app thử kết nối lại khi phiên hết hạn. Nếu mã đã bị thu hồi/đổi, cần người quản lý cấp lại; app không retry vô hạn. Nếu Windows không mở được dữ liệu mã hóa, đăng xuất để xóa rồi nhập lại mã.
 
 App không tự tải toàn thư viện. Phiên bản này không lưu cache audio lâu dài; dữ liệu buffer do WebView2 quản lý. Yêu thích, lịch sử và giao diện lưu riêng với mã truy cập đã được Windows mã hóa; session và vé phát chỉ giữ trong RAM.
 
-Chỉ cập nhật từ bản cài chính thức của người quản lý, đóng app trước khi chạy bản cài mới. Chưa có tự động cập nhật hoặc chữ ký phát hành được kiểm chứng. Khi báo lỗi, gửi phiên bản app, tên/số bài và mô tả thao tác; tránh gửi mã truy cập hoặc URL phát tạm thời.
+Sau khi kết nối, app kiểm tra phiên bản mới và kiểm tra lại mỗi sáu giờ khi cửa sổ đang hiển thị. Có thể bấm **Cài đặt → Kiểm tra cập nhật**. Khi có bản mới, thông báo nhỏ xuất hiện với nút **Cập nhật**. App chỉ tải bộ cài sau khi bạn bấm nút; phát nhạc tạm dừng, chữ ký và phiên bản được xác minh trước khi mở bộ cài. App đóng để cài đặt; mở lại AudioTP sau khi hoàn tất. Không cần đăng nhập GitHub hoặc tải lại thư viện audio. Nếu lỗi, thông báo có nút Thử lại; bản đang cài vẫn dùng được.
+
+**Đang dùng 1.0.0:** bản này chưa có chức năng cập nhật, nên cần nhận và chạy bộ cài 1.0.1 từ người quản lý một lần. Từ 1.0.1 trở đi hỗ trợ luồng cập nhật trên. Chữ ký updater bảo vệ file cập nhật; đây không phải chữ ký Windows Authenticode, nên Windows vẫn có thể hiện cảnh báo nhà phát hành chưa xác định. Khi báo lỗi, gửi phiên bản app, tên/số bài và mô tả thao tác; tránh gửi mã truy cập hoặc URL phát tạm thời.
 
 **Bản 1.0.0:** phát hành nội bộ theo yêu cầu người quản lý, dùng API HTTPS và R2 private. Người quản lý đã xác nhận bản trước hoạt động và đăng nhập bằng mã ngắn; máy Windows khác và cài/gỡ bản ONLINE còn cần thử thực tế. Bản phát hành chưa có Authenticode hoặc tự cập nhật. Version1.0.0 không thay thế bằng chứng nghiệm thu còn thiếu. Xem báo cáo trong repository: docs/phase02-online-beta.md.
 

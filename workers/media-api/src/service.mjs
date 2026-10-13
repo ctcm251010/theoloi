@@ -1,5 +1,5 @@
 import {timingSafeEqual} from 'node:crypto';
-import {validateData} from './validate-data.mjs';
+import {validateData,validateQuickAudio,validateUpdate,stableVersion,EMPTY_QUICK_AUDIO} from './validate-data.mjs';
 /** @typedef {{[K in keyof Env]: Env[K] extends string ? string : Env[K]} & {LOCAL_PREVIEW?:string}} WorkerEnv */
 /** @typedef {import('./contracts').Asset} Asset */
 /** @typedef {import('./contracts').ClientCatalog} ClientCatalog */
@@ -73,18 +73,53 @@ export function byteRange(value,size){
 /**
  * @param {R2Object | null} object
  * @param {Asset} asset
+ * @param {string} contentType
  */
-function metadataMatches(object,asset){
- return !!object && object.size===asset.bytes && object.customMetadata?.sha256===asset.sha256 && object.customMetadata?.['asset-id']===asset.assetId && object.httpMetadata?.contentType==='audio/mp4' && typeof object.etag==='string' && object.etag.length>0 && typeof object.httpEtag==='string' && /^"[^"\r\n]+"$/.test(object.httpEtag);
+function metadataMatches(object,asset,contentType){
+ return !!object && object.size===asset.bytes && object.customMetadata?.sha256===asset.sha256 && object.customMetadata?.['asset-id']===asset.assetId && object.httpMetadata?.contentType===contentType && typeof object.etag==='string' && object.etag.length>0 && typeof object.httpEtag==='string' && /^"[^"\r\n]+"$/.test(object.httpEtag);
+}
+
+/** @param {Request} request @param {R2Bucket} bucket @param {Asset} asset @param {string} contentType @param {boolean} exposeId */
+async function streamAsset(request,bucket,asset,contentType,exposeId){
+ const head=await bucket.head(asset.objectKey);if(!head)return error(404,'asset_missing');
+ if(!metadataMatches(head,asset,contentType))return error(409,'asset_integrity_mismatch');
+ const h=new Headers({'Content-Type':contentType,'Accept-Ranges':'bytes','ETag':head.httpEtag});
+ if(exposeId)h.set('X-AudioTP-Asset-Id',asset.assetId);
+ const none=request.headers.get('If-None-Match');
+ if(none?.split(',').some(t=>['*',head.httpEtag].includes(t.trim().replace(/^W\//,''))))return new Response(null,{status:304,headers:h});
+ // Range is defined for GET; HEAD describes the full selected representation.
+ const rawRange=request.method==='GET'?request.headers.get('Range'):null;
+ const ifRange=request.headers.get('If-Range');
+ let range=null;
+ if(rawRange && (!ifRange || ifRange===head.httpEtag)){
+  range=byteRange(rawRange,asset.bytes);
+  if(!range){h.set('Content-Range',`bytes */${asset.bytes}`);return error(416,'invalid_range',h);}
+ }
+ const length=range?.length ?? asset.bytes;h.set('Content-Length',String(length));
+ if(range)h.set('Content-Range',`bytes ${range.offset}-${range.offset+range.length-1}/${asset.bytes}`);
+ const status=range?206:200;
+ if(request.method==='HEAD')return new Response(null,{status,headers:h});
+ const object=await bucket.get(asset.objectKey,{...(range?{range}:{}),onlyIf:{etagMatches:head.etag}});
+ if(!object)return error(404,'asset_missing');
+ if(!('body' in object))return error(409,'asset_changed');
+ if(!metadataMatches(object,asset,contentType) || object.etag!==head.etag || (range && (!object.range || !('offset' in object.range) || !('length' in object.range) || object.range.offset!==range.offset || object.range.length!==range.length))){await object.body.cancel();return error(409,'asset_changed');}
+ return new Response(object.body,{status,headers:h});
 }
 
 /**
  * @param {ClientCatalog} client
  * @param {Record<string,Asset>} allowlist
+ * @param {{now?:()=>number,quickAudio?:import('./contracts').QuickAudio,updates?:import('./contracts').UpdateRelease}} options
  */
-export function createService(client,allowlist,{now=epochSeconds}={}){
+export function createService(client,allowlist,{now=epochSeconds,quickAudio=EMPTY_QUICK_AUDIO,updates}={}){
  validateData(client,allowlist);
- const tracks=new Map(client.tracks.map(t=>[t.id,t]));
+ validateQuickAudio(quickAudio,client,allowlist);
+ if(updates!==undefined)validateUpdate(updates);
+ /** @type {Map<string,import('./contracts').ClientTrack | import('./contracts').PrayerTrack>} */
+ const tracks=new Map([...client.tracks,...quickAudio.tracks].map(t=>[t.id,t]));
+ const publicQuick={schemaVersion:quickAudio.schemaVersion,revision:quickAudio.revision,tracks:quickAudio.tracks};
+ /** @param {string} id */
+ const revisionFor=id=>Object.hasOwn(quickAudio.assets,id)?quickAudio.revision:client.revision;
  return {
  /**
   * @param {Request} request
@@ -134,34 +169,28 @@ export function createService(client,allowlist,{now=epochSeconds}={}){
     const claims=await verify(url.searchParams.get('ticket'),env.SIGNING_KEY,'media',env.AUTH_EPOCH,now());
     if(!claims)return finish(error(401,'invalid_or_expired_ticket'));
     let id;try{id=decodeURIComponent(mediaMatch[1]);}catch{return finish(error(404,'asset_not_found'));}
-    if(claims.id!==id || claims.revision!==client.revision)return finish(error(403,'ticket_scope_mismatch'));
-    const asset=allowlist[id];if(!asset)return finish(error(404,'asset_not_found'));
-    const head=await env.MEDIA.head(asset.objectKey);if(!head)return finish(error(404,'asset_missing'));
-    if(!metadataMatches(head,asset))return finish(error(409,'asset_integrity_mismatch'));
-    const h=new Headers({'Content-Type':'audio/mp4','Accept-Ranges':'bytes','ETag':head.httpEtag,'X-AudioTP-Asset-Id':id});
-    const none=request.headers.get('If-None-Match');
-    if(none?.split(',').some(t=>['*',head.httpEtag].includes(t.trim().replace(/^W\//,''))))return finish(new Response(null,{status:304,headers:h}));
-    // Range is defined for GET; HEAD describes the full selected representation.
-    const rawRange=request.method==='GET'?request.headers.get('Range'):null;
-    const ifRange=request.headers.get('If-Range');
-    let range=null;
-    if(rawRange && (!ifRange || ifRange===head.httpEtag)){
-     range=byteRange(rawRange,asset.bytes);
-     if(!range){h.set('Content-Range',`bytes */${asset.bytes}`);return finish(error(416,'invalid_range',h));}
-    }
-    const length=range?.length ?? asset.bytes;h.set('Content-Length',String(length));
-    if(range)h.set('Content-Range',`bytes ${range.offset}-${range.offset+range.length-1}/${asset.bytes}`);
-    const status=range?206:200;
-    if(request.method==='HEAD')return finish(new Response(null,{status,headers:h}));
-    const object=await env.MEDIA.get(asset.objectKey,{...(range?{range}:{}),onlyIf:{etagMatches:head.etag}});
-    if(!object)return finish(error(404,'asset_missing'));
-    if(!('body' in object))return finish(error(409,'asset_changed'));
-    if(!metadataMatches(object,asset) || object.etag!==head.etag || (range && (!object.range || !('offset' in object.range) || !('length' in object.range) || object.range.offset!==range.offset || object.range.length!==range.length))){await object.body.cancel();return finish(error(409,'asset_changed'));}
-    return finish(new Response(object.body,{status,headers:h}));
+    if(claims.id!==id || claims.revision!==revisionFor(id))return finish(error(403,'ticket_scope_mismatch'));
+    const asset=Object.hasOwn(quickAudio.assets,id)?quickAudio.assets[id]:Object.hasOwn(allowlist,id)?allowlist[id]:null;if(!asset)return finish(error(404,'asset_not_found'));
+    return finish(await streamAsset(request,env.MEDIA,asset,'audio/mp4',true));
    }
    const authorization=request.headers.get('Authorization');
    const session=await verify(authorization?.startsWith('Bearer ')?authorization.slice(7):null,env.SIGNING_KEY,'session',env.AUTH_EPOCH,now());
    if(!session)return finish(error(401,'invalid_or_expired_session'));
+   if(url.pathname==='/v1/quick-audio' && ['GET','HEAD'].includes(request.method))return finish(Response.json(publicQuick));
+   const updateCheck=/^\/v1\/updates\/windows-x86_64\/([^/]+)$/.exec(url.pathname);
+   if(updateCheck && ['GET','HEAD'].includes(request.method)){
+    const current=stableVersion(updateCheck[1]);if(!current)return finish(error(400,'invalid_version'));
+    const available=updates?stableVersion(updates.version):null;
+    const differing=available?current.findIndex((part,index)=>part!==available[index]):-1;
+    if(!updates || !available || differing===-1 || current[differing]>available[differing])return finish(new Response(null,{status:204}));
+    return finish(Response.json({version:updates.version,pub_date:updates.pubDate,notes:updates.notes,url:`${url.origin}/v1/update-files/${updates.version}/installer`,signature:updates.signature}));
+   }
+   const updateFile=/^\/v1\/update-files\/([^/]+)\/installer$/.exec(url.pathname);
+   if(updateFile && ['GET','HEAD'].includes(request.method)){
+    if(!updates || updateFile[1]!==updates.version)return finish(error(404,'asset_not_found'));
+    const asset={assetId:`audiotp:windows:x86_64:${updates.version}`,objectKey:updates.objectKey,bytes:updates.bytes,sha256:updates.sha256};
+    return finish(await streamAsset(request,env.MEDIA,asset,'application/octet-stream',false));
+   }
    if(url.pathname==='/v1/catalog' && ['GET','HEAD'].includes(request.method))return finish(Response.json(client));
    const song=/^\/v1\/songs\/([^/]+)$/.exec(url.pathname);
    if(song && ['GET','HEAD'].includes(request.method)){
@@ -174,7 +203,7 @@ export function createService(client,allowlist,{now=epochSeconds}={}){
     const track=typeof data?.assetId==='string'?tracks.get(data.assetId):null;if(!track)return finish(error(404,'asset_not_found'));
     const issued=now(),seconds=Math.min(3600,Math.max(300,Math.ceil(track.durationSeconds)+600));
     /** @type {Claims} */
-    const claims={v:1,type:'media',sub:session.sub,id:track.id,revision:client.revision,epoch:env.AUTH_EPOCH,iat:issued,exp:Math.min(session.exp,issued+seconds)};
+    const claims={v:1,type:'media',sub:session.sub,id:track.id,revision:revisionFor(track.id),epoch:env.AUTH_EPOCH,iat:issued,exp:Math.min(session.exp,issued+seconds)};
     return finish(Response.json({assetId:track.id,path:`/v1/media/${encodeURIComponent(track.id)}`,ticket:await sign(claims,env.SIGNING_KEY),expiresAt:claims.exp}));
    }
    return finish(error(404,'route_not_found'));

@@ -46,6 +46,7 @@ export class MediaAPI {
  async login(code){this.logout();const generation=this.generation;const data=await this.request('/v1/auth/login',{method:'POST',body:{code},authenticated:false});if(generation!==this.generation)throw Error('Yêu cầu kết nối đã hủy.');this.adoptSession(data);}
  async localSession(){if(!['127.0.0.1','localhost'].includes(new URL(this.base).hostname))throw Error('Chỉ dùng cho bản nghe local.');const generation=this.generation;const data=await this.request('/v1/local-session',{method:'POST',authenticated:false});if(generation!==this.generation)throw Error('Yêu cầu kết nối đã hủy.');this.adoptSession(data);this.localPreview=true;}
  catalog(){return this.request('/v1/catalog');}
+ async quickAudio(){try{return await this.request('/v1/quick-audio');}catch(error){if(error.status===404)return null;throw error;}}
  async resolve(track){
   const cancellation=this.cancellation;
   if(this.token && this.expiresAt>this.now() && !this.needsRefresh(track) && this.urls.has(track.id))return this.urls.get(track.id);

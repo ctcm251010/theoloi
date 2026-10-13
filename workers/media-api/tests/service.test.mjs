@@ -7,12 +7,12 @@ const sha=data=>createHash('sha256').update(data).digest('hex');
 const tracks=[{id:'guide:1',logicalId:'song:1',mode:'guide',durationSeconds:125},{id:'instrumental:1',logicalId:'song:1',mode:'instrumental',durationSeconds:126},{id:'silent:1',logicalId:'silent:1',mode:'silent',durationSeconds:57}].map(t=>({...t,section:t.mode==='silent'?null:'main',number:1,title:'Bài thử tự tạo',category:'Fixture'}));
 const bytes=Buffer.from('0123456789abcdefghijklmnopqrstuvwxyz');
 const allow=Object.fromEntries(tracks.map(t=>[t.id,{assetId:t.id,objectKey:'audio/v1/watv/vi/'+t.id,bytes:bytes.length,sha256:sha(bytes)}]));
-function fixture(){
+function fixture(options={}){
  let clock=1000;const calls=[];
  const env={SERVING_ENABLED:'true',AUTH_EPOCH:'1',SIGNING_KEY:'unit-test-signing-key-01234567890123456789',GROUP_CODE_SHA256:sha(code),ALLOWED_ORIGINS:'http://tauri.localhost',LOGIN_LIMITER:{async limit(){return {success:true};}},REQUEST_LIMITER:{async limit(){return {success:true};}}};
- const meta=key=>{const a=Object.values(allow).find(a=>a.objectKey===key);return a?{size:a.bytes,etag:'opaque',httpEtag:'"opaque"',customMetadata:{sha256:a.sha256,'asset-id':a.assetId},httpMetadata:{contentType:'audio/mp4'}}:null;};
+ const meta=key=>{const update=options.updates;const a=Object.values({...allow,...options.quickAudio?.assets}).find(a=>a.objectKey===key) || (update?.objectKey===key?{...update,assetId:`audiotp:windows:x86_64:${update.version}`}:null);return a?{size:a.bytes,etag:'opaque',httpEtag:'"opaque"',customMetadata:{sha256:a.sha256,'asset-id':a.assetId},httpMetadata:{contentType:key.startsWith('updates/')?'application/octet-stream':'audio/mp4'}}:null;};
  env.MEDIA={async head(key){calls.push(['head',key]);return meta(key);},async get(key,options){calls.push(['get',key,options]);const m=meta(key);if(!m)return null;const r=options?.range;return {...m,...(r?{range:r}:{}),body:new Response(r?bytes.subarray(r.offset,r.offset+r.length):bytes).body};}};
- const service=createService({schemaVersion:1,revision:'reviewed-r1',tracks},allow,{now:()=>clock});
+ const service=createService({schemaVersion:1,revision:'reviewed-r1',tracks},allow,{...options,now:()=>clock});
  const request=(path,{method='GET',token,body,headers={}}={})=>service.fetch(new Request('https://media.example'+path,{method,headers:{...(token?{Authorization:'Bearer '+token}:{}),...(body?{'Content-Type':'application/json'}:{}),...headers},...(body?{body:JSON.stringify(body)}:{})}),env);
  const login=async()=>{const r=await request('/v1/auth/login',{method:'POST',body:{code}});assert.equal(r.status,200);return (await r.json()).token;};
  const ticket=async(id='guide:1')=>{const token=await login();const r=await request('/v1/play-tickets',{method:'POST',token,body:{assetId:id}});assert.equal(r.status,200);const data=await r.json();return data.path+'?ticket='+data.ticket;};
@@ -153,4 +153,94 @@ test('upstream diagnostics contain only a fixed event and code',async t=>{
  f.env.MEDIA.get=async()=>{throw Error('PRIVATE exception, object key and token must never be logged');};
  const response=await f.request(path);assert.equal(response.status,503);
  assert.deepEqual(lines.map(s=>JSON.parse(s)),[{event:'media_api_failure',code:'upstream_unavailable'}]);
+});
+
+const prayerId='watv:vi:prayer:our-wish';
+const prayerTrack={id:prayerId,logicalId:prayerId,mode:'prayer',section:null,number:null,title:'Cầu nguyện chúng con mong muốn',category:'Cầu nguyện',durationSeconds:69.427664};
+const quickAudio={schemaVersion:1,revision:'sha256:'+sha('supplementary'),tracks:[prayerTrack],assets:{[prayerId]:{assetId:prayerId,objectKey:`audio/v1/watv/vi/prayer/our-wish/${sha(bytes)}.m4a`,bytes:bytes.length,sha256:sha(bytes)}}};
+// Structurally valid synthetic minisign envelope; not an executable or trusted release.
+const minisign=`untrusted comment: synthetic test signature\n${Buffer.concat([Buffer.from('Ed'),Buffer.alloc(72)]).toString('base64')}\ntrusted comment: synthetic\n${Buffer.alloc(64).toString('base64')}\n`;
+const updates={version:'1.0.1',pubDate:'2026-10-13T00:00:00Z',notes:'Synthetic release',objectKey:'updates/windows-x86_64/1.0.1/AudioTP_1.0.1_x64-setup.exe',bytes:bytes.length,sha256:sha(bytes),signature:Buffer.from(minisign).toString('base64')};
+
+test('quick audio is authenticated, metadata only and keeps original catalog unchanged',async()=>{
+ const f=fixture({quickAudio}),token=await f.login();
+ assert.equal((await f.request('/v1/quick-audio')).status,401);
+ const response=await f.request('/v1/quick-audio',{token});assert.equal(response.status,200);
+ assert.deepEqual(await response.json(),{schemaVersion:1,revision:quickAudio.revision,tracks:[prayerTrack]});
+ assert.deepEqual(await (await f.request('/v1/catalog',{token})).json(),{schemaVersion:1,revision:'reviewed-r1',tracks});
+ assert.equal((await f.request('/v1/quick-audio',{method:'HEAD',token})).body,null);
+ assert.equal(f.calls.length,0);
+ const empty=fixture(),emptyToken=await empty.login();const payload=await (await empty.request('/v1/quick-audio',{token:emptyToken})).json();
+ assert.equal(payload.schemaVersion,1);assert.deepEqual(payload.tracks,[]);assert.match(payload.revision,/^sha256:[a-f0-9]{64}$/);
+});
+
+test('prayer tickets use supplementary revision and share strict media range and metadata behavior',async()=>{
+ const f=fixture({quickAudio}),path=await f.ticket(prayerId);
+ const claims=JSON.parse(Buffer.from(new URL('https://media.example'+path).searchParams.get('ticket').split('.')[0],'base64url'));
+ assert.equal(claims.revision,quickAudio.revision);
+ const oldPath=await f.ticket();const oldClaims=JSON.parse(Buffer.from(new URL('https://media.example'+oldPath).searchParams.get('ticket').split('.')[0],'base64url'));
+ assert.equal(oldClaims.revision,'reviewed-r1');assert.equal((await f.request(oldPath,{method:'HEAD'})).status,200);
+ let response=await f.request(path,{headers:{Range:'bytes=2-5'}});assert.equal(response.status,206);assert.deepEqual(Buffer.from(await response.arrayBuffer()),bytes.subarray(2,6));
+ assert.equal(response.headers.get('X-AudioTP-Asset-Id'),prayerId);
+ assert.equal((await f.request(path,{method:'HEAD'})).status,200);
+ response=await f.request(path,{headers:{Range:'bytes=999-'}});assert.equal(response.status,416);
+ f.env.MEDIA.head=async key=>({...f.meta(key),customMetadata:{sha256:'bad','asset-id':prayerId}});
+ assert.equal((await f.request(path)).status,409);
+});
+
+test('quick audio validator rejects private fields, shape drift, unsafe keys and original-mode collisions',()=>{
+ const catalog={schemaVersion:1,revision:'reviewed-r1',tracks};
+ const invalid=[{...quickAudio,sourceUrl:'private'},{...quickAudio,revision:'r1'},{...quickAudio,tracks:[{...prayerTrack,number:1}]},{...quickAudio,tracks:[{...prayerTrack,mode:'guide'}]},{...quickAudio,tracks:[{...prayerTrack,id:'guide:1'}]},{...quickAudio,tracks:[{...prayerTrack,title:'other'}]},{...quickAudio,assets:{...quickAudio.assets,extra:allow['guide:1']}},{...quickAudio,assets:{[prayerId]:{...quickAudio.assets[prayerId],objectKey:'audio/v1/watv/vi/prayer/../secret'}}},{...quickAudio,assets:{[prayerId]:{...quickAudio.assets[prayerId],sha256:'bad'}}}];
+ for(const quickAudio of invalid)assert.throws(()=>createService(catalog,allow,{quickAudio}));
+ assert.throws(()=>createService({...catalog,tracks:[prayerTrack]},quickAudio.assets));
+ assert.throws(()=>createService(catalog,allow,{quickAudio:null}));
+});
+
+test('signed update checks require session and only offer strictly newer stable versions',async()=>{
+ const f=fixture({updates}),token=await f.login();
+ assert.equal((await f.request('/v1/updates/windows-x86_64/1.0.0')).status,401);
+ let r=await f.request('/v1/updates/windows-x86_64/1.0.0',{token});assert.equal(r.status,200);
+ assert.deepEqual(await r.json(),{version:'1.0.1',pub_date:updates.pubDate,notes:updates.notes,url:'https://media.example/v1/update-files/1.0.1/installer',signature:updates.signature});
+ r=await f.request('/v1/updates/windows-x86_64/1.0.0',{method:'HEAD',token});assert.equal(r.status,200);assert.equal(r.body,null);
+ for(const version of ['1.0.1','1.0.2','1.1.0','2.0.0','10.0.0'])assert.equal((await f.request('/v1/updates/windows-x86_64/'+version,{token})).status,204);
+ for(const version of ['01.0.0','1.0','1.0.0-beta','1.0.0+build','v1.0.0','9007199254740992.0.0','%31.0.0'])assert.equal((await f.request('/v1/updates/windows-x86_64/'+version,{token})).status,400,version);
+ const empty=fixture(),emptyToken=await empty.login();assert.equal((await empty.request('/v1/updates/windows-x86_64/1.0.0',{token:emptyToken})).status,204);
+ assert.equal(f.calls.length,0);
+});
+
+test('installer streams only exact private artifact under bearer auth with cheap HEAD and immutable get',async()=>{
+ const f=fixture({updates}),token=await f.login(),path='/v1/update-files/1.0.1/installer';
+ assert.equal((await f.request(path)).status,401);
+ assert.equal((await f.request(path+'?token='+token)).status,401);
+ const head=await f.request(path,{method:'HEAD',token});assert.equal(head.status,200);assert.equal(head.body,null);assert.equal(head.headers.get('Content-Type'),'application/octet-stream');assert.equal(head.headers.get('Content-Length'),String(bytes.length));
+ assert.deepEqual(f.calls.map(c=>c[0]),['head']);
+ const r=await f.request(path,{token});assert.equal(r.status,200);assert.deepEqual(Buffer.from(await r.arrayBuffer()),bytes);
+ assert.deepEqual(f.calls.at(-1),['get',updates.objectKey,{onlyIf:{etagMatches:'opaque'}}]);
+ assert.equal(r.headers.get('Location'),null);assert.equal(r.headers.get('sha256'),null);assert.equal(r.headers.get('X-AudioTP-Asset-Id'),null);
+ assert.equal((await f.request(path,{token,headers:{'If-None-Match':'"opaque"'}})).status,304);
+ for(const bad of ['/v1/update-files/1.0.0/installer','/v1/update-files/1.0.1/other','/v1/update-files/%31.0.1/installer','/v1/update-files/1.0.1/installer/extra','/v1/update-files/1.0.1%2F..%2Fsecret/installer'])assert.equal((await f.request(bad,{token})).status,404,bad);
+});
+
+test('installer metadata faults and replacement between HEAD and GET fail closed',async()=>{
+ for(const patch of [{size:1},{customMetadata:{}},{httpMetadata:{contentType:'audio/mp4'}},{httpEtag:''}]){
+  const f=fixture({updates}),token=await f.login();f.env.MEDIA.head=async key=>({...f.meta(key),...patch});assert.equal((await f.request('/v1/update-files/1.0.1/installer',{token})).status,409);assert.equal(f.calls.length,0);
+ }
+ const f=fixture({updates}),token=await f.login();let cancelled=false;
+ f.env.MEDIA.get=async key=>({...f.meta(key),etag:'changed',body:new ReadableStream({cancel(){cancelled=true;}})});
+ assert.equal((await f.request('/v1/update-files/1.0.1/installer',{token})).status,409);assert.equal(cancelled,true);
+});
+
+test('updates reject unsafe release metadata and unsigned or invalid minisign envelopes before serving',()=>{
+ const catalog={schemaVersion:1,revision:'reviewed-r1',tracks};
+ for(const patch of [{version:'1.0.1-beta'},{version:'01.0.1'},{version:'1.0.2'},{pubDate:'tomorrow'},{pubDate:'2026-02-30T00:00:00Z'},{notes:1},{objectKey:'https://evil.invalid/file.exe'},{objectKey:'updates/windows-x86_64/1.0.1/../secret'},{bytes:0},{sha256:'bad'},{signature:''},{signature:'AAAA'},{signature:Buffer.from('not a minisign signature').toString('base64')},{sourceUrl:'private'}])assert.throws(()=>createService(catalog,allow,{updates:{...updates,...patch}}));
+ assert.throws(()=>createService(catalog,allow,{updates:null}));
+});
+
+test('prayer and update routes preserve serving gates, rate limiting and no-store behavior',async()=>{
+ const f=fixture({quickAudio,updates}),token=await f.login();
+ for(const path of ['/v1/quick-audio','/v1/updates/windows-x86_64/1.0.0','/v1/update-files/1.0.1/installer']){
+  const r=await f.request(path,{token});assert.equal(r.headers.get('Cache-Control'),'private, no-store');await r.arrayBuffer();
+  f.env.REQUEST_LIMITER.limit=async()=>({success:false});assert.equal((await f.request(path,{token})).status,429);
+  f.env.REQUEST_LIMITER.limit=async()=>({success:true});f.env.SERVING_ENABLED='false';assert.equal((await f.request(path,{token})).status,403);f.env.SERVING_ENABLED='true';
+ }
 });
