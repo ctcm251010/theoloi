@@ -14,6 +14,8 @@ MODULE = ROOT / 'scripts/windows_catalog.py'
 class WindowsCatalogTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        if not all((ROOT / name).is_file() for name in ('catalog/catalog.vi.json','delivery/manifest.vi.json')):
+            raise unittest.SkipTest('Private catalog/manifest integration requires authorized local inputs; never publish or substitute them')
         cls.catalog = json.loads((ROOT / 'catalog/catalog.vi.json').read_text(encoding='utf-8'))
         cls.manifest = json.loads((ROOT / 'delivery/manifest.vi.json').read_text(encoding='utf-8'))
 
@@ -56,6 +58,7 @@ class WindowsCatalogTests(unittest.TestCase):
         catalog['meditations'] = dict(reversed(list(catalog['meditations'].items())))
         self.assertEqual(self.module().project_catalog(catalog, self.manifest), self.module().project_catalog(self.catalog, self.manifest))
 
+    @unittest.skipUnless((ROOT/'source/snapshots/watv-vi-2026-10-10.audio.json').is_file(), 'Private source snapshot required for quick-play integration')
     def test_quick_silent_order_comes_from_snapshot_ids_not_catalog_map_order(self):
         snapshot=json.loads((ROOT/'source/snapshots/watv-vi-2026-10-10.audio.json').read_text(encoding='utf-8'))
         module=self.module()
@@ -69,6 +72,7 @@ class WindowsCatalogTests(unittest.TestCase):
         shuffled=copy.deepcopy(self.catalog);shuffled['meditations']=dict(reversed(list(shuffled['meditations'].items())))
         self.assertEqual(module.project_quick_play(shuffled,self.manifest,snapshot),cards)
 
+    @unittest.skipUnless((ROOT/'source/snapshots/watv-vi-2026-10-10.audio.json').is_file(), 'Private source snapshot required for quick-play integration')
     def test_quick_projection_rejects_missing_duplicate_and_wrong_source_identity(self):
         snapshot=json.loads((ROOT/'source/snapshots/watv-vi-2026-10-10.audio.json').read_text(encoding='utf-8'))
         module=self.module()
