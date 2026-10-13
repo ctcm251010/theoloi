@@ -1,5 +1,13 @@
 # THEOLOI — Development changelog
 
+## 2026-10-13 — Phase01 READY FOR REVIEW
+
+- Streaming/Range/HEAD/conditional/errors/readiness, CDN no-store, diagnostics không chứa URL/session.
+- Public contracts + runtime validation: clean-source typecheck/workerd không private JSON; production bundle vẫn cần inputs riêng.
+- Ticket RAM reuse/coalescing, expiry seek và logout/renewal/reconnect race được tái hiện bằng test rồi sửa; review độc lập không còn important finding.
+- Workspace Python168 PASS/2 SKIP, frontend49 PASS, Worker23 PASS/typecheck/dry-run, metrics1 PASS. 983 media/18 original metadata hashes không đổi. Xem phases/phase-01.md cho clone/Git và giới hạn.
+- Đọc B10 lịch sử PASS983 metadata; chuẩn bị vận hành/chi phí/rollback; không deploy/live R2/credential/config changes. Native/live chưa nghiệm thu, đề xuất Phase02 và dừng.
+
 ## 2026-10-12 — Phase 00 DONE
 
 - Ghi nhận master roadmap 00–05 và ranh giới phase theo yêu cầu người dùng; giữ quản lý docs hiện có.

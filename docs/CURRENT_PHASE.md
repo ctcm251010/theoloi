@@ -1,18 +1,17 @@
 # THEOLOI — Current phase
 
-Ngày cập nhật: 12/10/2026, Asia/Bangkok.
+Ngày cập nhật: 13/10/2026, Asia/Bangkok.
 
-- Current: **PHASE 00 — Repository Foundation**.
-- Status: **DONE**; đã hoàn thành acceptance kỹ thuật Phase 00, đang chờ người dùng giao phase tiếp theo.
-- Authorized scope: hoàn thiện và nghiệm thu Phase 00 theo MASTER_ROADMAP; không bắt đầu Phase 01.
-- Baseline: `748d180404c44a2cd35b9c40fb44e81e7bac09cc` trên main và origin/main; audit/tests trước trong repository-audit.md.
-- Owner `.git`: user-run đổi thành Sunny đã được kiểm tra; Git thường chạy được, working tree sạch trước task này.
-- Evidence: clone setup PASS; Python source-only92 PASS/2 SKIP, frontend37, Worker service12, metrics1; full Python workspace168 PASS/2 SKIP. Integrity983 media/18 metadata không đổi. Clone full Worker typecheck FAIL do chưa prepare private inputs; xem báo cáo phạm vi.
-- Git: source commit11543ed8071d150b2d0a01871dd95906ba13b6ac đã push; local/remote/clone khớp SHA, clone sạch; Python92 PASS/2 SKIP được chạy lại từ published source. Review độc lập, exact-index audit và Gitleaks PASS. Docs kết thúc phase được commit theo sau.
-- Remaining in Phase 00: không còn acceptance task; giới hạn native/live/private inputs được ghi rõ. Không có task Phase 01 đang chạy.
-- Plan / acceptance / evidence: [Phase 00](phases/phase-00.md).
-- Next proposed after acceptance: **PHASE 01 — Cloudflare R2 & Online Audio**; chờ xác nhận của người dùng.
+- Current: **PHASE 01 — R2 & Online Audio**.
+- Status: **READY FOR REVIEW**: source/offline/local hoàn tất; chưa DONE vì deployment/live playback/user acceptance chưa thực hiện.
+- Authorized: API/client/typecheck, bảo mật/chi phí, test, tài liệu và Git; không deploy hoặc thay Cloudflare live.
+- Baseline: Phase00 DONE, main ef7f50d0dd3ff2e867cccd2505d8056a98830636; Git owner Sunny, Git thường hoạt động.
+- Evidence: workspace Python168 PASS/2 SKIP, frontend49 PASS, Worker23 PASS/typecheck/dry-run, metrics1 PASS. Clone source typecheck/workerd không cần private JSON; private integrations SKIP có lý do. Chi tiết trong báo cáo.
+- Integrity: 983 media/2,506,137,889 bytes size/SHA đúng;18 original metadata/state hashes không đổi. B10 user-run11/10 PASS983 metadata là lịch sử, không phải remote content SHA hoặc live API.
+- Git: phase/01-online-audio; source4fc4d8d đã push/remote SHA khớp; published clone sạch, typecheck/Worker21 PASS2 SKIP/frontend49 PASS. Audit193 files và Gitleaks sạch; docs ledger commit theo sau. Xem [Phase01](phases/phase-01.md) và final handoff. Không merge main/force-push.
+- Remaining: phê duyệt phạm vi phục vụ/chi phí/deploy; user-run live API và playback trên máy không có media local. Browser Phase01 chỉ smoke guide local; helper mới bị ERR_BLOCKED_BY_CLIENT. Native Windows chưa chạy.
+- Operations: [deploy/cache/chi phí/rollback/live checklist](phase01-operations.md).
 
-Ưu tiên Phase 01: (1) đọc kết quả B10 user-run nếu có và kiểm tra asset mapping/config hiện có; (2) audit/reuse API auth/ticket/Range, bổ sung test mạng/lỗi; (3) cấu hình client online không cần media local; (4) chuẩn bị deploy/chi phí/rủi ro/rollback để người dùng duyệt rồi mới live E2E. Không yêu cầu gửi credential qua chat. Thiếu kết quả live không chặn phần code/mock độc lập.
+**Đề xuất Phase02 — Windows Application & Installer**, chưa bắt đầu: preflight Rust/MSVC/SDK; build Tauri/NSIS; cấu hình API URL không secret; kiểm thử WebView2/máy sạch; artifact/hash và tài liệu cài đặt. EXE online chưa đủ điều kiện phân phối trước live acceptance/quyền phục vụ phù hợp.
 
-“Tiếp tục” khi phase chưa xong nghĩa là hoàn thiện phase này. Sau khi phase DONE, “Tiếp tục” cho phép bắt đầu phase đã đề xuất; không tự cho phép deploy production hoặc thay R2.
+Dừng tại ranh giới phase. “Tiếp tục” cho phép tiếp tục source/phase được đề xuất theo roadmap; không thay phê duyệt production/chi phí hoặc quyền nội dung.

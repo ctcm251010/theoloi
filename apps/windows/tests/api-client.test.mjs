@@ -20,7 +20,7 @@ test('each asset receives its own scoped URL; media never falls back to mode ton
  await api.login('synthetic-user-access-code');
  const first=await api.resolve({id:'guide:1',mode:'guide'}),second=await api.resolve({id:'guide:2',mode:'guide'});
  assert.notEqual(first,second);assert.ok(first.startsWith('https://api.test/v1/media/guide%3A1?ticket='));
- assert.equal(calls[1].init.headers.Authorization,'Bearer synthetic-session');assert.equal(calls[1].init.credentials,'omit');assert.equal(first.includes('Bearer'),false);
+ assert.equal(calls[1].init.headers.Authorization,'Bearer synthetic-session');assert.equal(calls[1].init.credentials,'omit');assert.equal(calls[1].init.redirect,'error');assert.equal(first.includes('Bearer'),false);
  api.logout();assert.equal(api.token,'');assert.equal(api.tickets.size,0);
  const source=await readFile(new URL('../web/app.mjs',import.meta.url),'utf8');assert.equal(source.includes('demoSource'),false);assert.equal(source.includes('fixtures/'),false);
 });
@@ -46,4 +46,56 @@ test('only explicit loopback preview can re-bootstrap once after its local serve
  }});
  await api.localSession();assert.deepEqual(await api.catalog(),{tracks:[]});assert.equal(logins,2);assert.equal(catalogs,2);
  const remote=new MediaAPI('https://library.test',{now:()=>100});await assert.rejects(()=>remote.localSession());assert.equal(remote.localPreview,false);
+});
+test('valid tickets are reused in RAM and simultaneous resolutions are coalesced',async()=>{
+ let count=0,clock=100;
+ const api=new MediaAPI('https://api.test',{now:()=>clock,fetcher:async()=>{count++;await new Promise(r=>setImmediate(r));return Response.json({assetId:'a',path:'/v1/media/a',ticket:'p.s',expiresAt:clock+100});}});api.adoptSession(session);
+ const urls=await Promise.all([api.resolve({id:'a'}),api.resolve({id:'a'})]);assert.equal(urls[0],urls[1]);assert.equal(count,1);
+ assert.equal(await api.resolve({id:'a'}),urls[0]);assert.equal(count,1);
+ clock=180;await api.resolve({id:'a'});assert.equal(count,2);api.logout();assert.equal(api.tickets.size,0);
+});
+test('logout during login or media resolution cannot resurrect a session or media URL',async()=>{
+ for(const action of ['login','resolve']){
+  let finish;const api=new MediaAPI('https://api.test',{now:()=>100,fetcher:()=>new Promise(r=>{finish=r;})});api.adoptSession(session);
+  const pending=action==='login'?api.login('synthetic-access-code'):api.resolve({id:'a'});
+  api.logout();finish(Response.json(action==='login'?session:{assetId:'a',path:'/v1/media/a',ticket:'p.s',expiresAt:500}));
+  await assert.rejects(()=>pending);assert.equal(api.token,'');assert.equal(api.tickets.size,0);
+ }
+});
+test('an old unauthorized response cannot clear a newer session',async()=>{
+ let finish,unauthorized=0;const api=new MediaAPI('https://api.test',{now:()=>100,onUnauthorized:()=>unauthorized++,fetcher:()=>new Promise(r=>{finish=r;})});api.adoptSession(session);
+ const pending=api.catalog();api.logout();api.adoptSession({...session,token:'new-session'});finish(new Response(null,{status:401}));await assert.rejects(()=>pending);
+ assert.equal(api.token,'new-session');assert.equal(unauthorized,0);
+});
+test('429 and server failures are bounded one-request errors, not automatic retry loops',async()=>{
+ for(const status of [429,500,502,503,504]){let calls=0;const api=new MediaAPI('https://api.test',{now:()=>100,fetcher:async()=>{calls++;return new Response('sensitive upstream text',{status});}});api.adoptSession(session);await assert.rejects(()=>api.catalog(),e=>!e.message.includes('sensitive'));assert.equal(calls,1);assert.equal(api.token,session.token);}
+});
+test('ticket resolution survives legitimate preview expiry and one restart 401',async()=>{
+ for(const restart of [false,true]){
+  let clock=100,sessions=0,tickets=0;
+  const api=new MediaAPI('http://127.0.0.1:8766',{now:()=>clock,fetcher:async url=>{
+   if(url.endsWith('/local-session'))return Response.json({token:'local-'+(++sessions),expiresAt:clock+100});
+   if(restart && ++tickets===1)return new Response(null,{status:401});
+   return Response.json({assetId:'a',path:'/v1/media/a',ticket:'p.s',expiresAt:clock+50});
+  }});
+  await api.localSession();if(!restart)clock=250;
+  assert.match(await api.resolve({id:'a'}),/\/v1\/media\/a\?ticket=/);assert.equal(sessions,2);assert.equal(api.token,'local-2');
+ }
+});
+test('logout in the local bootstrap adoption gap never resurrects preview credentials',async()=>{
+ const api=new MediaAPI('http://127.0.0.1:8766',{now:()=>100,fetcher:async()=>({ok:true,json:()=>{queueMicrotask(()=>queueMicrotask(()=>api.logout()));return Promise.resolve(session);}})});
+ await assert.rejects(()=>api.localSession());assert.equal(api.token,'');assert.equal(api.localPreview,false);
+});
+test('explicit logout during preview renewal cannot move old work into a newer login',async()=>{
+ let clock=100,bootstraps=0,otherCalls=0;
+ const api=new MediaAPI('http://127.0.0.1:8766',{now:()=>clock,fetcher:async url=>{
+  if(!url.endsWith('/local-session')){otherCalls++;return Response.json({tracks:[]});}
+  if(++bootstraps===1)return Response.json({token:'local-1',expiresAt:200});
+  return {ok:true,json:()=>{queueMicrotask(()=>queueMicrotask(()=>queueMicrotask(()=>{api.logout();api.adoptSession({token:'new-session',expiresAt:1000});})));return Promise.resolve({token:'local-renewed',expiresAt:500});}};
+ }});
+ await api.localSession();clock=250;await assert.rejects(()=>api.catalog());assert.equal(otherCalls,0);assert.equal(api.token,'new-session');
+});
+test('logout after ticket acceptance but before resolver completion discards the URL',async()=>{
+ const api=new MediaAPI('https://api.test',{now:()=>100,fetcher:async()=>({ok:true,json:()=>{queueMicrotask(()=>queueMicrotask(()=>api.logout()));return Promise.resolve({assetId:'a',path:'/v1/media/a',ticket:'p.s',expiresAt:500});}})});api.adoptSession(session);
+ await assert.rejects(()=>api.resolve({id:'a'}));assert.equal(api.tickets.size,0);
 });

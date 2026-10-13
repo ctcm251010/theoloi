@@ -22,7 +22,8 @@ Sau setup dependency ở trên, clone source có thể chạy các test tự t�
 
 ```powershell
 npm.cmd test --prefix apps/windows
-node --test workers/media-api/tests/service.test.mjs
+npm.cmd run typecheck --prefix workers/media-api
+npm.cmd test --prefix workers/media-api
 node --test benchmarks/score-viewer/metrics.test.mjs
 Push-Location tests
 try {
@@ -33,9 +34,9 @@ try {
 
 Đây là nhóm con được chọn rõ, không phải full test discover. Test pinned production manifest sẽ SKIP khi file private không có; test read-only status vẫn chạy với SQLite tự tạo. Windows không có quyền symlink có thể SKIP một test traversal. Báo riêng PASS/SKIP, không coi thiếu dữ liệu là full regression PASS. Test demo truyền audio fixture riêng và không phụ thuộc thư mục tmp đã có.
 
-`npm run typecheck --prefix workers/media-api`, Worker dry-run/runtime/full HTTP tests và Python full discover còn cần private inputs/projections. Typecheck trên clone chưa prepare trả TS2307 vì thiếu `generated/catalog.json`/`assets.json`; đây là precondition được công bố, không bỏ checkJs hay tạo production catalog giả. Với full workspace, dùng lệnh README sau khi prepare inputs hợp lệ.
+Phase 01 tách public type contracts khỏi generated production JSON: typecheck và source-only workerd integration chạy được khi thiếu private inputs, không tạo catalog giả. `npm test` Worker báo riêng hai integration SKIP nếu không có manifest/bundle private; adapter tổng hợp vẫn chạy. Có thể dùng `npm.cmd run test:source --prefix workers/media-api` cho service + workerd tổng hợp. Worker production dry-run và Python full discover vẫn cần private inputs; bundle phải FAIL nếu thiếu generated JSON. Với full workspace, dùng lệnh README sau khi prepare inputs hợp lệ.
 
-Trên môi trường npm của lần nghiệm thu, npm ci thành công nhưng cảnh báo postinstall esbuild/workerd bị chặn bởi allowScripts. Nhóm source-only trên không cần những bước đó; Worker native bundle/runtime trong clone chưa được xác minh. Không tự mở rộng quyền script cài đặt trong Phase 00.
+Npm ci của Phase 00 có cảnh báo postinstall esbuild/workerd bị chặn bởi allowScripts. Phase 01 đã chạy workerd tổng hợp trong clone thành công với dependency đã pin, không nới policy toàn hệ thống. Production Worker/native Windows/live Cloudflare là các phạm vi nghiệm thu riêng; xem [Phase 01](docs/phases/phase-01.md).
 
 ## Dữ liệu không có trong clone
 

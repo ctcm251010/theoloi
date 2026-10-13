@@ -45,7 +45,7 @@ Mở **http://127.0.0.1:8766/**; nếu helper đã chạy chỉ mở/reload. Đ�
 
 ## Kiểm thử
 
-Clone chỉ có source: dùng nhóm fixture/mock trong [SETUP — Kiểm thử source-only](SETUP.md#kiểm-thử-source-only). Các lệnh full regression dưới đây cần private inputs/projections được chuẩn bị như SETUP; Worker typecheck/dry-run không chạy được khi thiếu generated JSON. Không thay JSON production bằng fixture để làm chúng pass.
+Clone chỉ có source: dùng nhóm fixture/mock trong [SETUP — Kiểm thử source-only](SETUP.md#kiểm-thử-source-only). Worker typecheck và workerd tổng hợp chạy không cần generated JSON; hai private integration báo SKIP khi thiếu inputs. Production dry-run và Python full regression dưới đây vẫn cần private inputs/projections. Không thay JSON production bằng fixture để làm bundle pass. Xem [nghiệm thu Phase 01](docs/phases/phase-01.md) và [vận hành/chi phí](docs/phase01-operations.md); chưa deploy Cloudflare live.
 
 ```powershell
 .\.venv\Scripts\python.exe -X utf8 -m unittest discover -s tests -v

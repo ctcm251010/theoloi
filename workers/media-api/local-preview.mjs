@@ -7,7 +7,6 @@ import {createHash,randomBytes} from 'node:crypto';
 import {Readable} from 'node:stream';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import worker from './src/index.mjs';
 
 const here=path.dirname(fileURLToPath(import.meta.url));
 const defaultRoot=path.resolve(here,'../..');
@@ -49,6 +48,7 @@ export async function createPreviewServer({root=defaultRoot,port=8766}={}){
  const raw=await readFile(path.join(root,'delivery/manifest.vi.json'));
  if(hash(raw)!==baseline)throw Error('unreviewed_manifest');
  const manifest=JSON.parse(raw);
+ const {default:worker}=await import('./src/index.mjs');
  const web=path.join(root,'apps/windows/web');
  const files=new Set(['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','catalog.client.json','quick-play.json','favicon.svg']);
  const env={SERVING_ENABLED:'true',LOCAL_PREVIEW:'true',AUTH_EPOCH:'local-only',SIGNING_KEY:randomBytes(32).toString('hex'),GROUP_CODE_SHA256:hash(localCode),SESSION_SECONDS:'43200',MEDIA:new ReadOnlyFileBucket(root,manifest),LOGIN_LIMITER:localLimiter(30),REQUEST_LIMITER:localLimiter(300)};
