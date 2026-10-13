@@ -23,6 +23,7 @@ Phase02 bắt đầu trên `phase/02-windows-installer`, parent `637fbd182f5ccee
 | Worker | 23 PASS, typecheck PASS; chỉ mock/workerd/local integration, config live không đổi. |
 | Viewer metrics | 1 PASS regression. |
 | Rust navigation | 1 PASS; URL ngoài app, file/data/javascript/credential/port bất thường bị từ chối. |
+| Clone source-only | Commit7da2d00: Python101 PASS/3 SKIP (1 private manifest,2 quyền symlink); frontend52 PASS, Worker21 PASS/2 private integration SKIP, typecheck/metrics PASS. TEST prepare chạy được khi không có private catalog/manifest. Đây là nhóm Python source-only, không phải full discover. |
 | Native debug | EXE build thật, khởi chạy từ working directory tmp; process Responding và WebView2 child. |
 | Release/NSIS TEST | Build thật x64; không ký; chỉ acceptance artifact. EXE3,099,648 bytes; NSIS1,120,502 bytes. |
 | Cài/gỡ TEST | NSIS /S current-user vào thư mục tmp mới, exit0; EXE installed khởi chạy với WebView2; uninstaller exit0 và EXE installed không còn. |
@@ -49,5 +50,9 @@ Lệnh thực tế ở [Windows README](../../apps/windows/README.md). Artifact 
 | AudioTP Test_0.2.0_x64-setup.exe | b354d4705df19f6b4f33e89e20dab38ef38c31bbcd98a2232876a934bf46f084 |
 
 Integrity cuối:983/983 media,2,506,137,889 bytes; SHA/size khớp và18 metadata/state gốc không đổi. Không đọc credential. Portable cuối đã chạy riêng từ TEMP ngoài workspace với PATH chỉ Windows/System32, title AudioTP/Responding=true và child msedgewebview2.exe; không dùng Node/Python làm runtime EXE. Máy sạch vẫn chưa có.
+
+Source implementation commit: `7da2d00`. Review độc lập và targeted re-review không còn blocking finding; exact-index audit201 files không có private path/content finding, Gitleaks staged/history không phát hiện leak. Log Python clone có ResourceWarning từ HTTPError trong test viewer cũ; không có test FAIL. Không đổi PowerShell execution policy: dùng `npm.cmd` theo hướng dẫn Windows.
+
+Branch `phase/02-windows-installer` đã push; remote source SHA7da2d00266adee264472d531eaa1121990e68db8 khớp. Main ef7f50d và Phase01 637fbd1 giữ nguyên. Commit ledger tiếp theo chỉ cập nhật bằng chứng bàn giao; không merge/deploy. Hai server TEST8870/8871 được dừng sau kiểm thử; preview8766 có sẵn của người dùng được giữ.
 
 Trước Closed Beta: nghiệm thu PR Phase01, phê duyệt riêng quyền phục vụ/chi phí/deploy, user-run live API/Range và nghe đúng asset trên máy không media local; rồi build production với HTTPS endpoint thật. Kiểm thử native UI trên máy đích và máy sạch, WebView2 bootstrap/cài-gỡ, ký mã/chính sách phân phối. Chưa bắt đầu Phase03 hoặc triển khai updater.

@@ -21,7 +21,8 @@
 - [x] Native navigation/popup policy và Rust unit test; Cargo.lock tạo từ build thật.
 - [x] Build debug và release/NSIS TEST; cài/gỡ current-user trong tmp, startup WebView2 PASS.
 - [x] Chrome Bang mock playback/seek/tabs/quick/search/reload/favourite/history/network/reconnect/responsive; một player.
-- [ ] Final artifact, integrity983/18, source-only verification, secret scan, docs và publish branch.
+- [x] Final artifact, integrity983/18, source-only verification, secret scan và docs. Source7da2d00; clone Python101 PASS/3 SKIP, frontend52, Worker21 PASS/2 SKIP/typecheck, metrics1.
+- [x] Publish Phase02 branch: source7da2d00 remote SHA khớp; main ef7f50d và Phase01 637fbd1 không đổi. Commit ledger bàn giao theo sau; không merge main.
 - [ ] Native UI interaction, máy Windows sạch, signing và live API acceptance: cần môi trường/quyền riêng; không coi browser/mock là PASS thay thế.
 
 ## Repository foundation — 12/10/2026

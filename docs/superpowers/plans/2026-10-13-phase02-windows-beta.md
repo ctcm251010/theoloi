@@ -27,16 +27,16 @@
 Files: scripts/build-windows.py, tests/test_windows_build.py, apps/windows/src-tauri/Cargo.toml, tauri.conf.json, src/main.rs; app.mjs/ui-core.mjs and corresponding tests if bootstrap mode needs support.
 
 - [x] RED: prepare-only without toolchain; validate inputs/origin/metadata, allowlist stage, configuration unchanged even failed build, no symlink/media extras.
-- [x] GREEN: implement prepare stage and override config without editing tracked Tauri config, version from metadata; compilation path and artifact freshness tested with mocks (actual compilation pending Rust).
-- [ ] RED/GREEN: catalog-only native debug mode cannot connect or play, HTTPS production mode stays unchanged; external navigation policy and native tests.
-- [ ] Run offline build/frontend suites; no mocked test may be reported as an actual compiled EXE/installer.
+- [x] GREEN: implement prepare stage and override config without editing tracked Tauri config, version from metadata; compilation path and artifact freshness tested with mocks, then actual native builds.
+- [x] RED/GREEN: catalog-only native debug mode cannot connect or play, HTTPS production mode stays unchanged; external navigation policy and Rust tests PASS.
+- [x] Run offline build/frontend suites; actual compiled TEST EXE/installer recorded separately from mocks.
 
 ## Task 3 — Native acceptance / handoff
 
-- [ ] Recheck toolchain after user installs; compile debug/release/NSIS where authorized prerequisites exist. Stop/fix failures using evidence, preserve logs and original data.
-- [ ] Launch native app, verify WebView2/UI/restart; mock allowed audio/network tests, installer/uninstall only within safe disposable test scope. Record unavailable real Windows/machine-clean/live tests explicitly.
-- [ ] Full regression,983 media/18 metadata integrity, artifact/no-credential review and independent final review.
-- [ ] Update docs/phases/phase-02.md, Windows instructions and current roadmap/tasks/decisions/changelog/backlog. Audit/commit/push Phase02 branch if safe; no Phase03. Recommend pending Phase01 live acceptance then Closed Beta gates.
+- [x] Recheck toolchain after user installs; actual debug/release/NSIS TEST builds PASS, preserve logs and original data.
+- [x] Native startup/WebView2, disposable current-user install/uninstall and portable outside workspace PASS; browser mock audio/network/reload tests PASS. Native UI interaction/machine-clean/live explicitly pending, not counted as PASS.
+- [x] Full regression,983 media/18 metadata integrity, artifact/no-credential review and independent final review.
+- [x] Update docs/phases/phase-02.md, Windows instructions and current roadmap/tasks/decisions/changelog/backlog. Source commit7da2d00 verified in clean clone; no Phase03. Audit/commit/push handoff ledger follows; recommend Phase01 live acceptance then Closed Beta gates.
 
 ## Ledger
 
@@ -44,3 +44,4 @@ Files: scripts/build-windows.py, tests/test_windows_build.py, apps/windows/src-t
 - Ruling: continue in the authorized existing workspace on a dedicated branch, as in Phase01 — ignored operational inputs/dependencies already reside here; do not copy originals into a new checkout or recreate the project. Source-only clone remains the independent verification surface.
 - Ruling: user explicitly authorizes complete phase implementation/review, so do not add intermediate design approval gates. Retain existing architecture and separate production permission gate.
 - Native test builds will use a separate application identifier and explicit TEST titles with the three existing self-authored WAV fixtures over a loopback mock. These are acceptance artifacts, never a production or WATV audio release. Production keeps HTTPS-only origin validation; no fake endpoint will be invented to compile a release.
+- Final evidence: toolchain READY; Python177 PASS/3 SKIP, frontend52, Worker23/typecheck, Rust1, metrics1. Clone source-only Python101 PASS/3 SKIP, frontend52, Worker21 PASS/2 SKIP/typecheck, metrics1; TEST prepare without private projections PASS. See Phase02 report for acceptance gaps and artifact hashes. Status READY FOR REVIEW.
