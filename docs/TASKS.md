@@ -11,7 +11,18 @@
 - [x] Vận hành/chi phí/request/required-secrets bootstrap/rollback/live checklist; không chạy live.
 - [x] Exact-index audit193 files/0 finding, Gitleaks staged/history sạch; source4fc4d8d đã push, remote SHA khớp. Published clone typecheck/Worker21 PASS2 SKIP/frontend49 PASS, working tree sạch; xem Phase01.
 - [ ] User review quyền phục vụ/chi phí/deploy, live API/WebView2 playback không có media local trước DONE.
-- [ ] Phase02 chưa bắt đầu; đề xuất native toolchain/build/NSIS/máy sạch sau review.
+- [x] PR Phase01 #1 OPEN, không merge; Phase02 branch riêng từ637fbd1, không phân kỳ.
+
+## Phase02 — 13/10/2026 / READY FOR REVIEW
+
+- [x] Người dùng cài Rust/MSVC/SDK; preflight READY, WebView2 có sẵn.
+- [x] Staging allowlist/config override, HTTPS production origin, source config không bị builder sửa; artifact freshness/PE/hash và tests offline.
+- [x] Debug catalog-only/TEST fixture rõ ràng, API origin khóa theo bản cài; không fake audio dưới title thật.
+- [x] Native navigation/popup policy và Rust unit test; Cargo.lock tạo từ build thật.
+- [x] Build debug và release/NSIS TEST; cài/gỡ current-user trong tmp, startup WebView2 PASS.
+- [x] Chrome Bang mock playback/seek/tabs/quick/search/reload/favourite/history/network/reconnect/responsive; một player.
+- [ ] Final artifact, integrity983/18, source-only verification, secret scan, docs và publish branch.
+- [ ] Native UI interaction, máy Windows sạch, signing và live API acceptance: cần môi trường/quyền riêng; không coi browser/mock là PASS thay thế.
 
 ## Repository foundation — 12/10/2026
 

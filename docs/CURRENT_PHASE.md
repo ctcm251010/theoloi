@@ -1,5 +1,15 @@
 # THEOLOI — Current phase
 
+## Hiện hành — Phase02 /13-10-2026
+
+- **READY FOR REVIEW**, chưa DONE: source/TEST EXE/NSIS/startup/cài-gỡ đã kiểm tra; native UI/playback/máy sạch và live API chưa nghiệm thu.
+- Branch `phase/02-windows-installer`, parent Phase01 `637fbd1`; [PR Phase01#1 OPEN](https://github.com/ctcm251010/theoloi/pull/1), không merge hoặc deploy Cloudflare.
+- Python177 PASS/3 symlink SKIP, frontend52, Worker23/typecheck, Rust1, metrics1.983 media/2,506,137,889 bytes SHA/size và18 metadata/state gốc không đổi.
+- TEST artifact: `release/windows/TEST-0.2.0-20261013T014110189461Z/`, chỉ âm tự tạo, không phải thư viện WATV online. Portable đã chạy ngoài workspace với PATH tối thiểu/WebView2.
+- [Báo cáo Phase02](phases/phase-02.md), [lệnh Windows](../apps/windows/README.md). Tiếp theo: review/live acceptance Phase01 và native máy đích trước Closed Beta. **Không bắt đầu Phase03; dừng chờ người dùng.**
+
+## Lịch sử bàn giao Phase01 — giữ nguyên bằng chứng trước khi Phase02 được giao
+
 Ngày cập nhật: 13/10/2026, Asia/Bangkok.
 
 - Current: **PHASE 01 — R2 & Online Audio**.

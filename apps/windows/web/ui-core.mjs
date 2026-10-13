@@ -1,5 +1,10 @@
 import {canPlayQuick} from './catalog.mjs';
 
+export function connectionPolicy(config={}){
+ const enabled=config.mode!=='catalog-only';
+ return {enabled,base:enabled && typeof config.apiBase==='string'?config.apiBase:'',locked:['catalog-only','remote','test-fixtures'].includes(config.mode),test:config.mode==='test-fixtures'};
+}
+
 // User intent outlives search, seek and track changes. No timers or DOM effects.
 export class QuickPanelState {
  constructor({manualCollapsed=false}={}){this.manualCollapsed=!!manualCollapsed;this.autoHidden=false;this.query='';}

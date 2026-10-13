@@ -16,4 +16,4 @@ App không tự tải toàn thư viện. Phiên bản này không lưu cache aud
 
 Chỉ cập nhật từ bản cài chính thức của người quản lý, đóng app trước khi chạy bản cài mới. Chưa có tự động cập nhật hoặc chữ ký phát hành được kiểm chứng. Khi báo lỗi, gửi phiên bản app, tên/số bài và mô tả thao tác; tránh gửi mã truy cập hoặc URL phát tạm thời.
 
-**Tình trạng bản 0.2:** source đã được chuẩn bị; chỉ phát hành sau khi người quản lý build, triển khai thư viện và kiểm thử trên máy khác. Tài liệu này không xác nhận đã có EXE hoặc dịch vụ live.
+**Tình trạng bản 0.2:** đã có EXE/installer TEST dùng âm tự tạo, chưa phải bản thư viện thật. Hướng dẫn này dành cho bản production tương lai; chỉ phát hành sau nghiệm thu API live, native trên máy đích, quyền phục vụ và quy trình phân phối. Xem [Phase02](phases/phase-02.md).

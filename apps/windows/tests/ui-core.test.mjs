@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { shortcutAction, libraryView, quickPresentation, QuickPanelState, quickPlaybackPlan } from '../web/ui-core.mjs';
+import { shortcutAction, libraryView, quickPresentation, QuickPanelState, quickPlaybackPlan, connectionPolicy } from '../web/ui-core.mjs';
+test('catalog-only packaging disables connection, remote pins its origin, preview remains usable',()=>{
+ assert.deepEqual(connectionPolicy({mode:'catalog-only'}),{enabled:false,base:'',locked:true,test:false});
+ assert.deepEqual(connectionPolicy({mode:'remote',apiBase:'https://media.test'}),{enabled:true,base:'https://media.test',locked:true,test:false});
+ assert.deepEqual(connectionPolicy({mode:'test-fixtures',apiBase:'http://127.0.0.1:8870'}),{enabled:true,base:'http://127.0.0.1:8870',locked:true,test:true});
+ assert.deepEqual(connectionPolicy({mode:'local-files',apiBase:'http://127.0.0.1:8766'}),{enabled:true,base:'http://127.0.0.1:8766',locked:false,test:false});
+ assert.deepEqual(connectionPolicy({}),{enabled:true,base:'',locked:false,test:false});
+});
 test('keyboard shortcuts never intercept forms, buttons or editable ancestors',()=>{
  for(const tag of ['INPUT','SELECT','TEXTAREA','BUTTON','A'])assert.equal(shortcutAction({key:' ',target:{closest:()=>({tagName:tag})}}),null);
  assert.equal(shortcutAction({key:' ',target:{closest:()=>null}}),'toggle');

@@ -2,7 +2,7 @@ import {MODES,validateCatalog,filterTracks,formatTime,displayNumber} from './cat
 import {Player} from './player.mjs';
 import {MediaAPI,ConnectionGate} from './api-client.mjs';
 import {LibraryStore} from './storage.mjs';
-import {shortcutAction,libraryView,quickPresentation,QuickPanelState,quickPlaybackPlan} from './ui-core.mjs';
+import {shortcutAction,libraryView,quickPresentation,QuickPanelState,quickPlaybackPlan,connectionPolicy} from './ui-core.mjs';
 
 const $=id=>document.getElementById(id);
 const modeNames={guide:'Hướng dẫn',instrumental:'Nhạc đệm',silent:'Nhạc ngẫm nghĩ'};
@@ -18,6 +18,7 @@ let activeQuickId='';
 let lastRecorded='',lastTrack='',lastStatus='';
 const media=$('audio');media.volume=.7;
 let api=null,sourceKind='none';
+let connection=connectionPolicy();
 const connections=new ConnectionGate();
 const player=new Player(media,track=>{
  if(!playbackEnabled || !api)throw Error('Chưa kết nối nguồn nghe. Hãy kết nối thư viện trước.');
@@ -61,6 +62,12 @@ async function loadCatalog(){
   renderQuick();renderCategories();renderRows();
   if(connectionResult.status==='fulfilled'){
    const config=connectionResult.value;
+   connection=connectionPolicy(config);
+   $('api-base').value=connection.base;$('api-base').readOnly=connection.locked;
+   $('api-base').disabled=!connection.enabled;$('access-code').disabled=!connection.enabled;$('connect-button').disabled=!connection.enabled;
+   if(!connection.enabled)setText('connection-status','Bản kiểm tra chỉ xem danh mục; chưa cấu hình máy chủ nghe.');
+   if(connection.test)setText('connection-status','BẢN KIỂM THỬ — chỉ phát âm mẫu tự tạo, không phải thư viện WATV.');
+   renderConnection();
    if(typeof config.version==='string')setText('build-version',`${config.version} · ${config.buildNumber || 'development'}`);
    if(config.mode==='local-files' && config.apiBase===window.location.origin){await connectLibrary(config.apiBase,'',{local:true});}
    else if(config.apiBase){$('api-base').value=config.apiBase;}
@@ -76,11 +83,12 @@ function renderConnection(){
  const notice=$('demo-notice').querySelector('p');
  // Browser offline status does not prevent listening to files on loopback.
  const offline=!navigator.onLine && sourceKind!=='local';
- notice.textContent=offline?'Mất kết nối. Hãy thử lại khi có mạng.':ready?'Đang ở chế độ chỉ xem danh mục.':'Kết nối thư viện để nghe nhạc.';
- $('demo-notice').hidden=playbackEnabled && !offline;
+ notice.textContent=!connection.enabled?'Bản kiểm tra chỉ xem danh mục; chưa cấu hình máy chủ nghe.':connection.test?'BẢN KIỂM THỬ — âm mẫu tự tạo, không phải nhạc WATV.':offline?'Mất kết nối. Hãy thử lại khi có mạng.':ready?'Đang ở chế độ chỉ xem danh mục.':'Kết nối thư viện để nghe nhạc.';
+ $('demo-notice').hidden=playbackEnabled && !offline && !connection.test;
 }
 function connectionLost(){connections.cancel();api?.logout();api=null;sourceKind='none';playbackEnabled=false;activeQuickId='';player.stop();$('connect-button').disabled=false;renderConnection();renderQuick();renderRows();$('connection-settings').open=true;openDialog('settings-dialog');setText('connection-status','Phiên truy cập đã hết hạn. Hãy kết nối lại.');}
 async function connectLibrary(base,code,{local=false}={}){
+ if(!connection.enabled || (connection.locked && base!==connection.base)){setText('connection-status','Địa chỉ nghe không khớp cấu hình bản cài đặt.');return;}
  playbackEnabled=false;activeQuickId='';player.stop();api?.logout();api=null;
  let next;
  const attempt=connections.begin({logout:()=>next?.logout()});

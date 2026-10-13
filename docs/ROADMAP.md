@@ -6,7 +6,7 @@
 |---|---|---|
 | 00 — Repository Foundation | Source audit, GitHub, setup và clean-clone validation | DONE |
 | 01 — Cloudflare R2 & Online Audio | Source/local PASS; live acceptance chờ phê duyệt, xem [nghiệm thu](phases/phase-01.md) | READY FOR REVIEW |
-| 02 — Windows Application & Installer | Tauri 2/WebView2, native build/EXE/NSIS, máy đích không cần workspace/Python/Node | NOT STARTED |
+| 02 — Windows Application & Installer | EXE/NSIS TEST + startup/cài-gỡ; native playback/máy sạch/live chờ nghiệm thu, xem [Phase02](phases/phase-02.md) | READY FOR REVIEW |
 | 03 — Closed Beta & Automatic Updates | Beta/máy khác, release artifacts/hash, updater có ký và recovery | NOT STARTED |
 | 04 — Android & iOS | ADR React Native/Tauri Mobile; Android/background audio; iOS theo môi trường thực tế | NOT STARTED |
 | 05 — THEOLOI Ecosystem | Ưu tiên từng MVP: bản nhạc/lời, sách, kế hoạch đọc, công cụ thờ phượng | NOT STARTED |

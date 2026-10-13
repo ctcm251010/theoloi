@@ -1,0 +1,18 @@
+{
+  "provenance": "Existing AudioTP self-authored test tones; no WATV audio or titles.",
+  "catalog": {
+    "schemaVersion": 1,
+    "revision": "self-authored-native-test-v1",
+    "tracks": [
+      {"id":"test:guide:1","logicalId":"test:song:1","mode":"guide","section":"main","number":1,"title":"TEST — Âm mẫu hướng dẫn tự tạo","category":"Kiểm thử","durationSeconds":12},
+      {"id":"test:instrumental:1","logicalId":"test:song:1","mode":"instrumental","section":"main","number":1,"title":"TEST — Âm mẫu nhạc đệm tự tạo","category":"Kiểm thử","durationSeconds":12},
+      {"id":"test:silent:1","logicalId":"test:silent:1","mode":"silent","section":null,"number":1,"title":"TEST — Âm mẫu ngẫm nghĩ tự tạo 1","category":"Kiểm thử","durationSeconds":12},
+      {"id":"test:silent:2","logicalId":"test:silent:2","mode":"silent","section":null,"number":2,"title":"TEST — Âm mẫu ngẫm nghĩ tự tạo 2","category":"Kiểm thử","durationSeconds":12}
+    ]
+  },
+  "quick": [
+    {"id":"test:quick:silent","title":"Nhạc ngẫm nghĩ","behavior":"silent-library","available":true,"assetIds":["test:silent:1","test:silent:2"],"firstAssetId":"test:silent:1","sourceStatus":"verified","rightsStatus":"approved","reason":"Chỉ âm mẫu tự tạo cho kiểm thử."},
+    {"id":"test:quick:prayer","title":"Cầu nguyện chúng con mong muốn","available":false,"assetIds":[],"sourceStatus":"not-imported","rightsStatus":"unknown","reason":"Chưa khả dụng."},
+    {"id":"test:quick:choral","title":"Nhạc không lời cầu nguyện thống thanh","available":false,"assetIds":[],"sourceStatus":"not-imported","rightsStatus":"unknown","reason":"Chưa khả dụng."}
+  ]
+}

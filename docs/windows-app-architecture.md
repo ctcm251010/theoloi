@@ -1,6 +1,6 @@
 # AudioTP — Kiến trúc ứng dụng Windows đề xuất
 
-**Trạng thái 0.2 — 12/10/2026:** đã triển khai Worker/API source có xác thực + vé phát + R2 allowlist và client Tauri source; đã thử M4A thật qua adapter local và workerd R2 mô phỏng. Chưa deploy hoặc compile EXE vì thiếu toolchain. [Báo cáo hiện hành và blockers](autonomous-implementation-report.md), [Worker/API đã triển khai](../workers/media-api/README.md). Các đoạn “chưa triển khai” bên dưới giữ bối cảnh bản đề xuất ban đầu.
+**Cập nhật 13/10/2026:** Phase01 source được review/PR#1 OPEN, live chưa nghiệm thu. Phase02 đã build Tauri EXE/NSIS TEST, startup WebView2 và cài/gỡ; không deploy hoặc phân phối nhạc thật. [Báo cáo Phase02 và giới hạn](phases/phase-02.md), [Worker/API](../workers/media-api/README.md). Các đoạn “chưa triển khai”/đề xuất bên dưới là bối cảnh lịch sử, không thay báo cáo nghiệm thu hiện hành.
 
 Ngày khảo sát tài liệu: 12/10/2026. **Chỉ phân tích**, chưa tạo app production, Worker/API, public bucket, deployment, credential hoặc quyền phân phối. Quyền lưu cá nhân không tự bật quyền phục vụ nhiều người.
 

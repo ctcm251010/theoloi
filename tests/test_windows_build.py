@@ -15,6 +15,13 @@ def module():
     value=importlib.util.module_from_spec(spec);spec.loader.exec_module(value);return value
 
 
+def web_file(name):
+    if name=='quick-play.json': return '[]'
+    if name=='catalog.client.json':
+        return json.dumps({'schemaVersion':1,'revision':'fixture','tracks':[{'id':'fixture:1','logicalId':'fixture:song:1','mode':'silent','section':None,'number':1,'title':'Tự soạn','category':'Fixture','durationSeconds':1}]})
+    return 'fixture'
+
+
 class WindowsBuildTests(unittest.TestCase):
     def test_production_origin_rejects_insecure_or_credential_urls(self):
         m=module();self.assertEqual(m.api_origin('https://library.test/'),'https://library.test')
@@ -31,15 +38,15 @@ class WindowsBuildTests(unittest.TestCase):
         m=module()
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);app=root/'apps/windows';(app/'src-tauri').mkdir(parents=True);(app/'web').mkdir()
-            config=app/'src-tauri/tauri.conf.json';original=json.dumps({'build':{},'app':{'security':{}}}).encode();config.write_bytes(original)
+            config=app/'src-tauri/tauri.conf.json';original=json.dumps({'version':'0.2.0','build':{},'app':{'security':{}}}).encode();config.write_bytes(original)
             names=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','catalog.client.json','quick-play.json','favicon.svg']
-            for name in names:(app/'web'/name).write_text('fixture')
+            for name in names:(app/'web'/name).write_text(web_file(name))
             (app/'web/fixtures').mkdir();(app/'web/fixtures/guide.wav').write_bytes(b'not-for-release')
             with patch.object(m,'ROOT',root),patch.object(m,'APP',app),patch.object(m,'preflight',return_value=({'missing':[],'status':'READY'},{'node':'node','cargo':str(root/'bin/cargo')},root/'npm.js')),patch.object(m.subprocess,'run',side_effect=subprocess.CalledProcessError(1,'synthetic-build')):
                 with self.assertRaises(subprocess.CalledProcessError):m.main(['--build','--api-base','https://library.test'])
             self.assertEqual(config.read_bytes(),original);self.assertFalse((root/'release').exists());self.assertFalse(any((app/'web-release').rglob('*.wav')))
             staged=list((app/'web-release').glob('*/connection.json'));self.assertEqual(json.loads(staged[0].read_text())['apiBase'],'https://library.test')
-            self.assertFalse((app/'build.lock').exists());self.assertEqual(next((app/'build-backups').glob('*.json')).read_bytes(),original)
+            self.assertFalse((app/'build.lock').exists());self.assertEqual(next((app/'build-backups').glob('*.tauri.json')).read_bytes(),original)
 
     def test_existing_build_lock_prevents_config_changes_and_subprocesses(self):
         m=module()
@@ -53,8 +60,8 @@ class WindowsBuildTests(unittest.TestCase):
         m=module()
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);app=root/'apps/windows';(app/'src-tauri/target/release').mkdir(parents=True);(app/'web').mkdir()
-            config=app/'src-tauri/tauri.conf.json';original=json.dumps({'build':{},'app':{'security':{}}}).encode();config.write_bytes(original)
-            for name in ['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','catalog.client.json','quick-play.json','favicon.svg']:(app/'web'/name).write_text('fixture')
+            config=app/'src-tauri/tauri.conf.json';original=json.dumps({'version':'0.2.0','build':{},'app':{'security':{}}}).encode();config.write_bytes(original)
+            for name in ['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','catalog.client.json','quick-play.json','favicon.svg']:(app/'web'/name).write_text(web_file(name))
             (app/'src-tauri/target/release/AudioTP.exe').write_bytes(b'MZ synthetic '+str(root).encode())
             with patch.object(m,'ROOT',root),patch.object(m,'APP',app),patch.object(m,'preflight',return_value=({'missing':[]},{'node':'node','cargo':str(root/'bin/cargo')},root/'npm.js')),patch.object(m.subprocess,'run'):
                 with self.assertRaisesRegex(ValueError,'prohibited'):m.main(['--build','--api-base','https://library.test'])

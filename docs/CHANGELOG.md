@@ -1,5 +1,13 @@
 # THEOLOI — Development changelog
 
+## 2026-10-13 — Phase02 READY FOR REVIEW
+
+- Phase01 PR#1 OPEN sau khi người dùng cấp quyền repo; không merge, live gate giữ nguyên.
+- Stage/override/metadata allowlist, HTTPS production origin, locked Cargo và artifact PE/freshness/hash. Npm build đi qua builder; mặc định CSP đóng.
+- Native navigation/popup policy, EXE debug/release và NSIS currentUser TEST; cài/gỡ exit0, WebView2 startup và portable TEMP/PATH tối thiểu.
+- App TEST identifier riêng, banner và catalog tự tạo; mock WAV12s có session/ticket/Range. Không phát âm mẫu dưới tên WATV.
+- Python177 PASS/3 SKIP, frontend52, Worker23/typecheck, Rust1, metrics1;983 media/18 metadata nguyên vẹn. Browser mock playback/network/reconnect/UI PASS; native UI/máy sạch/live/signing chưa nghiệm thu. Không deploy/credential/media changes hoặc Phase03.
+
 ## 2026-10-13 — Phase01 READY FOR REVIEW
 
 - Streaming/Range/HEAD/conditional/errors/readiness, CDN no-store, diagnostics không chứa URL/session.
