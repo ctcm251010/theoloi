@@ -1,5 +1,7 @@
 import {canPlayQuick} from './catalog.mjs';
 
+export function shouldPromptConnection({mode,connected=false,pending=false}={}){return mode==='remote' && !connected && !pending;}
+
 export function connectionPolicy(config={}){
  const enabled=config.mode!=='catalog-only';
  return {enabled,base:enabled && typeof config.apiBase==='string'?config.apiBase:'',locked:['catalog-only','remote','test-fixtures','local-library'].includes(config.mode),test:config.mode==='test-fixtures'};

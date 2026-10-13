@@ -1,5 +1,12 @@
 # THEOLOI — Development changelog
 
+## 2026-10-13 — ONLINE Beta và Nhớ đăng nhập
+
+- Worker đã deploy theo phê duyệt vào account đích, bucket giữ private; live health/auth/CORS5 checks PASS. Không tải/upload thêm audio hoặc đổi credential R2.
+- Windows Nhớ đăng nhập dùng DPAPI current-user/exact-origin; không localStorage credential, logout và OS lock/crash recovery. Review finding staging bị kẹt đã sửa và re-review sạch.
+- ONLINE EXE/NSIS với983 IDs/0 media, HTTPS thực, portable TEMP/PATH tối thiểu startup PASS. Python188 PASS/3 SKIP, frontend58, Worker24/typecheck, Rust5 + subprocess lock checks.983 media/18 metadata không đổi.
+- Native Play/seek/mã thật/remember restart, authenticated R2 và máy đích vẫn pending; không DONE, merge hoặc Phase03. Giữ riêng thay đổi `.env.example` của người dùng.
+
 ## 2026-10-13 — Phase02 correction: thư viện Bài ca mới thật
 
 - LOCAL EXE/NSIS dùng public projection983 audio thật; không TEST catalog hoặc chép media vào app. `Mo-AudioTP.cmd` khởi động backend chỉ đọc+EXE và tự kết nối.

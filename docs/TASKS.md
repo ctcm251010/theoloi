@@ -1,5 +1,17 @@
 # THEOLOI tasks
 
+## Phase02 online follow-up — READY FOR REVIEW /13-10-2026
+
+- [x] Người dùng duyệt bốn bước online; xác minh account/bucket private/member Active bằng Chrome Bang, không mời lại hoặc tăng quyền.
+- [x] Chặn helper secrets chạy sai account; sáu test mock PASS và dry-run không network.
+- [x] Người dùng Authorize đúng account và bootstrap secret; deploy disabled rồi serving authenticated; health/auth/CORS5 checks PASS, không thay bucket.
+- [x] OAuth user-run thành công; CLI thấy đúng login/account. Read-only xác minh Worker chưa tồn tại; không deploy nhầm account.
+- [x] Nhớ đăng nhập: DPAPI current-user/origin, native IPC giới hạn, queue/logout/checkbox, OS lock/crash recovery; independent re-review không còn Important/Critical.
+- [x] Build ONLINE EXE/NSIS, stage983 real IDs/0 media, portable TEMP/PATH tối thiểu startup; đã mở cho user nhập mã.
+- [x] User xác nhận ONLINE hoạt động/tự kết nối lại sau restart; bổ sung auto form lần đầu theo feedback, frontend59 PASS và targeted review sạch; rebuild artifact cuối.
+- [ ] User nghiệm thu Play/seek/restart nhớ/xóa/native và installer/máy đích. Không dùng kết quả LOCAL/TEST thay live acceptance.
+- [ ] Cập nhật nghiệm thu/integrity/secret scan/Git theo [checklist](superpowers/plans/2026-10-13-phase02-live-online.md); không Phase03.
+
 ## Phase01 — 13/10/2026 / READY FOR REVIEW
 
 - [x] Đọc Phase00/context/B10 lịch sử; bảo toàn983 media và18 metadata/state hashes.

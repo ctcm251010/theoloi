@@ -6,7 +6,7 @@
   "identifier": "org.audiotp.desktop",
   "build": { "frontendDist": "../web" },
   "app": {
-    "withGlobalTauri": false,
+    "withGlobalTauri": true,
     "windows": [{ "label": "main", "title": "AudioTP", "create": false, "width": 1280, "height": 860, "minWidth": 620, "minHeight": 600, "resizable": true }],
     "security": {
       "capabilities": [],

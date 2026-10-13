@@ -1,5 +1,63 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod remember;
+use std::sync::Mutex;
+use tauri::Manager;
+
+fn credential_directory(
+    app: &tauri::AppHandle,
+    window: &tauri::WebviewWindow,
+) -> Result<std::path::PathBuf, String> {
+    let url = window
+        .url()
+        .map_err(|_| "Không xác minh được cửa sổ ứng dụng.")?;
+    if window.label() != "main" || !internal_navigation(&url) {
+        return Err("Chỉ cửa sổ AudioTP được truy cập đăng nhập đã lưu.".into());
+    }
+    app.path()
+        .app_local_data_dir()
+        .map_err(|_| "Không mở được dữ liệu ứng dụng.".into())
+}
+
+#[tauri::command]
+fn save_access_code(
+    app: tauri::AppHandle,
+    window: tauri::WebviewWindow,
+    lock: tauri::State<'_, Mutex<()>>,
+    base: String,
+    code: String,
+) -> Result<(), String> {
+    let _guard = lock
+        .lock()
+        .map_err(|_| "Không mở được dữ liệu đăng nhập.")?;
+    remember::save(&credential_directory(&app, &window)?, &base, &code)
+}
+
+#[tauri::command]
+fn read_access_code(
+    app: tauri::AppHandle,
+    window: tauri::WebviewWindow,
+    lock: tauri::State<'_, Mutex<()>>,
+    base: String,
+) -> Result<Option<String>, String> {
+    let _guard = lock
+        .lock()
+        .map_err(|_| "Không mở được dữ liệu đăng nhập.")?;
+    remember::read(&credential_directory(&app, &window)?, &base)
+}
+
+#[tauri::command]
+fn forget_access_code(
+    app: tauri::AppHandle,
+    window: tauri::WebviewWindow,
+    lock: tauri::State<'_, Mutex<()>>,
+) -> Result<(), String> {
+    let _guard = lock
+        .lock()
+        .map_err(|_| "Không mở được dữ liệu đăng nhập.")?;
+    remember::forget(&credential_directory(&app, &window)?)
+}
+
 fn internal_navigation(url: &tauri::Url) -> bool {
     url.username().is_empty()
         && url.password().is_none()
@@ -38,8 +96,14 @@ mod tests {
 }
 
 fn main() {
-    // Bundled local frontend only. No shell/fs/network plugin, secret or R2 binding.
+    // Bundled frontend only. No general shell/fs/network plugin or R2 credential.
     tauri::Builder::default()
+        .manage(Mutex::new(()))
+        .invoke_handler(tauri::generate_handler![
+            save_access_code,
+            read_access_code,
+            forget_access_code
+        ])
         .setup(|app| {
             let config = app
                 .config()

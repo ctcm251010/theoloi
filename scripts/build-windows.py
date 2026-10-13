@@ -130,7 +130,7 @@ def prepare_stage(origin,debug=False,test_fixtures=False,local_library=False):
     version=config.get('version')
     if not isinstance(version,str) or not re.fullmatch(r'\d+\.\d+\.\d+',version): raise ValueError('Invalid application version')
     web=(APP/'web').resolve()
-    files=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','favicon.svg']
+    files=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','favicon.svg']
     if not test_fixtures: files+=['catalog.client.json','quick-play.json']
     for name in files:
         source=APP/'web'/name

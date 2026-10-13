@@ -1,5 +1,7 @@
 # Phase02 — AudioTP Windows Beta
 
+**Cập nhật ONLINE13/10:** người dùng đã duyệt deploy API private và Nhớ đăng nhập Windows. Đã build ONLINE EXE/NSIS dùng HTTPS thật, DPAPI/OS-lock và offline regression/re-review PASS; health/auth/CORS live PASS, native/mã thật/R2 playback/installer/máy đích còn pending. Xem [báo cáo mới](../phase02-online-beta.md); phần bên dưới giữ bằng chứng lịch sử LOCAL/TEST trước deployment, không mô tả trạng thái live hiện tại.
+
 Ngày: 13/10/2026, Asia/Bangkok. Status: **READY FOR REVIEW** — source và TEST artifacts đã kiểm tra; native playback/máy sạch/live chưa nghiệm thu, chưa DONE.
 
 Phase02 bắt đầu trên `phase/02-windows-installer`, parent `637fbd182f5cceef431b079ac131d577edfef1bb` của Phase01. [PR Phase01 #1](https://github.com/ctcm251010/theoloi/pull/1) OPEN, chưa merge. Phase01 vẫn READY FOR REVIEW: source/offline hoàn tất, live R2/API chưa nghiệm thu. Không deploy, thay Cloudflare, đọc credential hoặc phân phối thư viện thật.

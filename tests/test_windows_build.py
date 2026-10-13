@@ -39,7 +39,7 @@ class WindowsBuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);app=root/'apps/windows';(app/'src-tauri').mkdir(parents=True);(app/'web').mkdir()
             config=app/'src-tauri/tauri.conf.json';original=json.dumps({'version':'0.2.0','build':{},'app':{'security':{}}}).encode();config.write_bytes(original)
-            names=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','catalog.client.json','quick-play.json','favicon.svg']
+            names=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','catalog.client.json','quick-play.json','favicon.svg']
             for name in names:(app/'web'/name).write_text(web_file(name))
             (app/'web/fixtures').mkdir();(app/'web/fixtures/guide.wav').write_bytes(b'not-for-release')
             with patch.object(m,'ROOT',root),patch.object(m,'APP',app),patch.object(m,'preflight',return_value=({'missing':[],'status':'READY'},{'node':'node','cargo':str(root/'bin/cargo')},root/'npm.js')),patch.object(m.subprocess,'run',side_effect=subprocess.CalledProcessError(1,'synthetic-build')):
@@ -61,7 +61,7 @@ class WindowsBuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);app=root/'apps/windows';(app/'src-tauri/target/release').mkdir(parents=True);(app/'web').mkdir()
             config=app/'src-tauri/tauri.conf.json';original=json.dumps({'version':'0.2.0','build':{},'app':{'security':{}}}).encode();config.write_bytes(original)
-            for name in ['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','catalog.client.json','quick-play.json','favicon.svg']:(app/'web'/name).write_text(web_file(name))
+            for name in ['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','catalog.client.json','quick-play.json','favicon.svg']:(app/'web'/name).write_text(web_file(name))
             (app/'src-tauri/target/release/AudioTP.exe').write_bytes(b'MZ synthetic '+str(root).encode())
             with patch.object(m,'ROOT',root),patch.object(m,'APP',app),patch.object(m,'preflight',return_value=({'missing':[]},{'node':'node','cargo':str(root/'bin/cargo')},root/'npm.js')),patch.object(m.subprocess,'run'):
                 with self.assertRaisesRegex(ValueError,'prohibited'):m.main(['--build','--api-base','https://library.test'])

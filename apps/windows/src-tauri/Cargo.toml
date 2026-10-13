@@ -3,6 +3,7 @@ name = "audiotp-windows"
 version = "0.2.0"
 description = "AudioTP Windows private online audio client"
 edition = "2021"
+rust-version = "1.89"
 
 [[bin]]
 name = "AudioTP"

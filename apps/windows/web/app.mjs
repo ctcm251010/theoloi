@@ -2,7 +2,8 @@ import {MODES,validateCatalog,filterTracks,formatTime,displayNumber} from './cat
 import {Player} from './player.mjs';
 import {MediaAPI,ConnectionGate} from './api-client.mjs';
 import {LibraryStore} from './storage.mjs';
-import {shortcutAction,libraryView,quickPresentation,QuickPanelState,quickPlaybackPlan,connectionPolicy,shouldBootstrapLocal} from './ui-core.mjs';
+import {RememberedAccess} from './remember-access.mjs';
+import {shortcutAction,libraryView,quickPresentation,QuickPanelState,quickPlaybackPlan,connectionPolicy,shouldBootstrapLocal,shouldPromptConnection} from './ui-core.mjs';
 
 const $=id=>document.getElementById(id);
 const modeNames={guide:'Hướng dẫn',instrumental:'Nhạc đệm',silent:'Nhạc ngẫm nghĩ'};
@@ -21,6 +22,25 @@ let api=null,sourceKind='none';
 let connection=connectionPolicy();
 let localConnection=false;
 const connections=new ConnectionGate();
+const remembered=new RememberedAccess(window.__TAURI__?.core?.invoke);
+let restoringAccess=false;
+function canRemember(){return remembered.available && connection.enabled && connection.locked && !connection.test && !localConnection && connection.base.startsWith('https://');}
+async function forgetAccess(){
+ $('remember-access').checked=false;
+ try{await remembered.clear();return true;}catch{announce('Chưa xóa được đăng nhập đã lưu. Hãy thử đăng xuất lại.');return false;}
+}
+async function restoreAccess(){
+ if(!canRemember() || restoringAccess)return false;
+ restoringAccess=true;const generation=connections.generation;
+ try{
+  const code=await remembered.read(connection.base);
+  if(!code || generation!==connections.generation)return false;
+  $('remember-access').checked=true;
+  await connectLibrary(connection.base,code,{remember:true,restored:true});
+  return !!api?.token;
+ }catch{if(generation===connections.generation)setText('connection-status','Không mở được đăng nhập đã lưu. Hãy nhập lại mã hoặc đăng xuất để xóa.');return false;}
+ finally{restoringAccess=false;}
+}
 const player=new Player(media,track=>{
  if(!playbackEnabled || !api)throw Error('Chưa kết nối nguồn nghe. Hãy kết nối thư viện trước.');
  return api.resolve(track);
@@ -71,12 +91,18 @@ async function loadCatalog(){
    $('api-base').disabled=!connection.enabled;$('access-code').disabled=!connection.enabled;$('connect-button').disabled=!connection.enabled;
    $('access-code').required=!localConnection;
    $('access-code').closest('label').hidden=localConnection;
+   $('remember-row').hidden=!canRemember();$('remember-note').hidden=!canRemember();
    if(!connection.enabled)setText('connection-status','Bản kiểm tra chỉ xem danh mục; chưa cấu hình máy chủ nghe.');
    if(connection.test)setText('connection-status','BẢN KIỂM THỬ — chỉ phát âm mẫu tự tạo, không phải thư viện WATV.');
    renderConnection();
    if(typeof config.version==='string')setText('build-version',`${config.version} · ${config.buildNumber || 'development'}`);
    if(localConnection){await connectLibrary(config.apiBase,'',{local:true});}
-   else if(config.apiBase){$('api-base').value=config.apiBase;}
+   else if(config.apiBase){
+    $('api-base').value=config.apiBase;await restoreAccess();
+    if(shouldPromptConnection({mode:config.mode,connected:!!api?.token,pending:!!connections.pending})){
+     $('connection-settings').open=true;openDialog('settings-dialog');$('access-code').focus();
+    }
+   }
   }
  }catch(error){if(token!==loadGeneration)return;statePanel('Chưa thể mở thư viện',error.name==='AbortError'?'Dữ liệu phản hồi quá lâu. Hãy thử tải lại.':error.message,{retry:true});}
 }
@@ -85,15 +111,20 @@ function renderConnection(){
  const ready=!!api?.token;
  $('demo-mode').querySelector('option[value="listen"]').disabled=!ready;
  $('demo-mode').value=playbackEnabled?'listen':'catalog';
- $('disconnect').hidden=!ready;
+ $('disconnect').hidden=!ready && !canRemember();
  const notice=$('demo-notice').querySelector('p');
  // Browser offline status does not prevent listening to files on loopback.
  const offline=!navigator.onLine && sourceKind!=='local';
  notice.textContent=!connection.enabled?'Bản kiểm tra chỉ xem danh mục; chưa cấu hình máy chủ nghe.':connection.test?'BẢN KIỂM THỬ — âm mẫu tự tạo, không phải nhạc WATV.':offline?'Mất kết nối. Hãy thử lại khi có mạng.':ready?'Đang ở chế độ chỉ xem danh mục.':'Kết nối thư viện để nghe nhạc.';
  $('demo-notice').hidden=playbackEnabled && !offline && !connection.test;
 }
-function connectionLost(){connections.cancel();api?.logout();api=null;sourceKind='none';playbackEnabled=false;activeQuickId='';player.stop();$('connect-button').disabled=false;renderConnection();renderQuick();renderRows();$('connection-settings').open=true;openDialog('settings-dialog');setText('connection-status','Phiên truy cập đã hết hạn. Hãy kết nối lại.');}
-async function connectLibrary(base,code,{local=false}={}){
+function connectionLost({manual=false}={}){
+ connections.cancel();api?.logout();api=null;sourceKind='none';playbackEnabled=false;activeQuickId='';player.stop();$('connect-button').disabled=false;renderConnection();renderQuick();renderRows();$('connection-settings').open=true;
+ setText('connection-status','Phiên truy cập đã hết hạn. Hãy kết nối lại.');
+ if(!manual && canRemember() && $('remember-access').checked && !restoringAccess){void restoreAccess().then(ready=>{if(!ready)openDialog('settings-dialog');});}
+ else openDialog('settings-dialog');
+}
+async function connectLibrary(base,code,{local=false,remember=false,restored=false}={}){
  if(!connection.enabled || (connection.locked && base!==connection.base)){setText('connection-status','Địa chỉ nghe không khớp cấu hình bản cài đặt.');return;}
  playbackEnabled=false;activeQuickId='';player.stop();api?.logout();api=null;
  let next;
@@ -104,15 +135,22 @@ async function connectLibrary(base,code,{local=false}={}){
   if(local)await next.localSession();else await next.login(code);
   const data=await next.catalog();const rows=validateCatalog(data);
   if(!attempt.current()){next.logout();return;}
+  let storageWarning='';
+  if(canRemember()){
+   try{if(remember && !restored && $('remember-access').checked)await remembered.save(base,code);else if(!remember || !$('remember-access').checked)await remembered.clear();}
+   catch{storageWarning=' Chưa cập nhật được đăng nhập đã lưu; hãy thử lại trước khi đóng app.';}
+  }
+  if(!attempt.current()){next.logout();return;}
   api=next;sourceKind=local?'local':'remote';tracks=rows;revision=data.revision;playbackEnabled=true;
   attempt.complete();
-  setText('connection-status',local?'Đã kết nối thư viện trên máy.':'Đã kết nối thư viện trực tuyến.');
-  $('connection-settings').open=false;
- }catch(error){if(attempt.current()){next?.logout();attempt.complete();setText('connection-status',error.message);$('connection-settings').open=true;}}
- finally{if(attempt.current()){$('access-code').value='';$('connect-button').disabled=false;renderConnection();renderQuick();renderCategories();renderRows();}}
+  setText('connection-status',(local?'Đã kết nối thư viện trên máy.':'Đã kết nối thư viện trực tuyến.')+storageWarning);
+  $('connection-settings').open=!!storageWarning;
+ }catch(error){if(attempt.current()){next?.logout();attempt.complete();if(restored && error.status===401)await forgetAccess();if(attempt.current()){setText('connection-status',error.message);$('connection-settings').open=true;}}}
+ finally{code='';if(attempt.current()){$('access-code').value='';$('connect-button').disabled=false;renderConnection();renderQuick();renderCategories();renderRows();}}
 }
-$('connection-form').addEventListener('submit',event=>{event.preventDefault();const code=$('access-code').value;$('access-code').value='';void connectLibrary($('api-base').value.trim(),code,{local:localConnection});});
-$('disconnect').addEventListener('click',()=>{api?.logout();api=null;sourceKind='none';connectionLost();setText('connection-status','Đã ngắt kết nối.');});
+$('connection-form').addEventListener('submit',event=>{event.preventDefault();const code=$('access-code').value;$('access-code').value='';void connectLibrary($('api-base').value.trim(),code,{local:localConnection,remember:canRemember() && $('remember-access').checked});});
+$('remember-access').addEventListener('change',()=>{if(!$('remember-access').checked)void forgetAccess();});
+$('disconnect').addEventListener('click',()=>{const forgotten=forgetAccess();connectionLost({manual:true});void forgotten.then(ok=>setText('connection-status',ok?'Đã đăng xuất và xóa đăng nhập đã lưu.':'Đã ngắt kết nối nhưng chưa xóa được đăng nhập đã lưu. Hãy thử lại.'));});
 window.addEventListener('offline',renderConnection);window.addEventListener('online',renderConnection);
 renderConnection();
 

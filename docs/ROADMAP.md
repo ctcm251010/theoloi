@@ -5,8 +5,8 @@
 | Phase | Mục tiêu | Trạng thái |
 |---|---|---|
 | 00 — Repository Foundation | Source audit, GitHub, setup và clean-clone validation | DONE |
-| 01 — Cloudflare R2 & Online Audio | Source/local PASS; live acceptance chờ phê duyệt, xem [nghiệm thu](phases/phase-01.md) | READY FOR REVIEW |
-| 02 — Windows Application & Installer | EXE/NSIS LOCAL dùng catalog thật và launcher; TEST riêng, native session/catalog200; native playback/máy sạch/live chờ nghiệm thu, xem [Phase02](phases/phase-02.md) | READY FOR REVIEW |
+| 01 — Cloudflare R2 & Online Audio | API private đã deploy được duyệt; health/auth/CORS PASS, authenticated R2 playback còn pending, xem [ONLINE](phase02-online-beta.md) | READY FOR REVIEW |
+| 02 — Windows Application & Installer | EXE/NSIS ONLINE HTTPS thật, DPAPI Nhớ đăng nhập; portable startup PASS, native playback/restart/installer/máy đích pending, xem [ONLINE](phase02-online-beta.md) | READY FOR REVIEW |
 | 03 — Closed Beta & Automatic Updates | Beta/máy khác, release artifacts/hash, updater có ký và recovery | NOT STARTED |
 | 04 — Android & iOS | ADR React Native/Tauri Mobile; Android/background audio; iOS theo môi trường thực tế | NOT STARTED |
 | 05 — THEOLOI Ecosystem | Ưu tiên từng MVP: bản nhạc/lời, sách, kế hoạch đọc, công cụ thờ phượng | NOT STARTED |

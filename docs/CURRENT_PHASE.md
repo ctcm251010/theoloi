@@ -2,6 +2,14 @@
 
 ## Hiện hành — Phase02 /13-10-2026
 
+- **READY FOR REVIEW — ONLINE Beta:** API đã deploy đúng account `ctcm251010`, member `nguyenducbang.uit`; bucket giữ private. Health/auth/CORS5 checks PASS; login/playback R2 mã thật/native/máy đích còn pending.
+- Có Nhớ đăng nhập bằng Windows DPAPI current-user, exact HTTPS origin; logout/bỏ chọn xóa mã, không credential localStorage. OS lock/crash recovery và review độc lập PASS.
+- Artifact cuối `release/windows/0.2.0-20261013T040214371062Z/`, EXE/NSIS HTTPS thật/983 IDs. User xác nhận bản trước hoạt động và tự kết nối lại; bản cuối bổ sung form tự hiện nếu chưa đăng nhập, giữ thẳng thư viện khi restore thành công.
+- Python188 PASS/3 symlink SKIP, frontend59, Worker24/typecheck, Rust5 PASS và helper subprocess chạy2 lần.983 media/2,506,137,889 bytes +18 metadata/state không đổi.
+- [Báo cáo ONLINE](phase02-online-beta.md), [checklist](superpowers/plans/2026-10-13-phase02-live-online.md). Chưa DONE/Closed Beta; không merge Phase01 hoặc bắt đầu Phase03.
+
+## Lịch sử trước triển khai ONLINE — LOCAL/TEST
+
 - **READY FOR REVIEW**, chưa DONE: đã sửa thiếu thư viện thật trong bàn giao TEST; có EXE/NSIS LOCAL với catalog485/485/13, launcher `Mo-AudioTP.cmd`, native session/catalog200. Native UI/playback/máy sạch và live API còn chờ nghiệm thu.
 - Branch `phase/02-windows-installer`, parent Phase01 `637fbd1`; [PR Phase01#1 OPEN](https://github.com/ctcm251010/theoloi/pull/1), không merge hoặc deploy Cloudflare.
 - Python177 PASS/3 symlink SKIP, frontend52, Worker23/typecheck, Rust1, metrics1.983 media/2,506,137,889 bytes SHA/size và18 metadata/state gốc không đổi.

@@ -1,4 +1,12 @@
 import test from 'node:test';
+import {shouldPromptConnection} from '../web/ui-core.mjs';
+
+test('first online launch exposes connection unless restored or already connecting',()=>{
+ assert.equal(shouldPromptConnection({mode:'remote'}),true);
+ assert.equal(shouldPromptConnection({mode:'remote',connected:true}),false);
+ assert.equal(shouldPromptConnection({mode:'remote',pending:true}),false);
+ for(const mode of ['local-library','test-fixtures','catalog-only',undefined])assert.equal(shouldPromptConnection({mode}),false);
+});
 import assert from 'node:assert/strict';
 import { shortcutAction, libraryView, quickPresentation, QuickPanelState, quickPlaybackPlan, connectionPolicy, shouldBootstrapLocal } from '../web/ui-core.mjs';
 test('real local library is pinned and auto-connects only from native or loopback frontend',()=>{

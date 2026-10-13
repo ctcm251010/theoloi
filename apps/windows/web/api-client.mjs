@@ -32,7 +32,7 @@ export class MediaAPI {
      if(this.localPreview && !retried){await this.localSession();if(cancellation!==this.cancellation)throw Error('Yêu cầu kết nối đã hủy.');const data=await this.request(path,{method,body,authenticated,retried:true,accept});if(cancellation!==this.cancellation)throw Error('Yêu cầu kết nối đã hủy.');return data;}
      this.logout();this.onUnauthorized();
     }
-    const messages={401:'Mã truy cập hoặc phiên kết nối không hợp lệ.',403:'Chưa được cấp quyền phát từ máy chủ này.',404:'Chưa tìm thấy bài trên máy chủ.',409:'File audio không khớp dữ liệu đã xác minh.',429:'Đang có nhiều yêu cầu. Hãy chờ một phút rồi thử lại.',503:'Máy chủ tạm chưa sẵn sàng.'};throw Error(messages[response.status] || `Không kết nối được (${response.status}).`);
+    const messages={401:'Mã truy cập hoặc phiên kết nối không hợp lệ.',403:'Chưa được cấp quyền phát từ máy chủ này.',404:'Chưa tìm thấy bài trên máy chủ.',409:'File audio không khớp dữ liệu đã xác minh.',429:'Đang có nhiều yêu cầu. Hãy chờ một phút rồi thử lại.',503:'Máy chủ tạm chưa sẵn sàng.'};const failure=Error(messages[response.status] || `Không kết nối được (${response.status}).`);failure.status=response.status;throw failure;
    }
    const data=await response.json();
    if(generation!==this.generation)throw Error('Yêu cầu đã hủy do phiên kết nối thay đổi.');

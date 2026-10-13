@@ -1,6 +1,6 @@
 # AudioTP Windows 0.2
 
-Mỗi bài lấy nguồn theo assetId qua API, không fallback theo tên tab. Phase02 đã build EXE/NSIS **TEST** riêng với âm tự tạo; chưa có bản online production/live R2 E2E được nghiệm thu. Xem [Phase02](../../docs/phases/phase-02.md).
+Mỗi bài lấy nguồn theo assetId qua API, không fallback theo tên tab. Đã có **ONLINE Beta** dùng HTTPS API/private R2 theo phê duyệt; người dùng xác nhận hoạt động và tự kết nối lại. Nhớ đăng nhập dùng Windows DPAPI, form tự mở lần đầu khi chưa kết nối. Installer/máy đích và kiểm tra Range/R2 đầy đủ còn pending. Xem [ONLINE report](../../docs/phase02-online-beta.md); TEST/LOCAL cũ được giữ riêng.
 
 ## Nghe đúng audio đang có trên máy
 
@@ -31,7 +31,7 @@ App không lưu mã truy cập/session/ticket vào localStorage. Audio disk cach
 
 ## API và test
 
-[Worker README: source, xác thực, test, deploy user-run](../../workers/media-api/README.md). Worker private R2 chưa deploy; mặc định serving disabled. Không có R2 access key trong frontend.
+[Worker README: source, xác thực, test, deploy](../../workers/media-api/README.md). API private đã deploy và bật bằng override được duyệt; source mặc định serving disabled. Không có R2 access key trong frontend; mã được Windows lưu mã hóa chỉ khi người dùng chọn Nhớ đăng nhập.
 
 ```powershell
 cd D:\Workspace\AudioTP\apps\windows

@@ -1,11 +1,11 @@
 # AudioTP private media API 0.2
 
-Worker source đã có; **chưa deploy Cloudflare**, chưa xác minh live E2E. R2 bucket vẫn private. Chỉ `MEDIA.head/get` được dùng; không có LIST/PUT/DELETE/COPY trong Worker. Server allowlist được xuất nguyên assetId/objectKey từ manifest đã pin; client không gửi hoặc nhận object key.
+Worker đã deploy theo phê duyệt vào account đích; health/auth/CORS live PASS và người dùng báo ONLINE hoạt động/tự kết nối lại. Kiểm tra authenticated Range/R2 đầy đủ còn pending, không coi health là storage probe. R2 bucket vẫn private. Chỉ `MEDIA.head/get` được dùng; không LIST/PUT/DELETE/COPY. Server allowlist giữ nguyên assetId/objectKey; client không gửi/nhận object key. [ONLINE report](../../docs/phase02-online-beta.md).
 
 ## Routes và xác thực
 
 - `GET/HEAD /v1/health`: readiness không đọc R2; 503 khi serving chưa bật/cấu hình thiếu. `storage: not-probed` không chứng minh bucket đang truy cập được.
-- `POST /v1/auth/login`, JSON `{ "code": "mã nhóm do người quản lý cấp" }`: trả phiên HMAC, mặc định tối đa 12 giờ. Mã đầu vào được SHA-256 và so bằng `timingSafeEqual`; không lưu code/session trên máy người dùng.
+- `POST /v1/auth/login`, JSON `{ "code": "mã nhóm do người quản lý cấp" }`: trả phiên HMAC, mặc định tối đa12 giờ. Mã đầu vào được SHA-256 và so bằng `timingSafeEqual`; session/ticket giữ RAM. Windows client có tùy chọn nhớ group code bằng DPAPI current-user/origin, không plaintext/localStorage; logout xóa mã nhớ.
 - `GET/HEAD /v1/catalog`: Bearer session, metadata 983 asset; không có R2 key, HLS source hoặc đường local.
 - `GET/HEAD /v1/songs/<encoded logicalId>`: metadata các variant của cùng bài; silent giữ ID riêng.
 - `POST /v1/play-tickets`, Bearer + JSON `{ "assetId": "..." }`: vé gắn một asset, revision, session và epoch. TTL = duration + 600 giây, trong khoảng 300–3600 giây và không quá phiên.

@@ -1,10 +1,14 @@
 # AudioTP 0.2 — Hướng dẫn sử dụng
 
-**Trên máy phát triển hiện tại:** mở `Mo-AudioTP.cmd` trong `D:\Workspace\AudioTP` để chạy bản LOCAL dùng đủ485 Hướng dẫn/485 Nhạc đệm/13 Ngẫm nghĩ thật. Launcher tự mở backend+EXE và app tự kết nối, không nhập mã. Đóng app thì backend do launcher tạo sẽ dừng. Đừng mở bản TEST cũ để nghe Bài ca mới. Bản LOCAL cần workspace/Node/Python/media, chưa phải R2 live; mở EXE trực tiếp cần backend đang chạy. Các hướng dẫn kết nối Internet/mã bên dưới dành cho bản online tương lai.
+Lần đầu mở bản ONLINE, phần **Kết nối thư viện** tự hiện để bạn dán mã và chọn Nhớ đăng nhập. Nếu đã nhớ mã và tự kết nối thành công, app vào thư viện trực tiếp. Bạn luôn có thể mở lại phần kết nối trong Cài đặt.
+
+**Bản ONLINE:** dùng API HTTPS đã cấu hình và thư viện R2 private; máy người nghe không cần workspace, Node, Python hoặc media local. Bản LOCAL cũ mở bằng `Mo-AudioTP.cmd` chỉ dùng trên máy phát triển; bản TEST chỉ có âm tự tạo. Chọn đúng installer ONLINE do người quản lý bàn giao.
 
 Nhận bản cài từ người quản lý thư viện. Kết nối Internet, cài và mở AudioTP. Nếu máy thiếu Microsoft Edge WebView2, bộ cài có thể đề nghị cài runtime này; cần Internet. Bản EXE portable cũng cần WebView2 trên máy.
 
-Mở **Cài đặt → Kết nối thư viện**, nhập mã truy cập được cấp rồi bấm **Kết nối**. Bản phát hành được cấu hình sẵn địa chỉ thư viện. Không gửi mã truy cập qua ảnh chụp hoặc báo lỗi. Mã chỉ giữ trong phiên chạy, không lưu lại khi đóng app.
+Mở **Cài đặt → Kết nối thư viện**, dán mã truy cập được cấp. Trên máy cá nhân, chọn **Nhớ đăng nhập trên máy này**, rồi bấm **Kết nối**. Bạn không cần học thuộc mã. Windows mã hóa mã đã nhớ theo tài khoản đang dùng và địa chỉ API; lần mở app tiếp theo tự đăng nhập, không tự phát nhạc. Nếu không chọn, mã chỉ giữ trong phiên chạy. Không gửi mã qua ảnh chụp hoặc báo lỗi; đây là mã của AudioTP, không phải mật khẩu Cloudflare.
+
+Chọn **Đăng xuất** hoặc bỏ chọn Nhớ đăng nhập để xóa mã đã nhớ. Đăng xuất dừng player và xóa phiên trong RAM; không thu hồi các thiết bị khác. Trên máy dùng chung, để Nhớ đăng nhập tắt. Trình duyệt preview không có tùy chọn lưu này; không lưu credential vào localStorage. DPAPI không bảo vệ trước phần mềm độc hại đang chạy bằng chính tài khoản Windows của bạn.
 
 Tìm bằng số hoặc tên không dấu; dùng `PL 1` để tìm phụ lục. Hướng dẫn và Nhạc đệm là hai bản của cùng bài; Nhạc ngẫm nghĩ là nhóm riêng. Chuyển tab không tự đổi bài đang phát, hãy chọn bài muốn nghe.
 
@@ -12,10 +16,10 @@ Thanh dưới có phát/dừng, tua và bài trước/sau; desktop có âm lư�
 
 **Nghe nhanh** nằm dưới ba tab. Nhạc ngẫm nghĩ mở danh sách riêng và phát “Tâm Linh Tha Thiết Cầu Nguyện”, bài đầu trong nguồn hiện có. Bấm lại để tạm dừng/phát tiếp; bài tiếp theo tuân theo chế độ phát đã chọn. Hai mục cầu nguyện ghi “Chưa khả dụng” đến khi có nguồn được xác minh, không có âm thanh thay thế. Nhập từ khóa sẽ ẩn Nghe nhanh; xóa từ khóa sẽ hiện lại. Thu gọn thủ công được nhớ, chỉ mở lại khi bạn bấm Mở rộng.
 
-Nếu mất mạng, chờ kết nối lại và bấm **Thử phát lại**. App cố giữ vị trí khi thử lại. Khi phiên hết hạn, nhập lại mã truy cập.
+Nếu mất mạng, chờ kết nối lại và bấm **Thử phát lại**. App cố giữ vị trí khi thử lại. Nếu đã nhớ đăng nhập, app thử kết nối lại khi phiên hết hạn. Nếu mã đã bị thu hồi/đổi, cần người quản lý cấp lại; app không retry vô hạn. Nếu Windows không mở được dữ liệu mã hóa, đăng xuất để xóa rồi nhập lại mã.
 
-App không tự tải toàn thư viện. Phiên bản này không lưu cache audio lâu dài; dữ liệu buffer do WebView2 quản lý. Yêu thích, lịch sử và giao diện lưu trên máy; mã truy cập và vé phát không nằm trong dữ liệu này.
+App không tự tải toàn thư viện. Phiên bản này không lưu cache audio lâu dài; dữ liệu buffer do WebView2 quản lý. Yêu thích, lịch sử và giao diện lưu riêng với mã truy cập đã được Windows mã hóa; session và vé phát chỉ giữ trong RAM.
 
 Chỉ cập nhật từ bản cài chính thức của người quản lý, đóng app trước khi chạy bản cài mới. Chưa có tự động cập nhật hoặc chữ ký phát hành được kiểm chứng. Khi báo lỗi, gửi phiên bản app, tên/số bài và mô tả thao tác; tránh gửi mã truy cập hoặc URL phát tạm thời.
 
-**Tình trạng bản 0.2:** đã có EXE/installer LOCAL dùng thư viện thật trên máy và bản TEST riêng dùng âm tự tạo. Bản production online chỉ phát hành sau nghiệm thu API live, native trên máy đích, quyền phục vụ và quy trình phân phối. Xem [Phase02](phases/phase-02.md).
+**Tình trạng bản 0.2:** ONLINE Beta dành cho nghiệm thu có kiểm soát. Không coi build thành công hoặc health200 là đã kiểm tra playback R2, native/máy đích hoặc quyền phân phối rộng rãi. Xem [Phase02](phases/phase-02.md) cho bằng chứng và phần còn pending.

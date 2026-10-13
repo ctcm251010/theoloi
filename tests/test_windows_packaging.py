@@ -16,7 +16,7 @@ def web_fixture(root):
     app=root/'apps/windows';(app/'web').mkdir(parents=True);(app/'src-tauri').mkdir()
     config={'version':'0.2.0','build':{'frontendDist':'../web'},'app':{'security':{'capabilities':[]}},'bundle':{'windows':{}}}
     (app/'src-tauri/tauri.conf.json').write_text(json.dumps(config))
-    for name in ['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','favicon.svg']:
+    for name in ['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','favicon.svg']:
         (app/'web'/name).write_text('self-authored fixture')
     catalog={'schemaVersion':1,'revision':'self-authored','tracks':[{'id':'fixture:1','logicalId':'fixture:song:1','mode':'silent','section':None,'number':1,'title':'Tự soạn','category':'Fixture','durationSeconds':2}]}
     (app/'web/catalog.client.json').write_text(json.dumps(catalog))
@@ -71,6 +71,7 @@ class WindowsPackagingTests(unittest.TestCase):
             self.assertEqual(result,0);run.assert_not_called()
             stage=next((app/'web-release').iterdir());files={p.name for p in stage.iterdir()}
             self.assertNotIn('private.env',files);self.assertNotIn('fixtures',files)
+            self.assertIn('remember-access.mjs',files)
             self.assertEqual((app/'src-tauri/tauri.conf.json').read_bytes(),original)
             self.assertEqual(json.loads((stage/'connection.json').read_text())['apiBase'],'https://library.test')
             override=json.loads(next((app/'build-backups').glob('*.override.json')).read_text())
