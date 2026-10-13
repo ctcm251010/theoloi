@@ -25,6 +25,27 @@ def web_fixture(root):
 
 
 class WindowsPackagingTests(unittest.TestCase):
+    def test_local_library_packages_real_projection_and_pins_loopback_without_test_catalog(self):
+        m=module()
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);app=web_fixture(root)
+            original=(app/'web/catalog.client.json').read_bytes()
+            with patch.object(m,'ROOT',root),patch.object(m,'APP',app):
+                stage,override,_=m.prepare_stage('http://127.0.0.1:8872',local_library=True)
+                for origin in ['https://media.test','http://localhost:8872','http://127.0.0.1:8872/path']:
+                    with self.assertRaises(ValueError):m.prepare_stage(origin,local_library=True)
+                with self.assertRaises(ValueError):m.prepare_stage('http://127.0.0.1:8872',local_library=True,test_fixtures=True)
+                self.assertEqual(m.main(['--prepare','--local-library','--api-base','http://127.0.0.1:8872']),0)
+            catalog=json.loads((stage/'catalog.client.json').read_text())
+            self.assertEqual(catalog,json.loads(original))
+            self.assertFalse(any(t['id'].startswith('test:') for t in catalog['tracks']))
+            self.assertEqual(json.loads((stage/'connection.json').read_text())['mode'],'local-library')
+            config=json.loads(override.read_text())
+            self.assertEqual(config['identifier'],'org.audiotp.local')
+            self.assertIn('http://127.0.0.1:8872',config['app']['security']['csp'])
+            self.assertEqual(config['bundle']['resources'],[])
+            self.assertFalse(any(stage.rglob('*.m4a')))
+
     def test_mock_fixture_build_is_isolated_from_production_and_requires_loopback(self):
         m=module()
         with tempfile.TemporaryDirectory() as tmp:

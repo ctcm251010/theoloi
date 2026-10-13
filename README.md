@@ -4,7 +4,7 @@ Hệ sinh thái ứng dụng dành cho người theo Kinh Thánh. **AudioTP** l�
 
 ## Trạng thái thực tế
 
-Source Windows 0.2/Worker đã có; AudioTP phát M4A thật qua adapter local chỉ đọc. Thư viện vận hành có 485 guide, 485 instrumental, 13 silent. Người dùng báo B9 upload/verify 983 object; bước này không audit R2 live. Worker chưa có bằng chứng deploy live; chưa có EXE/installer đã build và kiểm thử.
+Source Windows 0.2/Worker đã có; AudioTP phát M4A thật qua adapter local chỉ đọc. Thư viện vận hành có 485 guide, 485 instrumental, 13 silent. Đã build EXE/NSIS TEST riêng và bản LOCAL dùng catalog thật; mở `Mo-AudioTP.cmd` trong workspace đã có media để chạy đầy đủ backend+EXE. Native LOCAL tự lấy phiên/catalog200; thao tác phát native/máy sạch còn chờ nghiệm thu. Người dùng báo B9 upload/verify983 object; Worker/R2 live chưa deploy/nghiệm thu. Xem [Phase02](docs/phases/phase-02.md).
 
 Audio, snapshot website, catalog/manifest vận hành, review decisions, credential và SQLite **không nằm trong GitHub**. Chúng vẫn giữ trên máy hoặc R2 theo cấu hình vận hành. Clone mới chỉ có source; full tests/playback cần bộ dữ liệu đã cấp quyền từ người quản lý. Không tải bù website hoặc fake audio.
 

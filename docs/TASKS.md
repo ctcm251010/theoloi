@@ -25,6 +25,14 @@
 - [x] Publish Phase02 branch: source7da2d00 remote SHA khớp; main ef7f50d và Phase01 637fbd1 không đổi. Commit ledger bàn giao theo sau; không merge main.
 - [ ] Native UI interaction, máy Windows sạch, signing và live API acceptance: cần môi trường/quyền riêng; không coi browser/mock là PASS thay thế.
 
+### Phase02 follow-up — thư viện thật trên máy
+
+- [x] Sửa bàn giao TEST-only: LOCAL build dùng đúng public projection của983 audio, không sample/fake asset hoặc sửa catalog/manifest gốc.
+- [x] TDD native local bootstrap/CORS opt-in, anonymous media Origin, tự kết nối/retry không cần mã; production giữ HTTPS.
+- [x] Launcher một lần bấm, hash/port/lifecycle/Windows byte lock; review lỗi mở trùng đã sửa và targeted re-review không còn blocking finding.
+- [x] EXE/NSIS LOCAL build thật, native session/catalog200; giữ app mở cho người dùng, không claim native Play/seek PASS khi CUA không expose native UI.
+- [x] Full Python188 total/185 PASS/3 SKIP, frontend53, Worker24/typecheck; không deploy R2 hoặc Phase03.
+
 ## Repository foundation — 12/10/2026
 
 - [x] Đọc context/kiểm kê; giữ runtime paths và local data.

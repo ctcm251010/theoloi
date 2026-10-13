@@ -1,5 +1,7 @@
 # AudioTP 0.2 — Hướng dẫn sử dụng
 
+**Trên máy phát triển hiện tại:** mở `Mo-AudioTP.cmd` trong `D:\Workspace\AudioTP` để chạy bản LOCAL dùng đủ485 Hướng dẫn/485 Nhạc đệm/13 Ngẫm nghĩ thật. Launcher tự mở backend+EXE và app tự kết nối, không nhập mã. Đóng app thì backend do launcher tạo sẽ dừng. Đừng mở bản TEST cũ để nghe Bài ca mới. Bản LOCAL cần workspace/Node/Python/media, chưa phải R2 live; mở EXE trực tiếp cần backend đang chạy. Các hướng dẫn kết nối Internet/mã bên dưới dành cho bản online tương lai.
+
 Nhận bản cài từ người quản lý thư viện. Kết nối Internet, cài và mở AudioTP. Nếu máy thiếu Microsoft Edge WebView2, bộ cài có thể đề nghị cài runtime này; cần Internet. Bản EXE portable cũng cần WebView2 trên máy.
 
 Mở **Cài đặt → Kết nối thư viện**, nhập mã truy cập được cấp rồi bấm **Kết nối**. Bản phát hành được cấu hình sẵn địa chỉ thư viện. Không gửi mã truy cập qua ảnh chụp hoặc báo lỗi. Mã chỉ giữ trong phiên chạy, không lưu lại khi đóng app.
@@ -16,4 +18,4 @@ App không tự tải toàn thư viện. Phiên bản này không lưu cache aud
 
 Chỉ cập nhật từ bản cài chính thức của người quản lý, đóng app trước khi chạy bản cài mới. Chưa có tự động cập nhật hoặc chữ ký phát hành được kiểm chứng. Khi báo lỗi, gửi phiên bản app, tên/số bài và mô tả thao tác; tránh gửi mã truy cập hoặc URL phát tạm thời.
 
-**Tình trạng bản 0.2:** đã có EXE/installer TEST dùng âm tự tạo, chưa phải bản thư viện thật. Hướng dẫn này dành cho bản production tương lai; chỉ phát hành sau nghiệm thu API live, native trên máy đích, quyền phục vụ và quy trình phân phối. Xem [Phase02](phases/phase-02.md).
+**Tình trạng bản 0.2:** đã có EXE/installer LOCAL dùng thư viện thật trên máy và bản TEST riêng dùng âm tự tạo. Bản production online chỉ phát hành sau nghiệm thu API live, native trên máy đích, quyền phục vụ và quy trình phân phối. Xem [Phase02](phases/phase-02.md).

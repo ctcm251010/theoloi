@@ -8,6 +8,33 @@ import {existsSync} from 'node:fs';
 import {request as httpRequest} from 'node:http';
 import {createPreviewServer,ReadOnlyFileBucket} from '../local-preview.mjs';
 const hash=data=>createHash('sha256').update(data).digest('hex');
+test('desktop local access is opt-in and permits only exact native origins with the real 983 catalog',{skip:!existsSync(new URL('../../../delivery/manifest.vi.json',import.meta.url))?'Private manifest/media not available in source-only clone':false},async t=>{
+ const servers=[];t.after(async()=>{for(const s of servers){s.closeAllConnections();await new Promise(r=>s.close(r));}});
+ for(const desktop of [false,true]){
+  const server=await createPreviewServer({port:0,desktop});servers.push(server);
+  const base='http://127.0.0.1:'+server.address().port;
+  for(const origin of ['http://tauri.localhost','https://tauri.localhost','tauri://localhost']){
+   const response=await fetch(base+'/v1/local-session',{method:'POST',headers:{Origin:origin,'Sec-Fetch-Site':'cross-site'}});
+   assert.equal(response.status,desktop?200:403);
+   if(desktop){
+    const bootstrapPreflight=await fetch(base+'/v1/local-session',{method:'OPTIONS',headers:{Origin:origin,'Sec-Fetch-Site':'cross-site','Access-Control-Request-Method':'POST'}});
+    assert.equal(bootstrapPreflight.status,204);assert.equal(bootstrapPreflight.headers.get('Access-Control-Allow-Origin'),origin);
+    assert.equal(response.headers.get('Access-Control-Allow-Origin'),origin);
+    const session=await response.json();
+    const headers={Origin:origin,'Sec-Fetch-Site':'cross-site',Authorization:'Bearer '+session.token};
+    const preflight=await fetch(base+'/v1/catalog',{method:'OPTIONS',headers:{Origin:origin,'Sec-Fetch-Site':'cross-site','Access-Control-Request-Method':'GET','Access-Control-Request-Headers':'authorization'}});
+    assert.equal(preflight.status,204);
+    const catalog=await (await fetch(base+'/v1/catalog',{headers})).json();
+    assert.equal(catalog.tracks.length,983);assert.ok(catalog.tracks.every(row=>row.id.startsWith('watv:')));
+    const assetId=catalog.tracks.find(row=>row.mode==='silent').id;
+    const ticket=await (await fetch(base+'/v1/play-tickets',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({assetId})})).json();
+    const media=await fetch(base+ticket.path+'?ticket='+ticket.ticket,{headers:{Origin:origin,'Sec-Fetch-Site':'cross-site',Range:'bytes=0-31'}});
+    assert.equal(media.status,206);assert.equal(media.headers.get('Access-Control-Allow-Origin'),origin);assert.equal((await media.arrayBuffer()).byteLength,32);
+   }
+  }
+  for(const origin of ['https://evil.test','http://tauri.localhost.evil','null'])assert.equal((await fetch(base+'/v1/local-session',{method:'POST',headers:{Origin:origin,'Sec-Fetch-Site':'cross-site'}})).status,403);
+ }
+});
 test('real HTTP integration: same Worker handler serves the exact guide/instrumental/silent files',{skip:!existsSync(new URL('../../../delivery/manifest.vi.json',import.meta.url))?'Private manifest/media not available in source-only clone':false},async t=>{
  const server=await createPreviewServer({port:0});t.after(()=>{server.closeAllConnections();return new Promise(resolve=>server.close(resolve));});
  const base='http://127.0.0.1:'+server.address().port;

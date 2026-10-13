@@ -2,11 +2,12 @@
 
 ## Hiện hành — Phase02 /13-10-2026
 
-- **READY FOR REVIEW**, chưa DONE: source/TEST EXE/NSIS/startup/cài-gỡ đã kiểm tra; native UI/playback/máy sạch và live API chưa nghiệm thu.
+- **READY FOR REVIEW**, chưa DONE: đã sửa thiếu thư viện thật trong bàn giao TEST; có EXE/NSIS LOCAL với catalog485/485/13, launcher `Mo-AudioTP.cmd`, native session/catalog200. Native UI/playback/máy sạch và live API còn chờ nghiệm thu.
 - Branch `phase/02-windows-installer`, parent Phase01 `637fbd1`; [PR Phase01#1 OPEN](https://github.com/ctcm251010/theoloi/pull/1), không merge hoặc deploy Cloudflare.
 - Python177 PASS/3 symlink SKIP, frontend52, Worker23/typecheck, Rust1, metrics1.983 media/2,506,137,889 bytes SHA/size và18 metadata/state gốc không đổi.
 - TEST artifact: `release/windows/TEST-0.2.0-20261013T014110189461Z/`, chỉ âm tự tạo, không phải thư viện WATV online. Portable đã chạy ngoài workspace với PATH tối thiểu/WebView2.
 - Source `7da2d00` được xác minh trong clone không private inputs: Python101 PASS/3 SKIP, frontend52, Worker21 PASS/2 SKIP/typecheck, metrics1; TEST prepare PASS. Gitleaks history/index audit sạch; ledger Git bàn giao tiếp theo không đổi runtime.
+- Follow-up LOCAL: Python185 PASS/3 SKIP, frontend53, Worker24/typecheck; review lỗi launcher mở trùng đã sửa. Artifact `release/windows/LOCAL-0.2.0-20261013T021343012529Z/`. Chỉ phát file trên máy, không phải R2 live; giữ bằng chứng TEST lịch sử bên dưới.
 - [Báo cáo Phase02](phases/phase-02.md), [lệnh Windows](../apps/windows/README.md). Tiếp theo: review/live acceptance Phase01 và native máy đích trước Closed Beta. **Không bắt đầu Phase03; dừng chờ người dùng.**
 
 ## Lịch sử bàn giao Phase01 — giữ nguyên bằng chứng trước khi Phase02 được giao

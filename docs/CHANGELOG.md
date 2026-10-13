@@ -1,5 +1,11 @@
 # THEOLOI — Development changelog
 
+## 2026-10-13 — Phase02 correction: thư viện Bài ca mới thật
+
+- LOCAL EXE/NSIS dùng public projection983 audio thật; không TEST catalog hoặc chép media vào app. `Mo-AudioTP.cmd` khởi động backend chỉ đọc+EXE và tự kết nối.
+- Native CORS opt-in exact origins, media anonymous Origin; fix launcher mở trùng bằng Windows byte lock, chỉ dừng backend tự tạo; không proxy/redirect readiness.
+- Native session/catalog200; Python185 PASS/3 SKIP, frontend53, Worker24/typecheck. Native Play/seek/máy sạch/live chưa được claim PASS. Không sửa media/credential/Cloudflare hoặc bắt đầu Phase03.
+
 ## 2026-10-13 — Phase02 READY FOR REVIEW
 
 - Phase01 PR#1 OPEN sau khi người dùng cấp quyền repo; không merge, live gate giữ nguyên.

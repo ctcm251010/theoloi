@@ -93,18 +93,21 @@ def main(argv=None):
     parser.add_argument('--api-base',help='actual HTTPS API origin, required for release')
     parser.add_argument('--debug',action='store_true',help='native debug; without API, catalog-only and no network playback')
     parser.add_argument('--installer',action='store_true',help='create NSIS installer with release build')
-    parser.add_argument('--test-fixtures',action='store_true',help='isolated TEST app with self-authored catalog and loopback mock; never distribute as production')
+    source=parser.add_mutually_exclusive_group()
+    source.add_argument('--test-fixtures',action='store_true',help='isolated TEST app with self-authored catalog and loopback mock; never distribute as production')
+    source.add_argument('--local-library',action='store_true',help='real authorized catalog through read-only loopback backend on this machine; not an online distribution')
     args=parser.parse_args(argv)
     if args.debug and args.installer: parser.error('Debug builds cannot produce a distribution installer')
-    if (args.debug or args.installer or args.api_base or args.test_fixtures) and not (args.build or args.prepare): parser.error('Build options require --build or --prepare')
+    if (args.debug or args.installer or args.api_base or args.test_fixtures or args.local_library) and not (args.build or args.prepare): parser.error('Build options require --build or --prepare')
     origin=None
     if args.build or args.prepare:
-        try: origin=(test_origin if args.test_fixtures else api_origin)(args.api_base) if args.api_base else None
+        try: origin=(test_origin if args.test_fixtures or args.local_library else api_origin)(args.api_base) if args.api_base else None
         except ValueError as error: parser.error(str(error))
         if not origin and not args.debug: parser.error('A deployed HTTPS API origin is required for release')
         if args.test_fixtures and not origin: parser.error('Test fixtures require a loopback mock API origin')
+        if args.local_library and not origin: parser.error('Local library requires an explicit loopback API origin')
     if args.prepare:
-        with exclusive_build(): stage,override,version=prepare_stage(origin,debug=args.debug,test_fixtures=args.test_fixtures)
+        with exclusive_build(): stage,override,version=prepare_stage(origin,debug=args.debug,test_fixtures=args.test_fixtures,local_library=args.local_library)
         print(json.dumps(dict(status='PREPARED_NOT_COMPILED',stage=str(stage),override=str(override),version=version,debug=args.debug)))
         return 0
     report,tools,npm_cli=preflight()
@@ -112,12 +115,14 @@ def main(argv=None):
     if not args.build: return 2 if report['missing'] else 0
     if report['missing']: return 2
     with exclusive_build():
-        return build_release(origin,args.installer,tools,npm_cli,debug=args.debug,test_fixtures=args.test_fixtures)
+        return build_release(origin,args.installer,tools,npm_cli,debug=args.debug,test_fixtures=args.test_fixtures,local_library=args.local_library)
 
 
-def prepare_stage(origin,debug=False,test_fixtures=False):
-    if origin is not None: origin=(test_origin if test_fixtures else api_origin)(origin)
+def prepare_stage(origin,debug=False,test_fixtures=False,local_library=False):
+    if local_library and test_fixtures: raise ValueError('Local library cannot use test fixtures')
+    if origin is not None: origin=(test_origin if test_fixtures or local_library else api_origin)(origin)
     if test_fixtures and not origin: raise ValueError('Test fixture origin required')
+    if local_library and not origin: raise ValueError('Local library origin required')
     if not origin and not debug: raise ValueError('Release requires an HTTPS origin')
     config_path=APP / 'src-tauri/tauri.conf.json'
     original=config_path.read_bytes()
@@ -152,12 +157,13 @@ def prepare_stage(origin,debug=False,test_fixtures=False):
     for name in files: shutil.copyfile(APP / 'web' / name, stage / name)
     (stage/'catalog.client.json').write_text(json.dumps(catalog,ensure_ascii=False),encoding='utf-8')
     (stage/'quick-play.json').write_text(json.dumps(quick,ensure_ascii=False),encoding='utf-8')
-    (stage/'connection.json').write_text(json.dumps(dict(mode='test-fixtures' if test_fixtures else 'remote' if origin else 'catalog-only',apiBase=origin or '',version=version,buildNumber=stamp)),encoding='utf-8')
+    (stage/'connection.json').write_text(json.dumps(dict(mode='local-library' if local_library else 'test-fixtures' if test_fixtures else 'remote' if origin else 'catalog-only',apiBase=origin or '',version=version,buildNumber=stamp)),encoding='utf-8')
     remote=(' '+origin) if origin else ''
     csp=f"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'{remote}; connect-src 'self'{remote} ipc: http://ipc.localhost; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'"
     override=backups/(stamp+'.override.json')
     settings={'build':{'frontendDist':'../web-release/'+stamp,'devUrl':None},'app':{'security':{'csp':csp,'devCsp':csp,'capabilities':[]}},'bundle':{'resources':[],'externalBin':[]}}
     if test_fixtures: settings.update(identifier='org.audiotp.acceptance',productName='AudioTP Test')
+    if local_library: settings.update(identifier='org.audiotp.local',productName='AudioTP Local')
     override.write_text(json.dumps(settings,indent=2),encoding='utf-8')
     return stage,override,version
 
@@ -172,8 +178,8 @@ def inspect_artifact(artifact,started):
     return data
 
 
-def build_release(origin,installer,tools,npm_cli,debug=False,test_fixtures=False):
-    stage,override,version=prepare_stage(origin,debug=debug,test_fixtures=test_fixtures)
+def build_release(origin,installer,tools,npm_cli,debug=False,test_fixtures=False,local_library=False):
+    stage,override,version=prepare_stage(origin,debug=debug,test_fixtures=test_fixtures,local_library=local_library)
     stamp=stage.name
     child_env=os.environ.copy()
     child_env.pop('TAURI_CONFIG',None)
@@ -212,7 +218,18 @@ Trên máy phát triển, chạy `node apps/windows/native-mock.mjs --port 8870`
 
 Hai mục cầu nguyện chưa khả dụng; Nghe nhanh dùng âm mẫu có nhãn TEST. Bản production chỉ build sau khi có endpoint HTTPS thật và hoàn tất phê duyệt/nghiệm thu Phase01. Không gửi installer TEST như bản thư viện thật.
 ''').encode('utf-8')
-    release=ROOT/'release/windows'/(('TEST-' if test_fixtures else '')+version+'-'+stamp)
+    if local_library:
+        from urllib.parse import urlsplit
+        port=urlsplit(origin).port
+        guide=(f'''# AudioTP — thư viện thật trên máy
+
+Bản này dùng catalog Bài ca mới hiện có, không dùng âm TEST. File media nằm ở workspace, được backend chỉ đọc kiểm tra size/SHA-256 và phục vụ bằng HTTP Range. Chưa kết nối R2 live, không phân phối cho máy khác.
+
+Mở PowerShell tại workspace, chạy `node workers/media-api/local-preview.mjs --desktop --port {port}`, rồi mở AudioTP.exe. App tự kết nối thư viện trên máy; không cần mã truy cập. Node/workspace/media cần cho backend local, WebView2 cần cho EXE. Các mục cầu nguyện chưa có nguồn vẫn khóa.
+
+Nếu backend chưa chạy, mở Cài đặt → Kết nối để thử lại sau khi khởi động backend. Không gán âm khác khi lỗi. Bản online độc lập workspace cần HTTPS API/R2 được phê duyệt và nghiệm thu riêng.
+''').encode('utf-8')
+    release=ROOT/'release/windows'/(('LOCAL-' if local_library else 'TEST-' if test_fixtures else '')+version+'-'+stamp)
     release.mkdir(parents=True,exist_ok=False)
     sums=[]
     for name,data in inspected:
@@ -220,7 +237,7 @@ Hai mục cầu nguyện chưa khả dụng; Nghe nhanh dùng âm mẫu có nhã
         sums.append(hashlib.sha256(data).hexdigest()+'  '+name)
     (release/'SHA256SUMS.txt').write_text('\n'.join(sums)+'\n',encoding='utf-8')
     (release/'HUONG-DAN.md').write_bytes(guide)
-    (release/'build-report.json').write_text(json.dumps(dict(status='TEST_ONLY_NOT_FOR_DISTRIBUTION' if test_fixtures else 'BUILT_NOT_ACCEPTED',version=version,buildNumber=stamp,apiBase=origin,installer=installer,files=[dict(name=n,bytes=len(d),sha256=hashlib.sha256(d).hexdigest()) for n,d in inspected]),indent=2),encoding='utf-8')
+    (release/'build-report.json').write_text(json.dumps(dict(status='LOCAL_LIBRARY_NOT_FOR_DISTRIBUTION' if local_library else 'TEST_ONLY_NOT_FOR_DISTRIBUTION' if test_fixtures else 'BUILT_NOT_ACCEPTED',version=version,buildNumber=stamp,apiBase=origin,installer=installer,files=[dict(name=n,bytes=len(d),sha256=hashlib.sha256(d).hexdigest()) for n,d in inspected]),indent=2),encoding='utf-8')
     print('BUILT, NOT YET NATIVE/LIVE-E2E ACCEPTED:',release,flush=True)
     return 0
 

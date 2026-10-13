@@ -2,7 +2,7 @@ import {MODES,validateCatalog,filterTracks,formatTime,displayNumber} from './cat
 import {Player} from './player.mjs';
 import {MediaAPI,ConnectionGate} from './api-client.mjs';
 import {LibraryStore} from './storage.mjs';
-import {shortcutAction,libraryView,quickPresentation,QuickPanelState,quickPlaybackPlan,connectionPolicy} from './ui-core.mjs';
+import {shortcutAction,libraryView,quickPresentation,QuickPanelState,quickPlaybackPlan,connectionPolicy,shouldBootstrapLocal} from './ui-core.mjs';
 
 const $=id=>document.getElementById(id);
 const modeNames={guide:'Hướng dẫn',instrumental:'Nhạc đệm',silent:'Nhạc ngẫm nghĩ'};
@@ -19,6 +19,7 @@ let lastRecorded='',lastTrack='',lastStatus='';
 const media=$('audio');media.volume=.7;
 let api=null,sourceKind='none';
 let connection=connectionPolicy();
+let localConnection=false;
 const connections=new ConnectionGate();
 const player=new Player(media,track=>{
  if(!playbackEnabled || !api)throw Error('Chưa kết nối nguồn nghe. Hãy kết nối thư viện trước.');
@@ -63,13 +64,18 @@ async function loadCatalog(){
   if(connectionResult.status==='fulfilled'){
    const config=connectionResult.value;
    connection=connectionPolicy(config);
+   localConnection=shouldBootstrapLocal(config,window.location.origin);
+   // Native media must send Origin so the opt-in loopback server can enforce CORS.
+   if(config.mode==='local-library')media.crossOrigin='anonymous';
    $('api-base').value=connection.base;$('api-base').readOnly=connection.locked;
    $('api-base').disabled=!connection.enabled;$('access-code').disabled=!connection.enabled;$('connect-button').disabled=!connection.enabled;
+   $('access-code').required=!localConnection;
+   $('access-code').closest('label').hidden=localConnection;
    if(!connection.enabled)setText('connection-status','Bản kiểm tra chỉ xem danh mục; chưa cấu hình máy chủ nghe.');
    if(connection.test)setText('connection-status','BẢN KIỂM THỬ — chỉ phát âm mẫu tự tạo, không phải thư viện WATV.');
    renderConnection();
    if(typeof config.version==='string')setText('build-version',`${config.version} · ${config.buildNumber || 'development'}`);
-   if(config.mode==='local-files' && config.apiBase===window.location.origin){await connectLibrary(config.apiBase,'',{local:true});}
+   if(localConnection){await connectLibrary(config.apiBase,'',{local:true});}
    else if(config.apiBase){$('api-base').value=config.apiBase;}
   }
  }catch(error){if(token!==loadGeneration)return;statePanel('Chưa thể mở thư viện',error.name==='AbortError'?'Dữ liệu phản hồi quá lâu. Hãy thử tải lại.':error.message,{retry:true});}
@@ -105,7 +111,7 @@ async function connectLibrary(base,code,{local=false}={}){
  }catch(error){if(attempt.current()){next?.logout();attempt.complete();setText('connection-status',error.message);$('connection-settings').open=true;}}
  finally{if(attempt.current()){$('access-code').value='';$('connect-button').disabled=false;renderConnection();renderQuick();renderCategories();renderRows();}}
 }
-$('connection-form').addEventListener('submit',event=>{event.preventDefault();const code=$('access-code').value;$('access-code').value='';void connectLibrary($('api-base').value.trim(),code);});
+$('connection-form').addEventListener('submit',event=>{event.preventDefault();const code=$('access-code').value;$('access-code').value='';void connectLibrary($('api-base').value.trim(),code,{local:localConnection});});
 $('disconnect').addEventListener('click',()=>{api?.logout();api=null;sourceKind='none';connectionLost();setText('connection-status','Đã ngắt kết nối.');});
 window.addEventListener('offline',renderConnection);window.addEventListener('online',renderConnection);
 renderConnection();

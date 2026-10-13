@@ -56,7 +56,30 @@ winget install --id Rustlang.Rustup --exact --source winget
 
 Mở PowerShell mới và chạy `rustup default stable-msvc`. Node/npm và `.venv` theo SETUP chỉ cần trên máy build; cài locked npm dependencies bằng `npm.cmd ci --prefix apps/windows`. Preflight exit2 nghĩa còn thiếu dependency.
 
-### Thử native với âm tự tạo — không R2
+### Nghe Bài ca mới thật trên máy hiện tại
+
+Trong workspace đã có đủ 983 audio/manifest và bản LOCAL đã build, mở **`Mo-AudioTP.cmd`** ở root. Launcher kiểm tra SHA-256 EXE, mở backend chỉ đọc và EXE; app tự kết nối, không nhập mã. Giữ ba nhóm485 Hướng dẫn/485 Nhạc đệm/13 Ngẫm nghĩ và assetId thật. Các mục cầu nguyện chưa có nguồn vẫn khóa. Không mở bản TEST để nghe Bài ca mới.
+
+Lệnh tương đương:
+
+```powershell
+cd D:\Workspace\AudioTP
+.\.venv\Scripts\python.exe -X utf8 scripts/start-windows-local.py
+```
+
+`--check` chỉ xác minh artifact/hash, không mở app hoặc kết nối mạng. Launcher từ chối cổng bị chương trình khác chiếm, không dừng backend đã có, chặn mở trùng và dừng backend do nó tạo khi EXE đóng. Log chỉ ghi route/status native, không token/query/header.
+
+Bản LOCAL cần Node/Python/workspace/media cho **launcher/backend trên máy này**; EXE dùng WebView2. Chưa phải bản online độc lập workspace hoặc phát từ R2. Nếu mở trực tiếp EXE hay shortcut installer LOCAL, backend phải đang chạy. Ưu tiên `Mo-AudioTP.cmd` để mở đầy đủ.
+
+Build lại khi có private projections hợp lệ:
+
+```powershell
+.\.venv\Scripts\python.exe -X utf8 scripts/build-windows.py --build --installer --local-library --api-base http://127.0.0.1:8872
+```
+
+Artifact `release/windows/LOCAL-0.2.0-<timestamp>/`, identifier `org.audiotp.local`; không chép M4A vào EXE/installer, không đổi 983 asset gốc. Backend chỉ cho Tauri origins chính xác khi opt-in `--desktop`, bind127.0.0.1; mặc định browser preview giữ giới hạn cũ. `--local-library` và `--test-fixtures` loại trừ nhau; production vẫn yêu cầu HTTPS.
+
+### Thử native với âm tự tạo — dành cho kiểm thử riêng
 
 Không cần private catalogs cho bản TEST. PowerShell thứ nhất, trong root repo:
 

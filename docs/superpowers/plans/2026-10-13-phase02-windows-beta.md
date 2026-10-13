@@ -40,6 +40,8 @@ Files: scripts/build-windows.py, tests/test_windows_build.py, apps/windows/src-t
 
 ## Ledger
 
+- User follow-up: TEST-only handoff không đáp ứng nghe thư viện thật trong EXE. Bounded correction trong Phase02: LOCAL build từ public projection983, explicit loopback backend read-only, native-origin CORS/bootstrap, một launcher backend+EXE; không thay kiến trúc production hoặc deploy. RED packaging/missing bootstrap/native403 đã tái hiện, GREEN; launcher double-open review finding được tái hiện rồi sửa bằng Windows byte lock. Build LOCAL thật, native session/catalog200; Python185 PASS/3 SKIP, frontend53, Worker24/typecheck,983/18 integrity. Native Play/seek/máy sạch/live không được suy ra từ bằng chứng này.
+
 - Baseline637fbd1 clean; Phase02 branch created from exact Phase01 head, no divergence. Preflight missing cargo/rustc/MSVC/SDK, Node/Tauri/WebView2 available. User is installing tools externally.
 - Ruling: continue in the authorized existing workspace on a dedicated branch, as in Phase01 — ignored operational inputs/dependencies already reside here; do not copy originals into a new checkout or recreate the project. Source-only clone remains the independent verification surface.
 - Ruling: user explicitly authorizes complete phase implementation/review, so do not add intermediate design approval gates. Retain existing architecture and separate production permission gate.

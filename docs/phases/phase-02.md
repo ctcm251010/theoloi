@@ -4,6 +4,20 @@ Ngày: 13/10/2026, Asia/Bangkok. Status: **READY FOR REVIEW** — source và TES
 
 Phase02 bắt đầu trên `phase/02-windows-installer`, parent `637fbd182f5cceef431b079ac131d577edfef1bb` của Phase01. [PR Phase01 #1](https://github.com/ctcm251010/theoloi/pull/1) OPEN, chưa merge. Phase01 vẫn READY FOR REVIEW: source/offline hoàn tất, live R2/API chưa nghiệm thu. Không deploy, thay Cloudflare, đọc credential hoặc phân phối thư viện thật.
 
+## Bổ sung sau review người dùng — Bài ca mới thật trên máy
+
+Bàn giao trước chỉ có TEST catalog4 track, không đáp ứng việc nghe Bài ca mới thật trong EXE. Đã sửa bằng chế độ build `--local-library`: dùng projection983 track hiện có (485 guide/485 instrumental/13 silent), assetId thật, không lấy âm mẫu hoặc thay catalog/manifest/media gốc. Identifier `org.audiotp.local` tách TEST và production. Production giữ HTTPS; LOCAL cần explicit127.0.0.1 origin, chưa phải online/R2 live.
+
+**Mở bằng `Mo-AudioTP.cmd` tại root workspace**, không mở bản TEST cũ. Launcher kiểm tra hash artifact, tự mở Node backend read-only rồi EXE và app tự kết nối, không cần mã. Windows byte lock giữ xuyên suốt backend+EXE để không mở trùng; chỉ dừng backend do chính launcher tạo. Backend có sẵn/cổng chương trình khác được bảo toàn. Readiness gọi thẳng loopback, không proxy hoặc redirect. Native CORS chỉ opt-in `--desktop` với exact origins; media gửi anonymous Origin. Log chỉ có fixed route/method/status, không token/query/header/body.
+
+Artifact LOCAL: `release/windows/LOCAL-0.2.0-20261013T021343012529Z/`. EXE3,122,176 bytes, SHA256 `297f62c04d6ff1c7404f1ae00e1d9c4fde6dcffa8b075e82608a7f97e4d9c591`; NSIS1,142,635 bytes, SHA256 `b70c5f28917dc24c52cd64ec76327435c2fdbdfd42d3286c0f506c505345298d`. Build exit0, stage không có M4A/WAV, catalog không có test:*; config nguồn không bị builder sửa. Không phân phối bản LOCAL cho máy khác vì launcher/backend cần workspace/Node/Python/media. Mở trực tiếp EXE hoặc shortcut installer cần backend đã chạy.
+
+Validation follow-up: Python188 total/185 PASS/3 symlink SKIP; frontend53 PASS; Worker24 PASS/typecheck PASS, gồm native-origin preflight/session/catalog983/real media206 và full-byte SHA cho guide/instrumental/silent. Launcher7 PASS, cross-process lock đã được reviewer kiểm tra trên Windows. Review lỗi hai launcher dùng chung backend đã được sửa, targeted re-review không còn blocking finding. Integrity983/983 media SHA/size,18 metadata/state không đổi.
+
+EXE LOCAL đã thực sự chạy/WebView2, `Responding=true`. Log native-origin sau startup ghi OPTIONS204, POST `/v1/local-session`200, GET `/v1/catalog`200. Chứng minh EXE đã kết nối backend/catalog thật; **chưa chứng minh thao tác Play/seek native**. CUA vẫn apps=[]; Chrome tự mở cổng8872 bị ERR_BLOCKED_BY_CLIENT. Tab người dùng mở sẵn8766 đang phát bài148 thật được giữ nguyên, không thao tác/gián đoạn. Không dùng browser hoặc process startup thay native playback acceptance. Log local `logs/repository-audit/phase02-real-*`, backend `logs/windows-local/`.
+
+Theo dõi: native Play/seek trên cửa sổ LOCAL hiện có, máy sạch và online HTTPS/R2 live vẫn pending. Không deploy hoặc Phase03. Bằng chứng TEST lịch sử bên dưới được giữ riêng.
+
 ## Phần đã triển khai
 
 - Giữ frontend/player hiện có. Endpoint trong connection.json được cấu hình khi build, khóa trường địa chỉ theo origin/CSP bản cài. Mã truy cập/session/ticket chỉ trong RAM; R2 credential không vào app. Chưa có endpoint production đã nghiệm thu.
@@ -42,7 +56,7 @@ Log/ảnh local: `logs/repository-audit/phase02-*`, không commit raw evidence. 
 
 ## Bàn giao / bước kế tiếp
 
-Lệnh thực tế ở [Windows README](../../apps/windows/README.md). Artifact cuối: `release/windows/TEST-0.2.0-20261013T014110189461Z/`, có guide TEST, SHA256SUMS và build-report; không push EXE/media vào Git.
+Lệnh thực tế ở [Windows README](../../apps/windows/README.md). Artifact TEST cuối: `release/windows/TEST-0.2.0-20261013T014110189461Z/`, có guide TEST, SHA256SUMS và build-report; không push EXE/media vào Git. Để nghe Bài ca mới thật trên máy, dùng LOCAL/launcher ở phần bổ sung trên.
 
 | Artifact | SHA-256 |
 |---|---|

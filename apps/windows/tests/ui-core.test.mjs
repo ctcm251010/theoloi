@@ -1,6 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { shortcutAction, libraryView, quickPresentation, QuickPanelState, quickPlaybackPlan, connectionPolicy } from '../web/ui-core.mjs';
+import { shortcutAction, libraryView, quickPresentation, QuickPanelState, quickPlaybackPlan, connectionPolicy, shouldBootstrapLocal } from '../web/ui-core.mjs';
+test('real local library is pinned and auto-connects only from native or loopback frontend',()=>{
+ const config={mode:'local-library',apiBase:'http://127.0.0.1:8872'};
+ assert.deepEqual(connectionPolicy(config),{enabled:true,base:config.apiBase,locked:true,test:false});
+ for(const origin of ['http://tauri.localhost','https://tauri.localhost','tauri://localhost','http://127.0.0.1:8873'])assert.equal(shouldBootstrapLocal(config,origin),true);
+ for(const origin of ['https://evil.test','http://tauri.localhost.evil','http://localhost:8873'])assert.equal(shouldBootstrapLocal(config,origin),false);
+ for(const apiBase of ['https://media.test','http://evil.test','http://127.0.0.1:8872/path','http://user@127.0.0.1:8872'])assert.equal(shouldBootstrapLocal({...config,apiBase},'http://tauri.localhost'),false);
+ assert.equal(shouldBootstrapLocal({mode:'remote',apiBase:config.apiBase},'http://tauri.localhost'),false);
+ assert.equal(shouldBootstrapLocal({mode:'local-files',apiBase:config.apiBase},config.apiBase),true);
+ assert.equal(shouldBootstrapLocal({mode:'local-files',apiBase:config.apiBase},'http://tauri.localhost'),false);
+});
 test('catalog-only packaging disables connection, remote pins its origin, preview remains usable',()=>{
  assert.deepEqual(connectionPolicy({mode:'catalog-only'}),{enabled:false,base:'',locked:true,test:false});
  assert.deepEqual(connectionPolicy({mode:'remote',apiBase:'https://media.test'}),{enabled:true,base:'https://media.test',locked:true,test:false});

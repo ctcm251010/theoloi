@@ -12,6 +12,7 @@ const here=path.dirname(fileURLToPath(import.meta.url));
 const defaultRoot=path.resolve(here,'../..');
 const baseline='b54965fd3c612439ba2ef503bd502abbab11fadcd6b1e16857c2ef0403051a4c';
 const localCode='public-local-preview-not-production-access';
+const desktopOrigins=['http://tauri.localhost','https://tauri.localhost','tauri://localhost'];
 const hash=data=>createHash('sha256').update(data).digest('hex');
 
 export class ReadOnlyFileBucket {
@@ -44,7 +45,7 @@ export class ReadOnlyFileBucket {
  }
 }
 function localLimiter(limit){const counts=new Map();return {async limit({key}){const minute=Math.floor(Date.now()/60000);if(counts.size>200)counts.clear();const previous=counts.get(key);const count=previous?.minute===minute?previous.count+1:1;counts.set(key,{minute,count});return {success:count<=limit};}};}
-export async function createPreviewServer({root=defaultRoot,port=8766}={}){
+export async function createPreviewServer({root=defaultRoot,port=8766,desktop=false}={}){
  const raw=await readFile(path.join(root,'delivery/manifest.vi.json'));
  if(hash(raw)!==baseline)throw Error('unreviewed_manifest');
  const manifest=JSON.parse(raw);
@@ -55,8 +56,9 @@ export async function createPreviewServer({root=defaultRoot,port=8766}={}){
  const server=createServer(async(req,res)=>{
   try{
    const actualPort=server.address().port;
-   if(![`127.0.0.1:${actualPort}`,`localhost:${actualPort}`].includes(req.headers.host) || req.headers['sec-fetch-site']==='cross-site'){res.writeHead(403);res.end();return;}
-   const base='http://'+req.headers.host;env.ALLOWED_ORIGINS=`http://127.0.0.1:${actualPort},http://localhost:${actualPort}`;
+   const nativeRequest=desktop && desktopOrigins.includes(req.headers.origin) && req.url.startsWith('/v1/');
+   if(![`127.0.0.1:${actualPort}`,`localhost:${actualPort}`].includes(req.headers.host) || (req.headers['sec-fetch-site']==='cross-site' && !nativeRequest)){res.writeHead(403);res.end();return;}
+   const base='http://'+req.headers.host;env.ALLOWED_ORIGINS=[`http://127.0.0.1:${actualPort}`,`http://localhost:${actualPort}`,...(desktop?desktopOrigins:[])].join(',');
    const url=new URL(req.url,base);const method=req.method;
    if(url.pathname==='/connection.json' && ['GET','HEAD'].includes(method)){
     const body=JSON.stringify({mode:'local-files',apiBase:base,version:'0.2.0',buildNumber:'local'});res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store','Content-Length':Buffer.byteLength(body)});res.end(method==='HEAD'?undefined:body);return;
@@ -67,10 +69,18 @@ export async function createPreviewServer({root=defaultRoot,port=8766}={}){
     headers.set('CF-Connecting-IP',req.socket.remoteAddress || '127.0.0.1');
     let request=new Request(url,{method,headers,...(!['GET','HEAD'].includes(method)?{body:Buffer.concat(chunks)}:{})});
     if(url.pathname==='/v1/local-session'){
-     if(method!=='POST' || (headers.has('Origin') && !env.ALLOWED_ORIGINS.split(',').includes(headers.get('Origin')))){res.writeHead(403);res.end();return;}
-     request=new Request(base+'/v1/auth/login',{method:'POST',headers:{'Content-Type':'application/json','CF-Connecting-IP':'127.0.0.1'},body:JSON.stringify({code:localCode})});
+     if(method!=='OPTIONS'){
+      if(method!=='POST' || (headers.has('Origin') && !env.ALLOWED_ORIGINS.split(',').includes(headers.get('Origin')))){res.writeHead(403);res.end();return;}
+      request=new Request(base+'/v1/auth/login',{method:'POST',headers:{'Content-Type':'application/json','CF-Connecting-IP':'127.0.0.1',...(headers.has('Origin')?{Origin:headers.get('Origin')}: {})},body:JSON.stringify({code:localCode})});
+     }
     }
-    const response=await worker.fetch(request,env);res.writeHead(response.status,Object.fromEntries(response.headers));
+    const response=await worker.fetch(request,env);
+    if(desktop && desktopOrigins.includes(headers.get('Origin'))){
+     const route=['/v1/local-session','/v1/catalog','/v1/play-tickets'].includes(url.pathname)?url.pathname:url.pathname.startsWith('/v1/media/')?'/v1/media/:asset':'other';
+     // Fixed route/status only: never log query tickets, headers, bodies or session data.
+     console.info(JSON.stringify({event:'desktop_local_api',method,route,status:response.status}));
+    }
+    res.writeHead(response.status,Object.fromEntries(response.headers));
     if(response.body){const stream=Readable.fromWeb(response.body);res.on('close',()=>stream.destroy());stream.on('error',()=>res.destroy());stream.pipe(res);}else res.end();return;
    }
    if(!['GET','HEAD'].includes(method)){res.writeHead(405);res.end();return;}
@@ -86,9 +96,11 @@ export async function createPreviewServer({root=defaultRoot,port=8766}={}){
  return server;
 }
 if(process.argv[1] && import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
- const args=process.argv.slice(2);if(args.length && !(args.length===2 && args[0]==='--port' && /^\d+$/.test(args[1])))throw Error('Usage: node local-preview.mjs [--port NUMBER]');
+ const input=process.argv.slice(2),desktop=input.includes('--desktop');
+ if(input.filter(x=>x==='--desktop').length>1)throw Error('Duplicate --desktop');
+ const args=input.filter(x=>x!=='--desktop');if(args.length && !(args.length===2 && args[0]==='--port' && /^\d+$/.test(args[1])))throw Error('Usage: node local-preview.mjs [--desktop] [--port NUMBER]');
  const port=args.length?Number(args[1]):8766;if(port<0 || port>65535)throw Error('Invalid port');
- const server=await createPreviewServer({port});
+ const server=await createPreviewServer({port,desktop});
  console.log(`AudioTP actual local audio: http://127.0.0.1:${server.address().port} — local file-backed Worker integration; NOT live R2.`);
  process.on('SIGINT',()=>{server.close();server.closeAllConnections();});
 }
