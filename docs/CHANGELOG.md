@@ -2,6 +2,8 @@
 
 ## 2026-10-15 — AudioTP1.1.0 đã phát hành
 
+User xác nhận sau cập nhật native: “Đã lên1.1.0, dữ liệu vẫn còn”. Nghiệm thu cập nhật/giữ dữ liệu trên máy hiện tại PASS theo user; máy khác/mạng yếu tiếp tục pending.
+
 PR#5merge/tagv1.1.0/Release có5file/hashGitHub khớp; installerprivateR2create-only/GET SHAverified. Worker521e48b2 công bố update1.1.0;32livechecksPASS,giữ983media/18metadata/auth/bucketprivate. User offline cơ bản ổn, visible network feedback đã sửa. Native actual updater install/máy sạch còn pending, không tự mởPhase03. [Release](https://github.com/ctcm251010/theoloi/releases/tag/v1.1.0) · [Báo cáo](release-1.1.0-report.md).
 
 ## 2026-10-15 — Phản hồi Nghe online khi mất mạng

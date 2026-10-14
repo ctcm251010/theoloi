@@ -18,7 +18,8 @@
 - [x] Push source, PR#5 MERGED/tree khớp bản build; tagv1.1.0/Release5file+2archives,5GitHub SHA/dung lượng khớp local. Repo đang Public, không đổi visibility/đưa media hoặc credential vào Release.
 - [x] Publish đúng một installer1.1 private/create-only/fullGET SHA; deploy update metadata Worker521e48b2, giữ auth/epoch3/serving/bucket.32livechecks PASS cho old/current/updateauth/signature/fullinstallerSHA/catalog983/prayer2/Range.
 - [x] Kiểm tra lại983media/18metadata không đổi; cập nhật ledger và dừng ở release task.
-- [ ] Native update1.0.3→1.1.0 actual install/restart giữ favourites/history/offline/DPAPI và clean machine; không coi live installer GET hoặc TEST upgrade là production user acceptance.
+- [x] User native update acceptance15/10: “Đã lên1.1.0, dữ liệu vẫn còn” sau hướng dẫn1.0.3→1.1.0. Xác nhận trên máy hiện tại; agent không kiểm kê từng field riêng.
+- [ ] Clean machine/máy khác/mạng yếu và acceptance đầy đủ; không coi xác nhận một máy là PASS toàn bộ môi trường.
 
 ## Browser Use localhost — DONE /14-10-2026
 

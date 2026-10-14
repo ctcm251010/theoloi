@@ -1,6 +1,6 @@
 # AudioTP1.1.0 — Offline Downloads & Startup Updates
 
-Ngày15/10/2026, Asia/Bangkok. **DONE phát hành1.1.0; native update install/máy sạch READY FOR REVIEW.** Người dùng đã duyệt source/deploy API/test một bài thật, xác nhận offline cơ bản ổn, sau đó duyệt bước4GitHub Release và bước5bật update. Không đổi serving/auth/credential/private bucket hoặc983media. Các đoạn chuẩn bị/chưa publish phía dưới giữ lịch sử; kết quả thực tế cuối nằm ở đây.
+Ngày15/10/2026, Asia/Bangkok. **DONE phát hành1.1.0 và user native update acceptance; máy sạch READY FOR REVIEW.** Người dùng đã duyệt source/deploy API/test một bài thật, xác nhận offline cơ bản ổn, sau đó duyệt bước4GitHub Release và bước5bật update. Không đổi serving/auth/credential/private bucket hoặc983media. Các đoạn chuẩn bị/chưa publish phía dưới giữ lịch sử; kết quả thực tế cuối nằm ở đây.
 
 ## GitHub Release và kênh cập nhật đã hoàn tất
 
@@ -11,6 +11,8 @@ Ngày15/10/2026, Asia/Bangkok. **DONE phát hành1.1.0; native update install/m�
 - Người dùng1.0.1/1.0.3: Settings→Kiểm tra cập nhật→Cập nhật; chưa có thông báo tự động trong EXE cũ.1.0.0 cần setup mới một lần.1.1.0 trở đi có startup notification cho phiên bản sau. Native actual updater install/restart giữ favourites/history/DPAPI/cache và máy sạch chưa được nghiệm thu; không ghi PASS cho chúng. Authenticode vẫn NotSigned, chữ ký updater là lớp riêng.
 
 Task phát hành được hoàn thành trong phạm vi đã duyệt. Tiếp theo đề xuất nghiệm thu nâng cấp bản đã cài, máy khác và mạng yếu; không tự bắt đầu phase mới.
+
+**User acceptance sau publication15/10:** người dùng trả lời câu hỏi thử Settings→Kiểm tra cập nhật→Cập nhật từ bản1.0.3: “Đã lên1.1.0, dữ liệu vẫn còn”. Ghi PASS cho cập nhật native/mở lại và giữ dữ liệu theo xác nhận user trên máy hiện tại. Đây bổ sung cho giới hạn native install chưa nghiệm thu trong bản ghi trước đó; không phải agent tự quan sát GUI, kiểm kê từng field hay clean-machine acceptance. Bước tiếp theo còn máy Windows khác, mạng yếu và theo dõi usage sau phân phối; dừng chờ phạm vi mới.
 
 ## Cập nhật sau user acceptance và phê duyệt phát hành
 
