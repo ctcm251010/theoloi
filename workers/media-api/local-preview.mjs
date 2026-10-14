@@ -19,7 +19,8 @@ const desktopOrigins=['http://tauri.localhost','https://tauri.localhost','tauri:
 const hash=data=>createHash('sha256').update(data).digest('hex');
 
 function validatePrayerAsset(id,asset){
- if(id!=='watv:vi:prayer:our-wish' || asset?.assetId!==id || Object.keys(asset).sort().join(',')!=='assetId,bytes,localPath,objectKey,sha256' || asset.localPath!=='media/prayer/watv/vi/our-wish/our-wish.m4a' || typeof asset.sha256!=='string' || !/^[a-f0-9]{64}$/.test(asset.sha256) || asset.objectKey!==`audio/v1/watv/vi/prayer/our-wish/${asset.sha256}.m4a` || !Number.isSafeInteger(asset.bytes) || asset.bytes<=0)throw Error('unsafe_prayer_registry');
+ const slug=id==='watv:vi:prayer:our-wish'?'our-wish':id==='watv:vi:prayer:unison-prayer'?'unison-prayer':null;
+ if(!slug || asset?.assetId!==id || Object.keys(asset).sort().join(',')!=='assetId,bytes,localPath,objectKey,sha256' || asset.localPath!==`media/prayer/watv/vi/${slug}/${slug}.m4a` || typeof asset.sha256!=='string' || !/^[a-f0-9]{64}$/.test(asset.sha256) || asset.objectKey!==`audio/v1/watv/vi/prayer/${slug}/${asset.sha256}.m4a` || !Number.isSafeInteger(asset.bytes) || asset.bytes<=0)throw Error('unsafe_prayer_registry');
 }
 
 // A missing supplementary projection means no prayer. Existing malformed or
@@ -97,7 +98,7 @@ export async function createPreviewServer({root=defaultRoot,port=8766,desktop=fa
    const base='http://'+req.headers.host;env.ALLOWED_ORIGINS=[`http://127.0.0.1:${actualPort}`,`http://localhost:${actualPort}`,...(desktop?desktopOrigins:[])].join(',');
    const url=new URL(req.url,base);const method=req.method;
    if(url.pathname==='/connection.json' && ['GET','HEAD'].includes(method)){
-    const body=JSON.stringify({mode:'local-files',apiBase:base,version:'1.0.1',buildNumber:'local'});res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store','Content-Length':Buffer.byteLength(body)});res.end(method==='HEAD'?undefined:body);return;
+    const body=JSON.stringify({mode:'local-files',apiBase:base,version:'1.0.3',buildNumber:'local'});res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store','Content-Length':Buffer.byteLength(body)});res.end(method==='HEAD'?undefined:body);return;
    }
    if(url.pathname.startsWith('/v1/')){
     const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>4096){res.writeHead(413);res.end();return;}chunks.push(chunk);}

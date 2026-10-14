@@ -23,13 +23,16 @@ export const EMPTY_QUICK_AUDIO={schemaVersion:1,revision:'sha256:e3b0c44298fc1c1
 
 /** @param {import('./contracts').QuickAudio} quick @param {import('./contracts').ClientCatalog} client @param {Record<string,import('./contracts').Asset>} allowlist */
 export function validateQuickAudio(quick,client,allowlist){
- if(!exactKeys(quick,['schemaVersion','revision','tracks','assets']) || quick.schemaVersion!==1 || !/^sha256:[a-f0-9]{64}$/.test(quick.revision) || !Array.isArray(quick.tracks) || quick.tracks.length>1 || !quick.assets || typeof quick.assets!=='object' || Array.isArray(quick.assets))throw Error('Invalid quick audio');
- const id='watv:vi:prayer:our-wish';
+ if(!exactKeys(quick,['schemaVersion','revision','tracks','assets']) || quick.schemaVersion!==1 || !/^sha256:[a-f0-9]{64}$/.test(quick.revision) || !Array.isArray(quick.tracks) || quick.tracks.length>2 || !quick.assets || typeof quick.assets!=='object' || Array.isArray(quick.assets))throw Error('Invalid quick audio');
+ const approved={'watv:vi:prayer:our-wish':{title:'Cầu nguyện chúng con mong muốn',duration:69.427664,slug:'our-wish'},'watv:vi:prayer:unison-prayer':{title:'Nhạc không lời cầu nguyện thống thanh',duration:311.518912,slug:'unison-prayer'}};
+ const seen=new Set();
  if(Object.keys(quick.assets).length!==quick.tracks.length)throw Error('Invalid quick audio assets');
  for(const track of quick.tracks){
-  if(!exactKeys(track,['id','logicalId','mode','section','number','title','category','durationSeconds']) || track.id!==id || track.logicalId!==id || track.mode!=='prayer' || track.section!==null || track.number!==null || track.title!=='Cầu nguyện chúng con mong muốn' || track.category!=='Cầu nguyện' || track.durationSeconds!==69.427664 || client.tracks.some(t=>t.id===id || t.logicalId===id) || Object.hasOwn(allowlist,id))throw Error('Invalid quick audio track');
+  const id=track?.id;const expected=approved[id];
+  if(!expected || seen.has(id))throw Error('Invalid quick audio track');seen.add(id);
+  if(!exactKeys(track,['id','logicalId','mode','section','number','title','category','durationSeconds']) || track.id!==id || track.logicalId!==id || track.mode!=='prayer' || track.section!==null || track.number!==null || track.title!==expected.title || track.category!=='Cầu nguyện' || track.durationSeconds!==expected.duration || client.tracks.some(t=>t.id===id || t.logicalId===id) || Object.hasOwn(allowlist,id))throw Error('Invalid quick audio track');
   const asset=Object.hasOwn(quick.assets,id)?quick.assets[id]:null;
-  if(!asset || !exactKeys(asset,['assetId','objectKey','bytes','sha256']) || asset.assetId!==id || typeof asset.sha256!=='string' || !/^[a-f0-9]{64}$/.test(asset.sha256) || asset.objectKey!==`audio/v1/watv/vi/prayer/our-wish/${asset.sha256}.m4a` || !Number.isSafeInteger(asset.bytes) || asset.bytes<=0 || Object.values(allowlist).some(a=>a.objectKey===asset.objectKey))throw Error('Invalid quick audio assets');
+  if(!asset || !exactKeys(asset,['assetId','objectKey','bytes','sha256']) || asset.assetId!==id || typeof asset.sha256!=='string' || !/^[a-f0-9]{64}$/.test(asset.sha256) || asset.objectKey!==`audio/v1/watv/vi/prayer/${expected.slug}/${asset.sha256}.m4a` || !Number.isSafeInteger(asset.bytes) || asset.bytes<=0 || Object.values(allowlist).some(a=>a.objectKey===asset.objectKey))throw Error('Invalid quick audio assets');
  }
 }
 

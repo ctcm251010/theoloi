@@ -1,5 +1,13 @@
 # THEOLOI tasks
 
+## AudioTP1.0.3 — IN PROGRESS
+
+- [x] File thống thanh local FFprobe/full decode/hash, copy byte-identical và registry riêng.
+- [x] Upload chỉ selected unison object,HEAD+GET/hash; giữ983vàour-wish. Recoveryselected regression/reviewfix.
+- [x] Sharedplayer/IDstrict mapping,UI Mật khẩu chung;frontend69/Worker36/typecheck/Python225 PASS4SKIP; browserlocal5:11/controls/search.
+- [ ] Build/signature1.0.3, publishupdate/deploy/live smoke, Git/Release assetdigest.
+- [ ] Usernative update từ1.0.1 và phát thống thanh; nghiệm thu máy khác riêng.
+
 ## AudioTP1.0.1 — DONE tích hợp/phát hành; native update/máy khác READY FOR REVIEW
 
 - [x] Người dùng xác nhận đúng bản cầu nguyện và quyền phục vụ nhóm AudioTP.

@@ -12,12 +12,12 @@ export interface ClientTrack {
 export interface ClientCatalog { schemaVersion: 1; revision: string; tracks: ClientTrack[] }
 export interface Asset { assetId: string; objectKey: string; bytes: number; sha256: string }
 export interface PrayerTrack {
-  id: 'watv:vi:prayer:our-wish';
-  logicalId: 'watv:vi:prayer:our-wish';
+  id: 'watv:vi:prayer:our-wish' | 'watv:vi:prayer:unison-prayer';
+  logicalId: 'watv:vi:prayer:our-wish' | 'watv:vi:prayer:unison-prayer';
   mode: 'prayer';
   section: null;
   number: null;
-  title: 'Cầu nguyện chúng con mong muốn';
+  title: 'Cầu nguyện chúng con mong muốn' | 'Nhạc không lời cầu nguyện thống thanh';
   category: 'Cầu nguyện';
   durationSeconds: number;
 }
