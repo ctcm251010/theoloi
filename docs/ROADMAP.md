@@ -17,4 +17,6 @@ Task riêng1.0.0 được người dùng duyệt đã DONE: review/merge/tag/bui
 
 Task riêng1.0.1 do người dùng giao: prayer bổ sung và signed updater đang hoàn tất phát hành, [nghiệm thu](release-1.0.1-report.md). Đây là phần updater của Phase03, không tự mở rộng sang toàn bộ Closed Beta; máy khác/nâng cấp native vẫn cần acceptance riêng.
 
+Taskriêng1.0.3DONE:thốngthanh+Mật khẩu chung,Releaseđủfile,người dùng xácnhậnnativeupdate1.0.1→1.0.3/phátổn. [Nghiệm thu](release-1.0.3-report.md). Đây chưa phải xácnhận toànClosedBeta/máyWindowskhác/mạngyếu hoặc đãfixrootcauseBrowserUselocalhost; không tựbắtđầu phasekhác.
+
 Hoàn thành một phase thì test, đối chiếu acceptance, cập nhật tài liệu/Git, đề xuất phase tiếp theo và chờ người dùng. Production Cloudflare, chi phí mới và quyền phân phối phải được phê duyệt riêng. Mock/local không chứng minh live. Chỉ triển khai nhiều phase khi người dùng giao rõ phạm vi đó.

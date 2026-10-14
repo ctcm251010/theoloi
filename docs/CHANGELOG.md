@@ -1,5 +1,9 @@
 # THEOLOI — Development changelog
 
+## 2026-10-14 — AudioTP1.0.3 thống thanh/Mật khẩu chung
+
+Thêm file thống thanh người dùng cấp5:11 vào supplementaryR2/private và playerchung, không đổi983/our-wish. Ô kết nối đổi nhãn **Mật khẩu chung**, không đổi hoặc nhúng giátrị. Frontend69/Worker36/typecheck/Python225PASS4SKIP/Rust16PASS,12livechecksPASS,review/secret/indexsạch. PR#4merge/tag/Release có5file/hashkhớp;userxácnhậnupdate1.0.1→1.0.3 và thửổn. [Báo cáo](release-1.0.3-report.md) phân biệt nativeuseracceptance với máysạch và ghi lỗi BrowserUse mởlocalhost chưa rõ rootcause.
+
 ## 2026-10-13 — AudioTP1.0.1 prayer và updater có chữ ký
 
 Thêm một prayer asset riêng qua supplementary API, giữ nguyên983 audio. Nghe nhanh phát đúng “Cầu nguyện chúng con mong muốn”; updater xác thực và kiểm tra chữ ký/phiên bản trước cài đặt. EXE/NSIS build PASS; live API12checks PASS;223Python/67frontend/35Worker/16Rust PASS (SKIP có lý do). PR#3 merge/tagv1.0.1/Release có đủ5file,5SHA GitHub khớp local; người dùng xác nhận prayer EXE ổn. [Báo cáo](release-1.0.1-report.md) ghi native upgrade/máy khác còn pending, không đánh dấu toàn bộ Closed Beta DONE.

@@ -1,8 +1,8 @@
 # THEOLOI — Current phase
 
-## Task riêng1.0.3 — IN PROGRESS /14-10-2026
+## Task riêng1.0.3 — DONE /14-10-2026
 
-Thống thanh từ file người dùng và nhãn **Mật khẩu chung** theo yêu cầu. Audio mới5038802bytes/311.518912s/decode/hash PASS, uploaded privateR2/GET verified;983media/18metadata nguyên vẹn. Frontend69/Worker36/typecheck/Python225 PASS4SKIP, scopedrecoveryfix review/test. Browserlocal5:11/pause/seek/two-prayer/search PASS; bản cuối signedinstaller/live/release/native đang hoàn tất. [Báo cáo](release-1.0.3-report.md). Không reset source hoặc mở rộng phase.
+Thống thanh và nhãn **Mật khẩu chung** hoàn tất theo yêu cầu. Audio5038802bytes/311.518912s/decode/hash PASS,privateR2/GET verified;983media/18metadata nguyên vẹn. Frontend69/Worker36/typecheck/Python225 PASS4SKIP/Rust16 PASS;reviewfix scopedrecovery córegression. Browserlocalcontrols/searchPASS;EXE/NSIS1.0.3 cóchữký,12livechecksPASS. User xác nhận update1.0.1→1.0.3/phát/nhãn ổn. PR#4merge/tagv1.0.3/Release5file,5GitHubhashkhớp. [Báo cáo](release-1.0.3-report.md). RootcauseBrowserUse mởlocalhostUNKNOWN; điều khiển/reload tabmởtayđược. Không mở rộngClosedBeta/phase; đềxuất tiếp theo kiểmthửmáykhác/mạngyếu/cài-gỡ.
 
 ## Task riêng 1.0.1 — DONE tích hợp/phát hành /13-10-2026
 
