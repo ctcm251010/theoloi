@@ -1,5 +1,9 @@
 # THEOLOI — Development changelog
 
+## 2026-10-15 — API offline1.1 live, dừng trước Release
+
+Sau phê duyệt deploy Worker đúng ctcm251010, giữ private R2/secrets/epoch3/update1.0.3. Review độc lập không Critical/Important;18livechecks PASS, native Rust tải guide1 hai lần với SHA/restart không auth/Range/skip/xóa/tải lại. Thêm ignored explicit live acceptance test, không network trong suite mặc định; preview version lấy package1.1.0 có regression. Native GUI acceptance còn chờ vì Computer Use pipe unavailable; chưa push/tag/GitHub Release hoặc publish update1.1.0. [Báo cáo](release-1.1.0-report.md#nghiệm-thu-live-sau-phê-duyệt1510).
+
 ## 2026-10-15 — AudioTP1.1.0 local build, chưa phát hành
 
 Native offline downloads/cache/Range/SHA/delete/resume, UI Nghe offline và startup signed updater modal/progress. Giữ ba tab/player và983 media. Thêm authenticated offline manifest/public version-only API source; pacing/backoff tôn trọng limiter, generation chống logout/defer races. Frontend92/Worker40/typecheck/Python225 PASS4SKIP/Rust41 PASS2 deliberate helpers ignored +real artifact signature PASS. TEST upgrade cache giữ SHA, final production portable startup PASS. EXE/NSIS1.1.0 local READY FOR REVIEW; chưa push/tag/GitHub/Cloudflare theo điểm dừng người dùng. Native E2E/máy sạch/API mới live pending. [Báo cáo](release-1.1.0-report.md), [hướng dẫn học](offline-updates-guide.vi.md).

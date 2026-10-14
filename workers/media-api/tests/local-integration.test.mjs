@@ -71,6 +71,7 @@ test('real HTTP integration: same Worker handler serves the exact guide/instrume
  const server=await createPreviewServer({port:0});t.after(()=>{server.closeAllConnections();return new Promise(resolve=>server.close(resolve));});
  const base='http://127.0.0.1:'+server.address().port;
  const config=await (await fetch(base+'/connection.json')).json();assert.equal(config.mode,'local-files');
+ assert.equal(config.version,JSON.parse(await readFile(new URL('../../../apps/windows/package.json',import.meta.url),'utf8')).version,'preview displays the current app version');
  assert.equal((await fetch(base+'/v1/catalog')).status,401);
  const session=await (await fetch(base+'/v1/local-session',{method:'POST'})).json();assert.ok(session.token);
  const headers={Authorization:'Bearer '+session.token};const catalog=await (await fetch(base+'/v1/catalog',{headers})).json();assert.equal(catalog.tracks.length,983);

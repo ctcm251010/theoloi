@@ -85,6 +85,7 @@ export async function createPreviewServer({root=defaultRoot,port=8766,desktop=fa
  const allowed=JSON.parse(await readFile(path.join(root,'workers/media-api/generated/assets.json'),'utf8'));
  const worker=createService(client,allowed,{quickAudio});
  const web=path.join(root,'apps/windows/web');
+ const {version}=JSON.parse(await readFile(path.join(root,'apps/windows/package.json'),'utf8'));
  const files=new Set(['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','supplementary.mjs','app-updates.mjs','offline.mjs','catalog.client.json','quick-play.json','favicon.svg']);
  const env={SERVING_ENABLED:'true',LOCAL_PREVIEW:'true',AUTH_EPOCH:'local-only',SIGNING_KEY:randomBytes(32).toString('hex'),GROUP_CODE_SHA256:hash(localCode),SESSION_SECONDS:'43200',MEDIA:new ReadOnlyFileBucket(root,manifest,prayerAssets),LOGIN_LIMITER:localLimiter(30),REQUEST_LIMITER:localLimiter(300)};
  const server=createServer(async(req,res)=>{
@@ -98,7 +99,7 @@ export async function createPreviewServer({root=defaultRoot,port=8766,desktop=fa
    const base='http://'+req.headers.host;env.ALLOWED_ORIGINS=[`http://127.0.0.1:${actualPort}`,`http://localhost:${actualPort}`,...(desktop?desktopOrigins:[])].join(',');
    const url=new URL(req.url,base);const method=req.method;
    if(url.pathname==='/connection.json' && ['GET','HEAD'].includes(method)){
-    const body=JSON.stringify({mode:'local-files',apiBase:base,version:'1.0.3',buildNumber:'local'});res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store','Content-Length':Buffer.byteLength(body)});res.end(method==='HEAD'?undefined:body);return;
+    const body=JSON.stringify({mode:'local-files',apiBase:base,version,buildNumber:'local'});res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store','Content-Length':Buffer.byteLength(body)});res.end(method==='HEAD'?undefined:body);return;
    }
    if(url.pathname.startsWith('/v1/')){
     const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>4096){res.writeHead(413);res.end();return;}chunks.push(chunk);}

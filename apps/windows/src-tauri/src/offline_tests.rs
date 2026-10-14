@@ -1,6 +1,133 @@
 use super::*;
 use sha2::{Digest, Sha256};
 
+// Explicit live acceptance, never part of the default/offline test suite.
+// A parent supplies a short-lived session over stdin; no credential files/env.
+#[test]
+#[ignore = "Requires explicit approval, a live session on stdin, and two downloads of guide 1"]
+fn live_single_asset_download_restart_ranges_skip_remove_retry() {
+    let mut token = String::new();
+    std::io::stdin()
+        .read_line(&mut token)
+        .expect("session on stdin");
+    let token = token.trim().to_owned();
+    assert!(crate::update_policy::valid_token(&token), "session missing");
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .ancestors()
+        .nth(3)
+        .unwrap();
+    let nonce = SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
+    let dir = root.join("tmp").join(format!("live-offline-{nonce}"));
+    std::fs::create_dir_all(&dir).unwrap();
+    let base = crate::update_policy::API_ORIGIN.to_owned();
+    let manager = OfflineManager::open(&dir, false).unwrap();
+    let synced = manager
+        .sync(base.clone(), token.clone())
+        .expect("live manifest");
+    let metadata = synced.manifest.unwrap();
+    assert_eq!(metadata.tracks.len(), 983);
+    assert_eq!(metadata.assets.len(), 983);
+    let track = metadata
+        .tracks
+        .iter()
+        .find(|t| t.mode == "guide" && t.section.as_deref() == Some("main") && t.number == 1)
+        .unwrap();
+    let ids = vec![track.id.clone()];
+    let asset = metadata
+        .assets
+        .iter()
+        .find(|a| a.asset_id == track.id)
+        .unwrap();
+    let wait = |manager: &OfflineManager| {
+        let deadline = std::time::Instant::now() + Duration::from_secs(90);
+        while manager.inner.lock().unwrap().worker {
+            assert!(
+                std::time::Instant::now() < deadline,
+                "live download timeout"
+            );
+            std::thread::sleep(Duration::from_millis(100));
+        }
+        let status = manager.status().unwrap();
+        assert_eq!(status.completed, ids, "single asset was not verified");
+        assert_eq!(status.job.failed, 0);
+    };
+    manager
+        .start(base.clone(), token.clone(), ids.clone())
+        .expect("live start");
+    wait(&manager);
+    assert!(manager
+        .cache
+        .verify(&track.id, asset.bytes, &asset.sha256)
+        .unwrap());
+    for name in ["manifest.json", "queue.json"] {
+        let bytes = std::fs::read(manager.cache.root.join(name)).unwrap();
+        assert!(
+            !bytes.windows(token.len()).any(|v| v == token.as_bytes()),
+            "session must not persist"
+        );
+    }
+    drop(manager);
+    let manager = OfflineManager::open(&dir, false).expect("offline restart");
+    assert!(manager.inner.lock().unwrap().session.is_none());
+    assert_eq!(manager.status().unwrap().completed, ids);
+    let uri = format!("http://offline.localhost/{}", encode(&track.id));
+    let head = manager.serve(
+        tauri::http::Request::builder()
+            .method("HEAD")
+            .uri(&uri)
+            .body(vec![])
+            .unwrap(),
+    );
+    assert_eq!(head.status(), 200);
+    assert_eq!(head.headers()["Content-Length"], asset.bytes.to_string());
+    for requested in ["bytes=0-1023", "bytes=-1024"] {
+        let result = manager.serve(
+            tauri::http::Request::builder()
+                .uri(&uri)
+                .header("Range", requested)
+                .header("Origin", "http://tauri.localhost")
+                .body(vec![])
+                .unwrap(),
+        );
+        assert_eq!(result.status(), 206);
+        assert_eq!(result.body().len(), 1024);
+        let (start, end) = range(requested, asset.bytes).unwrap();
+        assert_eq!(
+            result.headers()["Content-Range"],
+            format!("bytes {start}-{end}/{}", asset.bytes)
+        );
+    }
+    // An invalid server session proves a verified asset skips the network.
+    manager
+        .start(
+            base.clone(),
+            "invalid-but-well-formed-session".into(),
+            ids.clone(),
+        )
+        .unwrap();
+    wait(&manager);
+    manager
+        .remove(ids.clone())
+        .expect("remove only the isolated downloaded asset");
+    assert!(manager.status().unwrap().completed.is_empty());
+    manager
+        .start(base, token, ids.clone())
+        .expect("redownload same asset");
+    wait(&manager);
+    let result = serde_json::json!({"status":"PASS","assetId":track.id,"manifestAssets":983,"bytesPerDownload":asset.bytes,"downloads":2,"sha256":asset.sha256,"cacheDirectory":manager.cache.root,"checks":["live-manifest","native-download-sha256","no-session-on-disk","restart-without-auth","head","first-and-suffix-range","skip-with-invalid-session","local-remove","redownload"],"guiPlayback":"NOT_TESTED"});
+    std::fs::write(
+        root.join("logs/repository-audit/offline-live-native.json"),
+        serde_json::to_vec_pretty(&result).unwrap(),
+    )
+    .unwrap();
+    println!(
+        "Live native acceptance PASS: one asset, two verified downloads; GUI playback not tested."
+    );
+}
+
 fn manifest(bytes: &[u8]) -> Manifest {
     Manifest {
         schema_version: 1,

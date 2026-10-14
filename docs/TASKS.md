@@ -10,7 +10,11 @@
 - [x] Regression/review/data integrity; EXE/NSIS1.1.0 build, TEST0.2.0→1.1.0 cache SHA preserved; production portable startup.
 - [x] Artifact/hướng dẫn/report sẵn review; learning guide có build/release; [báo cáo](release-1.1.0-report.md).
 - [ ] Native player/updater E2E và clean machine; helper Windows unavailable, không dùng mock đánh dấu DONE.
-- [ ] **Deferred theo người dùng:** push/tag/GitHub Release/R2 publish/deploy/live API mới. Dừng chờ review, chưa phát hành1.1.0.
+- [x] Review trước deploy: reviewer độc lập không Critical/Important; frontend92/Worker40/typecheck/Rust41 PASS; secret scan và index audit sạch;983media/18metadata không đổi.
+- [x] Sau phê duyệt15/10 deploy riêng API offline lên ctcm251010; giữ secrets/epoch3/serving/private bucket/update1.0.3, không upload installer/audio.
+- [x] Live API + native engine một bài thật:18checks PASS; guide1 hai lượt tải verified/restart không auth/Range/skip/xóa/tải lại. Test chạy riêng có chủ đích, không thuộc suite offline mặc định.
+- [ ] Người dùng xác nhận phát/tạm dừng/tua/mở lại offline trong EXE1.1; đã mở app, helper Windows native pipe unavailable. Không coi Rust/live engine là GUI acceptance.
+- [ ] **Deferred theo người dùng:** push/tag/GitHub Release và R2 installer/update1.1 publication. Dừng trước phát hành1.1.0.
 
 ## Browser Use localhost — DONE /14-10-2026
 

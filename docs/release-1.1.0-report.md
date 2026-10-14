@@ -1,6 +1,18 @@
 # AudioTP1.1.0 — Offline Downloads & Startup Updates
 
-Ngày15/10/2026, Asia/Bangkok. **READY FOR REVIEW — source và artifact local, chưa phát hành/live acceptance.** Người dùng yêu cầu làm tới EXE/setup chuẩn bị đưa GitHub rồi dừng. Không push/tag/Release, upload installer/audio, deploy Worker, đổi serving/auth/credential hay public bucket trong lượt này.
+Ngày15/10/2026, Asia/Bangkok. **READY FOR REVIEW — API offline đã live; native engine PASS, GUI acceptance còn chờ, chưa phát hành.** Ban đầu người dùng yêu cầu làm tới EXE/setup rồi dừng. Yêu cầu tiếp theo đã cho phép review/deploy API/test một bài thật; vẫn dừng trước GitHub Release, không publish installer/update1.1.0 hoặc đổi serving/auth/credential/private bucket.
+
+## Nghiệm thu live sau phê duyệt15/10
+
+- Reviewer độc lập: không Critical/Important chặn deploy; rà manifest core/auth/Range/old updater/native contract. Giữ `generated/updates.json`1.0.3, không công bố1.1.0.
+- Wrangler4.149.0 xác nhận member nguyenducbang.uit/account ctcm251010; version trước `4b3c5c16-04b8-4faa-a30c-a0d24ec59b66`, version mới `52e19593-8136-41b7-9961-58fe9078c00d`. Deploy `--strict --keep-vars --var SERVING_ENABLED:true`; đối chiếu hậu kiểm giữ epoch3, SESSION_SECONDS43200, exact origins, limiters10/180 và MEDIA→audiotp-media. Không đọc/rotate secrets hoặc sửa public access.
+- **18 live checks PASS**: health200/auth401/origin403, manifest983 exact ID/size/hash/type và no-store/không private key, supplementary2, old1.0.1 update vẫn1.0.3,1.0.3 không nhận thông báo1.1.0. Manifest chỉ metadata, không LIST/probe983objects.
+- **Native Rust explicit live test1 PASS** dùng đúng production origin và downloader/protocol source, session qua stdin chỉ trong RAM. Chọn guide main1, asset `watv:vi:guide:4177`,2.027.172bytes, SHA `ff9c2ad0d53e908a1f156561f15c16f00894b8b59f072324ee5aa53151d63393`. Hai lượt tải cùng một bài vào `tmp/live-offline-*/offline-v1`, tổng4.054.344audio bytes; kiểm tra SHA/promote, không lưu session, mở lại không auth, HEAD/first/suffix Range, skip với session sai chứng minh không xin vé/tải lại, xóa local rồi tải lại PASS. Không sửa cache người dùng/983media/R2.
+- Test mới `live_single_asset_download_restart_ranges_skip_remove_retry` được `#[ignore]` rõ ràng; suite mặc định không bao giờ tự dùng mạng. Log an toàn: `offline-live-api.json`, `offline-live-native.json`, `offline-live-native-test.txt`, deploy/config/secret/index/integrity trong `logs/repository-audit/` (local-only).
+- Frontend92/Worker40/typecheck/Python225PASS4SKIP; Rust suite mặc định41 PASS,3 ignored có chủ đích gồm helper/artifact/live; live test chạy riêng1PASS và final installer signature chạy riêng1PASS. Gitleaks commit range không leak, index245paths không forbidden;983media +18metadata SHA không đổi. Preview version lấy package metadata1.1.0 thay hardcode1.0.3, có regression test. Artifact SHA/bytes vẫn khớp cả ba file; thay đổi Rust mới chỉ ở module test, không sửa production binary.
+- Final production EXE khởi động12s Responding/title AudioTP, không báo stderr. Công cụ Windows vẫn `native pipe unavailable (os error2)`; đã mở EXE và nhờ người dùng xác nhận play/pause/seek/restart khi mất mạng. **Chưa ghi GUI playback/clean machine/updater install là PASS.** Native test gọi engine Rust, không đi qua UI/IPC/WebView2.
+
+GitHub push/PR/merge/tag/Release, private installer upload và metadata update1.1.0 **chưa thực hiện**. Bản1.0.3 vẫn là bản thông báo cập nhật hiện hành. Chờ native GUI acceptance trước quyết định phát hành; phần dưới giữ bằng chứng build/test trước deploy.
 
 ## Artifact cuối để review
 
@@ -57,7 +69,7 @@ Computer Use Windows báo native pipe unavailable (`os error2`), đã thử lạ
 
 Một lần smoke intermediate không còn process khi kiểm tra lại, nguyên nhân chưa xác định; lần thử lại ổn. Final artifact được quan sát trực tiếp10s và dừng đúng process do agent tạo sau kiểm tra. Không dùng smoke process để thay cho native E2E hoặc clean-machine acceptance.
 
-**API mới chưa deploy**: bản build dùng endpoint HTTPS thật nhưng server live vẫn source cũ. Online hiện có giữ nguyên; tải offline từ R2 cần deploy route mới sau review. Không công bố1.1.0 như đã dùng đầy đủ qua production và không thay update metadata1.0.3 trong lượt này. Các bản cũ chưa được thông báo1.1.0.
+**Cập nhật API:** trạng thái chưa deploy trong handoff ban đầu đã được thay bằng deployment/test ở đầu báo cáo. Online giữ nguyên; API tải offline đã live. Không công bố1.1.0 như đã nghiệm thu GUI đầy đủ và không thay update metadata1.0.3. Các bản cũ chưa được thông báo1.1.0.
 
 GitHub repo private đã xác minh từ remote: `ctcm251010/theoloi`. Branch làm việc `feature/offline-downloads-updates`, nềnb361659. Chưa publish/push/tag. Tài liệu học và command thực tế: [Nghe offline/build/release](offline-updates-guide.vi.md), [hướng dẫn người dùng](windows-user-guide.vi.md). Git/secret audit ghi sau checkpoint local; không thay đổi remote theo điểm dừng người dùng.
 

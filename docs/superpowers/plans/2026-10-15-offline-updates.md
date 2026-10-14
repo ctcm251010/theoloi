@@ -12,6 +12,8 @@
 
 **User steering15/10:** finish local code/tests and export production EXE/NSIS ready for GitHub, then STOP for review. Do not push/tag/publish GitHub or deploy/publish R2 in this turn. Release steps below become a prepared handoff, not authorization to execute now.
 
+**Later steering15/10:** user explicitly approved final source review, existing Worker deploy and small live/native EXE acceptance, then STOP before GitHub Release. API deployment and18 live API/native-engine checks completed; native GUI confirmation pending (Computer Use native pipe unavailable). Keep existing1.0.3 update metadata, no installer publication or GitHub mutation. See release-1.1.0-report.md.
+
 ## Global constraints
 
 No original983media/catalog/manifest/state mutation, no secret read/output/commit, no bulk real downloads, retain identifier and signing key, keep R2 private. Windows app data outside installation; single player, one downloader; explicit install and bulk-delete confirmation. Use manifest count not hardcoded983 for completeness.
