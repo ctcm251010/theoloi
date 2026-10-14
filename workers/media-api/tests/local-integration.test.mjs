@@ -8,6 +8,37 @@ import {existsSync} from 'node:fs';
 import {request as httpRequest} from 'node:http';
 import {createPreviewServer,ReadOnlyFileBucket} from '../local-preview.mjs';
 import * as preview from '../local-preview.mjs';
+test('preview permits cross-site top-level HTML navigation without exposing API or framed resources',{skip:!existsSync(new URL('../../../delivery/manifest.vi.json',import.meta.url))?'Private manifest/media not available in source-only clone':false},async t=>{
+ const server=await createPreviewServer({port:0});t.after(()=>{server.closeAllConnections();return new Promise(resolve=>server.close(resolve));});
+ const base='http://127.0.0.1:'+server.address().port;
+ const navigation={'Sec-Fetch-Site':'cross-site','Sec-Fetch-Mode':'navigate','Sec-Fetch-Dest':'document'};
+ // Node fetch rewrites Sec-Fetch-Mode to cors; raw HTTP preserves the observed browser headers.
+ const request=(route,options={})=>new Promise((resolve,reject)=>{
+  const req=httpRequest(base+route,{...options,headers:options.headers??navigation},response=>{
+   const chunks=[];response.on('data',chunk=>chunks.push(chunk));response.on('error',reject);
+   response.on('end',()=>resolve(new Response(Buffer.concat(chunks),{status:response.statusCode,headers:response.headers})));
+  });req.on('error',reject);req.end();
+ });
+ for(const route of ['/','/index.html']){
+  const response=await request(route);
+  assert.equal(response.status,200,route);assert.match(response.headers.get('Content-Type'),/^text\/html/);
+  assert.match(await response.text(),/<title>AudioTP<\/title>/);
+  assert.equal(response.headers.get('Cache-Control'),'no-store');
+  assert.equal(response.headers.get('X-Frame-Options'),'DENY');
+  assert.equal(response.headers.get('Content-Security-Policy'),"frame-ancestors 'none'");
+  const head=await request(route,{method:'HEAD'});assert.equal(head.status,200);assert.equal(await head.text(),'');
+ }
+ for(const route of ['/connection.json','/catalog.client.json','/app.mjs','/v1/catalog','/v1/media/unlisted','/v1/local-session']){
+  assert.equal((await request(route)).status,403,route);
+ }
+ for(const patch of [{'Sec-Fetch-Dest':'iframe'},{'Sec-Fetch-Dest':'empty'},{'Sec-Fetch-Mode':'cors'},{'Sec-Fetch-Mode':'no-cors'},{'Sec-Fetch-Mode':''}]){
+  assert.equal((await request('/',{headers:{...navigation,...patch}})).status,403,JSON.stringify(patch));
+ }
+ assert.equal((await request('/',{method:'POST'})).status,403);
+ assert.equal((await request('/v1/local-session',{method:'POST'})).status,403);
+ const badHost=await new Promise((resolve,reject)=>{const req=httpRequest(base+'/',{headers:{...navigation,Host:'evil.test'}},response=>{response.resume();resolve(response.statusCode);});req.on('error',reject);req.end();});assert.equal(badHost,403);
+ assert.equal((await fetch(base+'/',{headers:{'Sec-Fetch-Site':'none','Sec-Fetch-Mode':'navigate','Sec-Fetch-Dest':'document'}})).status,200);
+});
 const hash=data=>createHash('sha256').update(data).digest('hex');
 test('desktop local access is opt-in and permits only exact native origins with the real 983 catalog',{skip:!existsSync(new URL('../../../delivery/manifest.vi.json',import.meta.url))?'Private manifest/media not available in source-only clone':false},async t=>{
  const servers=[];t.after(async()=>{for(const s of servers){s.closeAllConnections();await new Promise(r=>s.close(r));}});

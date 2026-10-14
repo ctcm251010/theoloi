@@ -94,7 +94,10 @@ export async function createPreviewServer({root=defaultRoot,port=8766,desktop=fa
   try{
    const actualPort=server.address().port;
    const nativeRequest=desktop && desktopOrigins.includes(req.headers.origin) && req.url.startsWith('/v1/');
-   if(![`127.0.0.1:${actualPort}`,`localhost:${actualPort}`].includes(req.headers.host) || (req.headers['sec-fetch-site']==='cross-site' && !nativeRequest)){res.writeHead(403);res.end();return;}
+   // Browser Use/link navigation can be cross-site. Permit only the HTML entry
+   // document, never cross-site API, media, subresource, iframe or POST requests.
+   const pageNavigation=['GET','HEAD'].includes(req.method) && req.headers['sec-fetch-mode']==='navigate' && req.headers['sec-fetch-dest']==='document' && ['/', '/index.html'].includes(new URL(req.url,'http://127.0.0.1').pathname);
+   if(![`127.0.0.1:${actualPort}`,`localhost:${actualPort}`].includes(req.headers.host) || (req.headers['sec-fetch-site']==='cross-site' && !nativeRequest && !pageNavigation)){res.writeHead(403,{'Cache-Control':'no-store'});res.end();return;}
    const base='http://'+req.headers.host;env.ALLOWED_ORIGINS=[`http://127.0.0.1:${actualPort}`,`http://localhost:${actualPort}`,...(desktop?desktopOrigins:[])].join(',');
    const url=new URL(req.url,base);const method=req.method;
    if(url.pathname==='/connection.json' && ['GET','HEAD'].includes(method)){
@@ -126,7 +129,7 @@ export async function createPreviewServer({root=defaultRoot,port=8766,desktop=fa
    const target=path.join(web,name);if((await lstat(target)).isSymbolicLink()){res.writeHead(403);res.end();return;}
    const content=await readFile(target);
    const types={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml'};
-   res.writeHead(200,{'Content-Type':types[path.extname(name)] || 'application/octet-stream','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Cross-Origin-Resource-Policy':'same-origin','Content-Length':content.length});res.end(method==='HEAD'?undefined:content);
+   res.writeHead(200,{'Content-Type':types[path.extname(name)] || 'application/octet-stream','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Cross-Origin-Resource-Policy':'same-origin',...(name==='index.html'?{'X-Frame-Options':'DENY','Content-Security-Policy':"frame-ancestors 'none'"}:{}),'Content-Length':content.length});res.end(method==='HEAD'?undefined:content);
   }catch{if(!res.headersSent)res.writeHead(503,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end('{"error":"local_preview_unavailable"}');}
  });
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,'127.0.0.1',resolve);});

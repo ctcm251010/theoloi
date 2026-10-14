@@ -1,5 +1,9 @@
 # THEOLOI — Development changelog
 
+## 2026-10-14 — Sửa Browser Use mở localhost
+
+Preview từ chối nhầm cross-site top-level navigation dẫn tới HTTP403/Chrome ERR_BLOCKED_BY_CLIENT. Cho phép đúng HTML entry GET/HEAD, giữ API/media protections và thêm frame denial. Codex tự mở tab mới và kiểm thử playback thành công. Worker37/frontend69/typecheck PASS; Windows Python64 PASS2 SKIP. [Báo cáo](local-browser-troubleshooting.md).
+
 ## 2026-10-14 — AudioTP1.0.3 thống thanh/Mật khẩu chung
 
 Thêm file thống thanh người dùng cấp5:11 vào supplementaryR2/private và playerchung, không đổi983/our-wish. Ô kết nối đổi nhãn **Mật khẩu chung**, không đổi hoặc nhúng giátrị. Frontend69/Worker36/typecheck/Python225PASS4SKIP/Rust16PASS,12livechecksPASS,review/secret/indexsạch. PR#4merge/tag/Release có5file/hashkhớp;userxácnhậnupdate1.0.1→1.0.3 và thửổn. [Báo cáo](release-1.0.3-report.md) phân biệt nativeuseracceptance với máysạch và ghi lỗi BrowserUse mởlocalhost chưa rõ rootcause.

@@ -1,5 +1,9 @@
 # THEOLOI — Current phase
 
+## Task sửa Browser Use local — DONE /14-10-2026
+
+Root cause đã xác minh bằng HTTP log: preview chặn cross-site top-level navigation. Sửa giới hạn HTML entry, giữ API/media/iframe/Host protections. Tự mở tab mới/phát ba nhóm và hai prayer, pause/seek/search PASS; Worker37/frontend69/typecheck PASS, Python Windows64 PASS2 SKIP. Không cần người dùng đổi Chrome; không Cloudflare/media/credential mutation. [Bằng chứng và quy trình](local-browser-troubleshooting.md). Không tự chuyển phase.
+
 ## Task riêng1.0.3 — DONE /14-10-2026
 
 Thống thanh và nhãn **Mật khẩu chung** hoàn tất theo yêu cầu. Audio5038802bytes/311.518912s/decode/hash PASS,privateR2/GET verified;983media/18metadata nguyên vẹn. Frontend69/Worker36/typecheck/Python225 PASS4SKIP/Rust16 PASS;reviewfix scopedrecovery córegression. Browserlocalcontrols/searchPASS;EXE/NSIS1.0.3 cóchữký,12livechecksPASS. User xác nhận update1.0.1→1.0.3/phát/nhãn ổn. PR#4merge/tagv1.0.3/Release5file,5GitHubhashkhớp. [Báo cáo](release-1.0.3-report.md). RootcauseBrowserUse mởlocalhostUNKNOWN; điều khiển/reload tabmởtayđược. Không mở rộngClosedBeta/phase; đềxuất tiếp theo kiểmthửmáykhác/mạngyếu/cài-gỡ.

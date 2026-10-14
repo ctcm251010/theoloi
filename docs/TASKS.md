@@ -1,5 +1,12 @@
 # THEOLOI tasks
 
+## Browser Use localhost — DONE /14-10-2026
+
+- [x] Reproduce tab mới ERR_BLOCKED_BY_CLIENT; log HTTP403 và Fetch Metadata xác định nguyên nhân tại preview server.
+- [x] Regression RED→GREEN; chỉ cho top-level HTML GET/HEAD, chặn API/media/iframe/cross-site fetch và Host lạ.
+- [x] Worker37/frontend69/typecheck PASS; Python Windows64 PASS2 SKIP; tự mở tab mới và playback/controls/search trên server bình thường PASS.
+- [x] Ghi nguyên nhân và cách tự QA; không đổi Chrome/sandbox/Cloudflare/media/credential.
+
 ## AudioTP1.0.3 — DONE
 
 - [x] File thống thanh local FFprobe/full decode/hash, copy byte-identical và registry riêng.
