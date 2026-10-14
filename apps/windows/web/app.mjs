@@ -31,6 +31,7 @@ const updates=new AppUpdates(window.__TAURI__?.core?.invoke,{listen:window.__TAU
 const offline=new OfflineLibrary(window.__TAURI__?.core?.invoke);
 let offlineInitialized=false,offlinePolling=false,offlinePollTimer=null,networkUnavailable=!navigator.onLine,pendingInstall=false,startupProbeDone=false,offlineRowsFingerprint='';
 let confirmOperation=null;
+let onlineSwitchMessage='',onlineSwitchPending=false;
 let restoringAccess=false;
 function canRemember(){return remembered.available && connection.enabled && connection.locked && !connection.test && !localConnection && connection.base.startsWith('https://');}
 async function forgetAccess(){
@@ -135,8 +136,8 @@ function renderConnection(){
  $('disconnect').hidden=!api?.token && !canRemember();
  const notice=$('demo-notice').querySelector('p');
  // Browser offline status does not prevent listening to files on loopback.
- notice.textContent=offline.offline?(offline.completed.length?'Đang nghe các bài đã tải trên máy.':'Chưa có bài offline. Kết nối Internet rồi tải bài để nghe khi mất mạng.'):!connection.enabled?'Bản kiểm tra chỉ xem danh mục; chưa cấu hình máy chủ nghe.':connection.test?'BẢN KIỂM THỬ — âm mẫu tự tạo, không phải nhạc WATV.':networkUnavailable?'Thư viện trực tuyến chưa kết nối được. Các bài đã tải vẫn nghe được.':ready?'Đang ở chế độ chỉ xem danh mục.':'Kết nối thư viện để nghe nhạc.';
- $('demo-notice').hidden=playbackEnabled && !connection.test;
+ notice.textContent=onlineSwitchMessage || (offline.offline?(offline.completed.length?'Đang nghe các bài đã tải trên máy.':'Chưa có bài offline. Kết nối Internet rồi tải bài để nghe khi mất mạng.'):!connection.enabled?'Bản kiểm tra chỉ xem danh mục; chưa cấu hình máy chủ nghe.':connection.test?'BẢN KIỂM THỬ — âm mẫu tự tạo, không phải nhạc WATV.':networkUnavailable?'Thư viện trực tuyến chưa kết nối được. Các bài đã tải vẫn nghe được.':ready?'Đang ở chế độ chỉ xem danh mục.':'Kết nối thư viện để nghe nhạc.');
+ $('demo-notice').hidden=playbackEnabled && !connection.test && !onlineSwitchMessage;
  $('connection-open').hidden=offline.offline && offline.completed.length>0;
 }
 function connectionLost({manual=false}={}){
@@ -170,7 +171,7 @@ async function connectLibrary(base,code,{local=false,remember=false,restored=fal
    catch{storageWarning=' Chưa cập nhật được đăng nhập đã lưu; hãy thử lại trước khi đóng app.';}
   }
   if(!attempt.current()){next.logout();return;}
-  api=next;sourceKind=local?'local':'remote';tracks=rows;quickTracks=supplemental;revision=data.revision;playbackEnabled=true;networkUnavailable=false;
+  api=next;sourceKind=local?'local':'remote';tracks=rows;quickTracks=supplemental;revision=data.revision;playbackEnabled=true;networkUnavailable=false;onlineSwitchMessage='';
   attempt.complete();
   setText('connection-status',(local?'Đã kết nối thư viện trên máy.':'Đã kết nối thư viện trực tuyến.')+storageWarning);
   $('connection-settings').open=!!storageWarning;
@@ -183,7 +184,7 @@ async function connectLibrary(base,code,{local=false,remember=false,restored=fal
 $('connection-form').addEventListener('submit',event=>{event.preventDefault();const code=$('access-code').value;$('access-code').value='';void connectLibrary($('api-base').value.trim(),code,{local:localConnection,remember:canRemember() && $('remember-access').checked});});
 $('remember-access').addEventListener('change',()=>{if(!$('remember-access').checked)void forgetAccess();});
 $('disconnect').addEventListener('click',()=>{const forgotten=forgetAccess();connectionLost({manual:true});void forgotten.then(ok=>setText('connection-status',ok?'Đã đăng xuất và xóa đăng nhập đã lưu.':'Đã ngắt kết nối nhưng chưa xóa được đăng nhập đã lưu. Hãy thử lại.'));});
-window.addEventListener('offline',()=>{if(sourceKind!=='local')enterOffline();});window.addEventListener('online',()=>{networkUnavailable=false;renderConnection();announce('Mạng đã trở lại. Có thể chọn Nghe online.');});
+window.addEventListener('offline',()=>{if(sourceKind!=='local')enterOffline();});window.addEventListener('online',()=>{networkUnavailable=false;onlineSwitchMessage='';renderConnection();announce('Mạng đã trở lại. Có thể chọn Nghe online.');});
 renderConnection();
 
 function renderQuickVisibility(){
@@ -370,7 +371,7 @@ function enterOffline(){
  renderConnection();renderQuick();renderCategories();renderRows();
 }
 function renderOffline(){
- $('offline-toggle').textContent=offline.offline?'Nghe online':'Nghe offline';
+ $('offline-toggle').textContent=onlineSwitchPending?'Đang kết nối…':offline.offline?'Nghe online':'Nghe offline';
  $('offline-toggle').setAttribute('aria-pressed',String(offline.offline));
  $('offline-toggle').title=offline.offline?'Chuyển sang thư viện trực tuyến khi có kết nối':'Tải nhạc về máy để nghe khi mạng yếu hoặc không có Internet.';
  $('download-open').hidden=offline.complete;
@@ -403,14 +404,16 @@ offline.subscribe(()=>{
  renderConnection();renderQuick();renderCategories();renderRows();
 });
 $('offline-toggle').addEventListener('click',async()=>{
+ if(onlineSwitchPending)return;
+ onlineSwitchMessage='';
  if(!offline.offline){if(player.state.track && !offline.has(player.state.track.id))player.stop();offline.setOffline(true);return;}
- $('offline-toggle').disabled=true;
+ onlineSwitchPending=true;$('offline-toggle').disabled=true;$('offline-toggle').textContent='Đang kết nối…';
  try{
-  if(!await checkReachability()){enterOffline();announce('Chưa kết nối được thư viện trực tuyến. Các bài đã tải vẫn nghe được.');return;}
+  if(!await checkReachability()){enterOffline();onlineSwitchMessage='Chưa kết nối được thư viện trực tuyến. Hãy kiểm tra kết nối Internet rồi thử lại. Bạn vẫn có thể nghe các bài đã tải.';renderConnection();return;}
   networkUnavailable=false;offline.setOffline(false);playbackEnabled=!!api?.token;
   if(!api?.token){const restored=await restoreAccess();if(!restored){$('connection-settings').open=true;openDialog('settings-dialog');$('access-code').focus();}}
   renderConnection();renderQuick();renderCategories();renderRows();
- }finally{$('offline-toggle').disabled=false;}
+ }finally{onlineSwitchPending=false;$('offline-toggle').disabled=false;renderOffline();}
 });
 function requireDownloadSession(){if(api?.token)return {base:api.base,token:api.token};$('connection-settings').open=true;openDialog('settings-dialog');setText('connection-status','Kết nối thư viện trực tuyến để tải thêm bài. Những bài đã tải vẫn được giữ.');return null;}
 async function startDownload(ids){

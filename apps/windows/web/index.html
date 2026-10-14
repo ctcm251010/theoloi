@@ -56,7 +56,7 @@
       </div>
       <div class="download-toolbar"><span id="offline-summary" class="setting-status"></span><button id="download-open" class="text-button" aria-haspopup="dialog" aria-controls="download-dialog"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Tải về</button><button id="trash-open" class="icon-button" aria-label="Quản lý xóa bài offline" title="Xóa bài đã tải trên máy" aria-haspopup="dialog" aria-controls="trash-dialog" hidden><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></button></div>
       <div id="download-job" class="download-job" hidden><p id="download-progress-text" role="status"></p><progress id="download-progress" max="1" value="0" aria-label="Tiến độ tải thư viện"></progress><div class="download-controls"><button id="download-pause" class="text-button">Tạm dừng</button><button id="download-resume" class="text-button">Tiếp tục</button><button id="download-retry" class="text-button">Thử lại bài lỗi</button><button id="download-cancel" class="text-button">Hủy tải</button></div></div>
-      <div id="demo-notice" class="connection-notice" hidden><p>Chưa kết nối thư viện.</p><button id="connection-open" class="text-button">Kết nối</button></div>
+      <div id="demo-notice" class="connection-notice" hidden><p role="status" aria-live="polite">Chưa kết nối thư viện.</p><button id="connection-open" class="text-button">Kết nối</button></div>
       <div id="update-notice" class="connection-notice update-notice" role="status" hidden><p id="update-message"></p><button id="update-install" class="text-button">Cập nhật</button></div>
       <section class="library-section" aria-label="Danh mục âm thanh">
         <div class="tabs" role="tablist" aria-label="Loại âm nhạc">

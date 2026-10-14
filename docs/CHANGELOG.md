@@ -1,5 +1,9 @@
 # THEOLOI — Development changelog
 
+## 2026-10-15 — Phản hồi Nghe online khi mất mạng
+
+User xác nhận EXE offline cơ bản ổn, góp ý thiếu thông báo khi chuyển online lúc mất mạng. Sửa sr-only/hidden notice bằng inline network guidance, pending button, clear trên reconnect;3 regression RED→GREEN/frontend95/browser TEST PASS. Final EXE/setup rebuild1.1.0 có chữ ký, đang thực hiện GitHub/update publication theo phê duyệt mới, không đổi983/media/credential.
+
 ## 2026-10-15 — API offline1.1 live, dừng trước Release
 
 Sau phê duyệt deploy Worker đúng ctcm251010, giữ private R2/secrets/epoch3/update1.0.3. Review độc lập không Critical/Important;18livechecks PASS, native Rust tải guide1 hai lần với SHA/restart không auth/Range/skip/xóa/tải lại. Thêm ignored explicit live acceptance test, không network trong suite mặc định; preview version lấy package1.1.0 có regression. Native GUI acceptance còn chờ vì Computer Use pipe unavailable; chưa push/tag/GitHub Release hoặc publish update1.1.0. [Báo cáo](release-1.1.0-report.md#nghiệm-thu-live-sau-phê-duyệt1510).

@@ -76,7 +76,7 @@ Private signing key phải giữ an toàn ngoài Git và sao lưu riêng. Không
 
 ### GitHub Release và API liên quan ra sao?
 
-**Commit** ghi lại source đã kiểm thử. **Tag**, ví dụ `v1.1.0`, đánh dấu đúng commit của bản phát hành. **GitHub Release** gắn ghi chú và các file installer/EXE/chữ ký/hash vào tag. Repository hiện private: người tải qua GitHub cần quyền repo; không nhúng GitHub token vào app.
+**Commit** ghi lại source đã kiểm thử. **Tag**, ví dụ `v1.1.0`, đánh dấu đúng commit của bản phát hành. **GitHub Release** gắn ghi chú và các file installer/EXE/chữ ký/hash vào tag. Repository được quan sát là Public ngày15/10; giữ nguyên visibility hiện có, không nhúng GitHub token vào app. Audio và installer qua API update vẫn ở R2 private có xác thực.
 
 Upload Release lên GitHub **chưa đủ** để app cũ biết bản mới. Dự án dùng API chính thức làm kênh update: publisher đưa đúng installer có chữ ký vào R2 private, xác minh hash, chuẩn bị update metadata; Worker deploy metadata mới. App cũ kiểm tra API và tải installer có xác thực qua Worker. GitHub là nơi lưu phát hành/source; không phải app tự chạy một EXE bất kỳ lấy từ link người dùng gửi.
 

@@ -2,6 +2,12 @@
 
 Ngày15/10/2026, Asia/Bangkok. **READY FOR REVIEW — API offline đã live; native engine PASS, GUI acceptance còn chờ, chưa phát hành.** Ban đầu người dùng yêu cầu làm tới EXE/setup rồi dừng. Yêu cầu tiếp theo đã cho phép review/deploy API/test một bài thật; vẫn dừng trước GitHub Release, không publish installer/update1.1.0 hoặc đổi serving/auth/credential/private bucket.
 
+## Cập nhật sau user acceptance và phê duyệt phát hành
+
+Người dùng đã thử EXE và trả lời “khá ổn”, góp ý khi mất mạng bấm Nghe online thiếu phản hồi nhìn thấy. Root cause: `announce` là sr-only, connection notice lại bị hidden khi có cache nghe được. Sửa dùng lại inline notice, thông báo kiểm tra Internet/giữ nghe offline, nút Đang kết nối, clear khi network return/switch thành công/Settings login; không popup, đổi focus hoặc dừng bài cached.3 regression RED→GREEN;frontend95 PASS/browser TEST failure/recovery PASS, Windows Python64 PASS2SKIP. Reviewer không Critical/Important; góp ý stale notice khi Settings reconnect đã có regression và sửa.
+
+Yêu cầu mới cho phép thực hiện bước4push/review/merge/tag/GitHub Release rồi bước5private installer publication/deploy update metadata, giải thích từng mốc. Trạng thái phía dưới trước publication là lịch sử. Repository quan sát qua GitHub đang **Public**; không đổi visibility. Chỉ source/EXE/setup/signature/guide/hash được phát hành, không audio/credential/private operational inputs. User acceptance cơ bản không chứng minh clean machine hoặc toàn bộ updater install matrix.
+
 ## Nghiệm thu live sau phê duyệt15/10
 
 - Reviewer độc lập: không Critical/Important chặn deploy; rà manifest core/auth/Range/old updater/native contract. Giữ `generated/updates.json`1.0.3, không công bố1.1.0.
@@ -16,13 +22,13 @@ GitHub push/PR/merge/tag/Release, private installer upload và metadata update1.
 
 ## Artifact cuối để review
 
-Thư mục `release/windows/1.1.0-20261014T193441266227Z/` (build stamp UTC, ngày local15/10). Đây là bản cuối có pacing/backoff; không chọn bản intermediate191653 hoặc TEST để phân phối.
+Thư mục `release/windows/1.1.0-20261014T205105238937Z/` (build stamp UTC, ngày local15/10). Đây là bản cuối có pacing/backoff và visible network feedback; không chọn bản intermediate193441/203538 hoặc TEST để phân phối.
 
 | File | Bytes | SHA-256 |
 |---|---:|---|
-| `AudioTP.exe` |5,006,848 |`84331a82b5c247421253618ef3fcc5ea8784b3be18b8247194280520a48c9510` |
-| `AudioTP_1.1.0_x64-setup.exe` |1,948,420 |`052705592ed7c7928398d9f2fcd01f6c2b362e9614a2f5acc14bd1992790faeb` |
-| `AudioTP_1.1.0_x64-setup.exe.sig` |436 |`3877b4082a080b1b1997c314671f0c36253e81203bd7c9b7b9344e2c8a6ccdc0` |
+| `AudioTP.exe` |5,006,848 |`25832b9819e5e3a51cb801482d8add42bb4f3a7bcef97f751fd5f17f77e948fc` |
+| `AudioTP_1.1.0_x64-setup.exe` |1,948,675 |`909534f5c1594d84fc8001e9cece1622a26f6b16743418590a34f57180540192` |
+| `AudioTP_1.1.0_x64-setup.exe.sig` |436 |`626f39f6a113af5c3e7487bb78e47998b79c18254c00a896b592271f874bfe2f` |
 
 EXE/NSIS build exit0, file PE/hash/allowlist checks PASS, HUONG-DAN khớp guide source, không M4A/WAV/HLS/private key. `.sig` thật qua official updater verify bằng public key hiện hành và signed version1.1.0, byte tải loopback khớp installer, không gọi install. Publisher **dry-run** PASS, không tạo update metadata hoặc request Cloudflare. Windows Authenticode vẫn **NotSigned**, khác với chữ ký updater.
 

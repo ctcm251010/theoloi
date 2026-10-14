@@ -2,6 +2,8 @@
 
 ## Offline Downloads & Startup Updates — READY FOR REVIEW /15-10-2026
 
+**Đang phát hành theo phê duyệt mới15/10:** người dùng xác nhận EXE offline cơ bản “khá ổn”, yêu cầu sửa phản hồi khi Nghe online mất mạng rồi thực hiện bước4GitHub Release và bước5bật update theo thứ tự, giải thích từng mốc. Sửa inline feedback/loading/reconnect có3regression RED→GREEN,frontend95/browser TEST PASS. Final build `release/windows/1.1.0-20261014T205105238937Z/`; không dùng build193441/203538 intermediate. Đang kiểm tra chữ ký/audit trước push/merge/tag; chưa đánh dấu đã publish khi chưa xác minh. Không mở phase mới, không đổi R2 public access/credential/983media.
+
 Người dùng giao trọn feature/build/release qua attachment18187dfa. Branch `feature/offline-downloads-updates`, nền b361659 gồm bản sửa Browser Use local. Triển khai song song native offline, frontend và updater; root tích hợp API/build/QA. [Thiết kế](superpowers/specs/2026-10-15-offline-updates-design.md), [plan](superpowers/plans/2026-10-15-offline-updates.md). Giữ983media/catalog/state và R2 private; không tải hàng loạt để test. Production chỉ thay phần cần thiết sau khi artifact/test cụ thể đã sẵn; không đổi credential hoặc mua signing service.
 
 Chỉ đạo tiếp theo15/10: người dùng đã duyệt review source → deploy API offline → test một bài thật; **dừng trước GitHub Release**. Đã deploy Worker `52e19593-8136-41b7-9961-58fe9078c00d` vào đúng account ctcm251010, giữ secrets/epoch3/serving/private bucket và update1.0.3. Không publish installer/update1.1.0, push/tag/Release.

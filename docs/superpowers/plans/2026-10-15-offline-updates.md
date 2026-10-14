@@ -14,6 +14,8 @@
 
 **Later steering15/10:** user explicitly approved final source review, existing Worker deploy and small live/native EXE acceptance, then STOP before GitHub Release. API deployment and18 live API/native-engine checks completed; native GUI confirmation pending (Computer Use native pipe unavailable). Keep existing1.0.3 update metadata, no installer publication or GitHub mutation. See release-1.1.0-report.md.
 
+**Latest steering15/10:** user reports native offline basic flow good; fix missing visible offline→online network feedback (3 RED→GREEN regressions/frontend95/browser PASS). User now approves steps4GitHub source/merge/tag/Release and5private installer/update metadata publication in that order, with explanatory progress. Final selected build205105238937Z. Do not interpret this as a new phase or audio bulk transfer.
+
 ## Global constraints
 
 No original983media/catalog/manifest/state mutation, no secret read/output/commit, no bulk real downloads, retain identifier and signing key, keep R2 private. Windows app data outside installation; single player, one downloader; explicit install and bulk-delete confirmation. Use manifest count not hardcoded983 for completeness.

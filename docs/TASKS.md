@@ -13,8 +13,9 @@
 - [x] Review trước deploy: reviewer độc lập không Critical/Important; frontend92/Worker40/typecheck/Rust41 PASS; secret scan và index audit sạch;983media/18metadata không đổi.
 - [x] Sau phê duyệt15/10 deploy riêng API offline lên ctcm251010; giữ secrets/epoch3/serving/private bucket/update1.0.3, không upload installer/audio.
 - [x] Live API + native engine một bài thật:18checks PASS; guide1 hai lượt tải verified/restart không auth/Range/skip/xóa/tải lại. Test chạy riêng có chủ đích, không thuộc suite offline mặc định.
-- [ ] Người dùng xác nhận phát/tạm dừng/tua/mở lại offline trong EXE1.1; đã mở app, helper Windows native pipe unavailable. Không coi Rust/live engine là GUI acceptance.
-- [ ] **Deferred theo người dùng:** push/tag/GitHub Release và R2 installer/update1.1 publication. Dừng trước phát hành1.1.0.
+- [x] Người dùng trả lời thử EXE offline “khá ổn”; phát hiện thiếu phản hồi nhìn thấy khi bấm Nghe online lúc mất mạng. Đây là user acceptance cơ bản, không thay máy sạch/toàn bộ matrix.
+- [x] Sửa phản hồi mạng: giữ offline, thông báo inline nhìn thấy/aria-live, nút Đang kết nối; clear khi mạng/kết nối lại.3 regression RED→GREEN/frontend95 PASS, browser TEST failure/recovery PASS, Windows Python64 PASS2SKIP.
+- [ ] **Người dùng đã duyệt tiếp:** push/review/merge/tag/GitHub Release1.1.0, sau đó publish một installer private và deploy update metadata; giải thích từng mốc, không mở phase mới.
 
 ## Browser Use localhost — DONE /14-10-2026
 
