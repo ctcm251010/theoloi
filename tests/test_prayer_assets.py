@@ -74,6 +74,57 @@ class PrayerTests(unittest.TestCase):
         self.assertEqual(quick["revision"], "sha256:" + hashlib.sha256(canonical).hexdigest())
         self.assertFalse((self.root / "delivery").exists())
 
+    def test_two_registered_prayers_preserve_identity_and_upload_only_selected_asset(self):
+        second = dict(self.entry, assetId='watv:vi:prayer:unison-prayer', slug='unison-prayer', title='Nhạc không lời cầu nguyện thống thanh', localPath='media/prayer/watv/vi/unison-prayer/unison-prayer.m4a',durationSeconds=311.518912,confirmedAt='2026-10-14',sourceUrl=None)
+        target=self.root/second['localPath']; target.parent.mkdir(parents=True);target.write_bytes(self.content)
+        proof=dict(self.proof,localPath=second['localPath'],sourceUrl=None,durationSeconds=second['durationSeconds'])
+        target.with_name('verification.json').write_text(json.dumps(proof),encoding='utf-8')
+        with patch.object(pa,'REGISTRY',(self.entry,second)):
+            manifest,quick=pa.prepare(self.root)
+            self.assertEqual(len(quick['tracks']),2)
+            pa.write_prepared(self.root,manifest,quick)
+            module=cli('upload-prayer');remote=FakeS3();remote.close=lambda:None
+            with patch.object(module,'ROOT',self.root),patch.object(module,'read_secrets',return_value={}),patch.object(module,'create_client',return_value=remote),redirect_stdout(io.StringIO()):
+                self.assertEqual(module.main(['--apply','--asset','watv:vi:prayer:unison-prayer','--verify-download']),0)
+            self.assertEqual([x[0] for x in remote.calls].count('put'),1)
+            self.assertIn('unison-prayer',next(iter(remote.objects)))
+
+    def test_selected_unison_upload_preserves_all_unselected_our_wish_state_fields(self):
+        second = dict(self.entry, assetId='watv:vi:prayer:unison-prayer', slug='unison-prayer',
+            title='Nhạc không lời cầu nguyện thống thanh',
+            localPath='media/prayer/watv/vi/unison-prayer/unison-prayer.m4a',
+            durationSeconds=311.518912, confirmedAt='2026-10-14', sourceUrl=None)
+        audio = self.root / second['localPath']
+        audio.parent.mkdir(parents=True)
+        audio.write_bytes(self.content)
+        proof = dict(self.proof, localPath=second['localPath'], sourceUrl=None,
+            durationSeconds=second['durationSeconds'])
+        audio.with_name('verification.json').write_text(json.dumps(proof), encoding='utf-8')
+        module = cli('upload-prayer')
+        remote = FakeS3()
+        remote.close = lambda: None
+        with patch.object(pa, 'REGISTRY', (self.entry, second)), patch.object(module, 'ROOT', self.root), \
+                patch.object(module, 'read_secrets', return_value={}), \
+                patch.object(module, 'create_client', return_value=remote), redirect_stdout(io.StringIO()):
+            manifest, quick = pa.prepare(self.root)
+            pa.write_prepared(self.root, manifest, quick)
+            target = module.target_config()
+            for status in ('uploading', 'uploaded'):
+                with self.subTest(status=status):
+                    state = module.UploadState(self.root / pa.STATE, target)
+                    state.register(list(manifest['assets'].values()))
+                    state.update(self.entry['assetId'], status=status, attempts=2,
+                        remote_bytes=len(self.content), etag='preserved-etag',
+                        uploaded_at='2026-10-13T00:00:00+00:00')
+                    before = state.get(self.entry['assetId'])
+                    state.close()
+                    self.assertEqual(module.main(['--apply', '--asset', second['assetId'], '--verify-download']), 0)
+                    state = module.UploadState(self.root / pa.STATE, target)
+                    try:
+                        self.assertEqual(state.get(self.entry['assetId']), before)
+                    finally:
+                        state.close()
+
     def test_rejects_changed_or_missing_audio(self):
         self.audio.write_bytes(b"changed")
         with self.assertRaisesRegex(pa.UploadError, "prayer_local_integrity"):

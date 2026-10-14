@@ -12,7 +12,11 @@ export function validateQuickAudio(data){
 // Only the explicitly reviewed recording can enable this card. The server
 // publishes approved supplementary assets; no guessed filename/placeholder.
 export function applyQuickAudio(cards,tracks){
- const id='watv:vi:prayer:our-wish';
- return cards.map(card=>card.id==='quick:our-wish-meditation'?{...card,behavior:'asset-playlist',available:tracks.some(t=>t.id===id),assetIds:tracks.some(t=>t.id===id)?[id]:[],firstAssetId:id,sourceStatus:tracks.some(t=>t.id===id)?'verified':'unverified',rightsStatus:tracks.some(t=>t.id===id)?'approved':'unknown',reason:tracks.some(t=>t.id===id)?'Bản thu đã xác minh.':'Chưa có nguồn audio được xác minh.'}:card);
+ const bindings={'quick:our-wish-meditation':'watv:vi:prayer:our-wish','quick:unison-prayer':'watv:vi:prayer:unison-prayer'};
+ return cards.map(card=>{
+  const id=bindings[card.id];if(!id)return card;
+  const available=tracks.some(t=>t.id===id);
+  return {...card,behavior:'asset-playlist',available,assetIds:available?[id]:[],firstAssetId:id,sourceStatus:available?'verified':'unverified',rightsStatus:available?'approved':'unknown',reason:available?'Bản thu đã xác minh.':'Chưa có nguồn audio được xác minh.'};
+ });
 }
 export function trackLabel(track){return Number.isInteger(track.number)?`${displayNumber(track)}. ${track.title}`:track.title;}

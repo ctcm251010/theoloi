@@ -27,7 +27,19 @@ REGISTRY = (MappingProxyType({
     "rightsConfirmed": True,
     "identityConfirmed": True,
     "confirmedAt": "2026-10-13",
-}),)
+}), MappingProxyType({
+    "assetId": "watv:vi:prayer:unison-prayer",
+    "localPath": "media/prayer/watv/vi/unison-prayer/unison-prayer.m4a",
+    "slug": "unison-prayer",
+    "title": "Nhạc không lời cầu nguyện thống thanh",
+    "bytes": 5038802,
+    "sha256": "317ae73c27cc963181d71e11cdbb522924c329e31f0ffcb3bc15354a5579070e",
+    "durationSeconds": 311.518912,
+    "sourceUrl": None,
+    "rightsConfirmed": True,
+    "identityConfirmed": True,
+    "confirmedAt": "2026-10-14",
+}))
 
 
 def plain_path(root, relative, writable=False):
@@ -59,8 +71,7 @@ def registered_documents():
                 or PurePosixPath(local).is_absolute() or ".." in PurePosixPath(local).parts
                 or not re.fullmatch(r"[0-9a-f]{64}", entry.get("sha256", ""))
                 or type(entry.get("bytes")) is not int or entry["bytes"] <= 0
-                or entry.get("durationSeconds") != 69.427664
-                or entry.get("confirmedAt") != "2026-10-13"):
+                or (slug,entry.get("durationSeconds"),entry.get("confirmedAt")) not in (('our-wish',69.427664,'2026-10-13'),('unison-prayer',311.518912,'2026-10-14'))):
             raise UploadError("prayer_invalid_registry")
         ident = entry["assetId"]
         if ident in assets:

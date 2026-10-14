@@ -6,6 +6,17 @@ const code='unit-test-access-code-not-a-real-secret';
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const tracks=[{id:'guide:1',logicalId:'song:1',mode:'guide',durationSeconds:125},{id:'instrumental:1',logicalId:'song:1',mode:'instrumental',durationSeconds:126},{id:'silent:1',logicalId:'silent:1',mode:'silent',durationSeconds:57}].map(t=>({...t,section:t.mode==='silent'?null:'main',number:1,title:'Bài thử tự tạo',category:'Fixture'}));
 const bytes=Buffer.from('0123456789abcdefghijklmnopqrstuvwxyz');
+test('two independent prayers receive their own scoped media and leave original catalog intact',async()=>{
+ const entries=[['our-wish','Cầu nguyện chúng con mong muốn',69.427664],['unison-prayer','Nhạc không lời cầu nguyện thống thanh',311.518912]];
+ const prayerTracks=entries.map(([slug,title,durationSeconds])=>({id:'watv:vi:prayer:'+slug,logicalId:'watv:vi:prayer:'+slug,mode:'prayer',section:null,number:null,title,category:'Cầu nguyện',durationSeconds}));
+ const assets=Object.fromEntries(prayerTracks.map(t=>[t.id,{assetId:t.id,objectKey:`audio/v1/watv/vi/prayer/${t.id.split(':').at(-1)}/${sha(bytes)}.m4a`,bytes:bytes.length,sha256:sha(bytes)}]));
+ const quickAudio={schemaVersion:1,revision:'sha256:'+sha(bytes),tracks:prayerTracks,assets};
+ const f=fixture({quickAudio});const token=await f.login();
+ assert.equal((await(await f.request('/v1/catalog',{token})).json()).tracks.length,3);
+ assert.equal((await(await f.request('/v1/quick-audio',{token})).json()).tracks.length,2);
+ for(const t of prayerTracks){const path=await f.ticket(t.id);const response=await f.request(path,{headers:{Range:'bytes=0-3'}});assert.equal(response.status,206);assert.equal(response.headers.get('X-AudioTP-Asset-Id'),t.id);assert.equal(await response.text(),'0123');}
+ assert.throws(()=>fixture({quickAudio:{...quickAudio,tracks:[prayerTracks[1],prayerTracks[1]]}}));
+});
 const allow=Object.fromEntries(tracks.map(t=>[t.id,{assetId:t.id,objectKey:'audio/v1/watv/vi/'+t.id,bytes:bytes.length,sha256:sha(bytes)}]));
 function fixture(options={}){
  let clock=1000;const calls=[];

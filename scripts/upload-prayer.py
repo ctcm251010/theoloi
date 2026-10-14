@@ -25,6 +25,7 @@ def arguments(argv=None):
     mode.add_argument("--status", action="store_true", help="Read-only local state, no credentials or network")
     parser.add_argument("--verify-download", action="store_true", help="Stream GET and verify the single registered file's full SHA-256")
     parser.add_argument("--retry-failed", action="store_true", help="Retry failed entry in one fresh round of at most three transient attempts")
+    parser.add_argument('--asset',help='Exact supplementary asset ID; required when registry has multiple assets')
     args = parser.parse_args(argv)
     if (args.verify_download or args.retry_failed) and not args.apply:
         parser.error("--verify-download and --retry-failed require --apply")
@@ -58,8 +59,9 @@ def execute(args, assets, target):
         with BatchLock(ROOT / LOCK):
             state = UploadState(ROOT / STATE, target)
             state.register(assets)
-            state.recover()
             asset = assets[0]
+            if state.get(asset["assetId"])["status"] in ("uploading", "uploaded"):
+                state.update(asset["assetId"], status="pending")
             if args.retry_failed:
                 state.retry_failed([asset["assetId"]])
             if state.get(asset["assetId"])["status"] == "failed":
@@ -85,6 +87,11 @@ def main(argv=None):
     try:
         manifest = load_prepared(ROOT, verify_local=not args.status)
         assets = list(manifest["assets"].values())
+        if args.asset:
+            assets=[a for a in assets if a['assetId']==args.asset]
+            if not assets:raise UploadError('prayer_unknown_asset')
+        elif not args.status and len(assets)!=1:
+            raise UploadError('prayer_select_asset_required')
         if args.status:
             plain_path(ROOT, STATE)
             for suffix in ("-wal", "-shm", "-journal"):
