@@ -1,5 +1,9 @@
 # THEOLOI — Development changelog
 
+## 2026-10-15 — AudioTP1.1.0 đã phát hành
+
+PR#5merge/tagv1.1.0/Release có5file/hashGitHub khớp; installerprivateR2create-only/GET SHAverified. Worker521e48b2 công bố update1.1.0;32livechecksPASS,giữ983media/18metadata/auth/bucketprivate. User offline cơ bản ổn, visible network feedback đã sửa. Native actual updater install/máy sạch còn pending, không tự mởPhase03. [Release](https://github.com/ctcm251010/theoloi/releases/tag/v1.1.0) · [Báo cáo](release-1.1.0-report.md).
+
 ## 2026-10-15 — Phản hồi Nghe online khi mất mạng
 
 User xác nhận EXE offline cơ bản ổn, góp ý thiếu thông báo khi chuyển online lúc mất mạng. Sửa sr-only/hidden notice bằng inline network guidance, pending button, clear trên reconnect;3 regression RED→GREEN/frontend95/browser TEST PASS. Final EXE/setup rebuild1.1.0 có chữ ký, đang thực hiện GitHub/update publication theo phê duyệt mới, không đổi983/media/credential.

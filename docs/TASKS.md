@@ -1,6 +1,6 @@
 # THEOLOI tasks
 
-## Offline Downloads & Startup Updates — READY FOR REVIEW /15-10-2026
+## AudioTP1.1.0 — DONE phát hành /15-10-2026; kiểm thử mở rộng còn pending
 
 - [x] Đọc attachment/context, chốt boundaries/IPC/manifest và plan; môi trường build READY.
 - [x] API offline metadata có auth và public version-only info, RED→GREEN; mock tự tạo có SHA/ETag.
@@ -15,7 +15,10 @@
 - [x] Live API + native engine một bài thật:18checks PASS; guide1 hai lượt tải verified/restart không auth/Range/skip/xóa/tải lại. Test chạy riêng có chủ đích, không thuộc suite offline mặc định.
 - [x] Người dùng trả lời thử EXE offline “khá ổn”; phát hiện thiếu phản hồi nhìn thấy khi bấm Nghe online lúc mất mạng. Đây là user acceptance cơ bản, không thay máy sạch/toàn bộ matrix.
 - [x] Sửa phản hồi mạng: giữ offline, thông báo inline nhìn thấy/aria-live, nút Đang kết nối; clear khi mạng/kết nối lại.3 regression RED→GREEN/frontend95 PASS, browser TEST failure/recovery PASS, Windows Python64 PASS2SKIP.
-- [ ] **Người dùng đã duyệt tiếp:** push/review/merge/tag/GitHub Release1.1.0, sau đó publish một installer private và deploy update metadata; giải thích từng mốc, không mở phase mới.
+- [x] Push source, PR#5 MERGED/tree khớp bản build; tagv1.1.0/Release5file+2archives,5GitHub SHA/dung lượng khớp local. Repo đang Public, không đổi visibility/đưa media hoặc credential vào Release.
+- [x] Publish đúng một installer1.1 private/create-only/fullGET SHA; deploy update metadata Worker521e48b2, giữ auth/epoch3/serving/bucket.32livechecks PASS cho old/current/updateauth/signature/fullinstallerSHA/catalog983/prayer2/Range.
+- [x] Kiểm tra lại983media/18metadata không đổi; cập nhật ledger và dừng ở release task.
+- [ ] Native update1.0.3→1.1.0 actual install/restart giữ favourites/history/offline/DPAPI và clean machine; không coi live installer GET hoặc TEST upgrade là production user acceptance.
 
 ## Browser Use localhost — DONE /14-10-2026
 

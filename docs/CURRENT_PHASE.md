@@ -1,6 +1,12 @@
 # THEOLOI — Current phase
 
-## Offline Downloads & Startup Updates — READY FOR REVIEW /15-10-2026
+## AudioTP1.1.0 — DONE phát hành /15-10-2026; nghiệm thu mở rộng READY FOR REVIEW
+
+**Kết quả cuối:** người dùng duyệt bước4/5; [PR#5](https://github.com/ctcm251010/theoloi/pull/5) MERGED thành `f4774dd4cce9b3970320a350bb0306daebd07f28`, tree khớp source `c3d76ec` đã build/test. [Release v1.1.0](https://github.com/ctcm251010/theoloi/releases/tag/v1.1.0) có5file phát hành+2source archives,5digest GitHub khớp local. Installer1.948.675bytes đã create-only/privateR2/fullGET SHA verified; Worker `521e48b2-f38f-4229-82e2-d3498b47e425` đã bật update1.1.0, giữ epoch3/secrets/serving/private bucket.32livechecksPASS,983media/18metadata SHA nguyên vẹn. User xác nhận offline cơ bản “khá ổn”; phản hồi Nghe online mất mạng đã sửa/3regression RED→GREEN/frontend95/browser TEST PASS.
+
+**Còn riêng:** native updater1.0.3→1.1.0 chạy installer/mở lại và giữ dữ liệu thực, máy Windows sạch, mạng yếu và acceptance đầy đủ. Chưa gọi các mục đó PASS hoặc toànPhase03 DONE. Bản1.0.1/1.0.3 mở Settings kiểm tra update;1.0.0 cài setup mới một lần. Dừng sau release task, không tự mở phase mới. [Báo cáo](release-1.1.0-report.md).
+
+### Lịch sử trước publication — giữ bằng chứng quyết định
 
 **Đang phát hành theo phê duyệt mới15/10:** người dùng xác nhận EXE offline cơ bản “khá ổn”, yêu cầu sửa phản hồi khi Nghe online mất mạng rồi thực hiện bước4GitHub Release và bước5bật update theo thứ tự, giải thích từng mốc. Sửa inline feedback/loading/reconnect có3regression RED→GREEN,frontend95/browser TEST PASS. Final build `release/windows/1.1.0-20261014T205105238937Z/`; không dùng build193441/203538 intermediate. Đang kiểm tra chữ ký/audit trước push/merge/tag; chưa đánh dấu đã publish khi chưa xác minh. Không mở phase mới, không đổi R2 public access/credential/983media.
 

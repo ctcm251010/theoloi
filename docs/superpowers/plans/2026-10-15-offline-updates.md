@@ -36,7 +36,7 @@ No original983media/catalog/manifest/state mutation, no secret read/output/commi
 - [x] Updater module: preserve official plugin + source pinning, tests startup/defer/progress/offline/error/cancel/version signature; modal integration, older client compatibility; prepare deployment config without leaking secrets.
 - [x] Integrate commands/CSP/build inputs, affected regressions, independent Worker/frontend review + root native review/fixes, verify original data unchanged.
 - [x] SemVer1.1.0 selected from actual tags; production EXE/NSIS/signature build, TEST installer app-data upgrade preservation; document native GUI/live limitations.
-- [ ] Prepare validated selected installer/signature/hash/source release handoff; publishing/source push/tag/GitHub Release and Worker/R2 changes deferred by latest user instruction. Never use test audio under real titles or fake pass missing private inputs.
+- [x] Latest approval completed: PR#5merged/tagv1.1.0/Release5files+2archives/5digests verified; selected installer private R2 create-only/fullGET SHA; Workerupdate1.1.0 deployed,32livechecksPASS. Native actual installer/máy sạch pending as separate acceptance. No audio bulk transfer or fake playback.
 - [x] Update CURRENT_PHASE/TASKS/ROADMAP/CHANGELOG and learning guide requested by user; recommend next scoped work then stop.
 
 Final local handoff: docs/release-1.1.0-report.md. Native GUI/live API/actual production updater install remain review gates; no claim DONE for those. Remote publication deliberately deferred, not silently skipped.

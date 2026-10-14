@@ -1,6 +1,6 @@
 # THEOLOI roadmap
 
-Task riêng15/10 **AudioTP1.1.0 Offline Downloads & Startup Updates — READY FOR REVIEW**: EXE/NSIS có chữ ký updater sẵn;983media/18metadata nguyên vẹn. Người dùng đã duyệt deploy API offline: live API/native engine18 checks PASS với một bài thật. Native GUI/máy sạch còn pending do helper Windows unavailable. Dừng trước GitHub Release và publish update1.1.0; không đánh dấu toànPhase03 DONE. [Bàn giao](release-1.1.0-report.md).
+Task riêng15/10 **AudioTP1.1.0 Offline Downloads & Startup Updates — DONE phát hành**: người dùng xác nhận offline cơ bản; phản hồi mất mạng đã sửa,PR#5merge/tagv1.1.0/Release5file/hashkhớp. Installer privateR2verified/Workerupdate1.1.0live,32checksPASS;983media/18metadata nguyên vẹn. Actual native updater install/máy sạch còn pending; không đánh dấu toànPhase03 DONE. [Bàn giao](release-1.1.0-report.md).
 
 Task riêng14/10 sửa Browser Use local **DONE**: root cause preview cross-site navigation; tự mở tab/phát nhạc và regression PASS. [Báo cáo](local-browser-troubleshooting.md). Không thay nghiệm thu native/live hoặc mở phase mới.
 

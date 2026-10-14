@@ -1,6 +1,16 @@
 # AudioTP1.1.0 — Offline Downloads & Startup Updates
 
-Ngày15/10/2026, Asia/Bangkok. **READY FOR REVIEW — API offline đã live; native engine PASS, GUI acceptance còn chờ, chưa phát hành.** Ban đầu người dùng yêu cầu làm tới EXE/setup rồi dừng. Yêu cầu tiếp theo đã cho phép review/deploy API/test một bài thật; vẫn dừng trước GitHub Release, không publish installer/update1.1.0 hoặc đổi serving/auth/credential/private bucket.
+Ngày15/10/2026, Asia/Bangkok. **DONE phát hành1.1.0; native update install/máy sạch READY FOR REVIEW.** Người dùng đã duyệt source/deploy API/test một bài thật, xác nhận offline cơ bản ổn, sau đó duyệt bước4GitHub Release và bước5bật update. Không đổi serving/auth/credential/private bucket hoặc983media. Các đoạn chuẩn bị/chưa publish phía dưới giữ lịch sử; kết quả thực tế cuối nằm ở đây.
+
+## GitHub Release và kênh cập nhật đã hoàn tất
+
+- [PR#5](https://github.com/ctcm251010/theoloi/pull/5) MERGED; merge `f4774dd4cce9b3970320a350bb0306daebd07f28` tree khớp source `c3d76ec0228bcdfc8a71f048bf4ac5b7a56a6d45` đã build. Tagv1.1.0 trỏ merge commit, không thay tag cũ. [Release1.1.0](https://github.com/ctcm251010/theoloi/releases/tag/v1.1.0) Latest có5file setup/portable/.sig/HUONG-DAN/SHA256SUMS và2sourcearchives. API GitHub xác nhận5digest/dung lượng khớp local; không chỉ phát source ZIP. Evidence `logs/repository-audit/v1.1.0-published-assets.json`.
+- Publish create-only đúng installer2.0MB vào R2 private, fullGET/hash verified; không PUT audio hoặc thay983originalstate. Metadata1.1.0 chỉ ở ignored delivery/generated; secrets được tool sử dụng qua cơ chế hiện có, không đọc/in nội dung. Worker deployment `521e48b2-f38f-4229-82e2-d3498b47e425`; config hậu kiểm giữ auth epoch3/origins/session43200/limiters10và180/servingtrue/MEDIAaudiotp-media. Không đổi visibility repo (đang Public) hoặc bucket.
+- **32livechecks PASS**: public old versions→1.1.0/current204; authenticated1.0.1/1.0.3→signed1.1.0, signature bằng đúng local verified .sig; installer401 khi thiếu auth, fullGET200/1.948.675bytes/SHA `909534f5c1594d84fc8001e9cece1622a26f6b16743418590a34f57180540192`,private no-store; catalog/offline983,corebytes2.506.137.889,prayer2,guide1Range1024bytes/identity. Không chạy installer qua smoke; evidence `v1.1.0-live-smoke.json`, `v1.1.0-update-deploy.txt`, `v1.1.0-update-config.json` local-only.
+- Test release: frontend95 PASS,Worker40/typecheck PASS,Python225 PASS4platformSKIP,Rust41 PASS3ignored có chủ đích, explicit final signature1PASS/live engine1PASS. History26commits/index246paths/Gitleaks sạch; `.env.example` người dùng giữ nguyên ngoài commit.983media/18metadata hậu kiểm SHA không đổi. Offline GUI user acceptance là “khá ổn” ở build trước network feedback; sửa feedback được3regression và ChromeTEST xác minh. Không đánh đồng với clean-machine hoặc mọi native control trên final build.
+- Người dùng1.0.1/1.0.3: Settings→Kiểm tra cập nhật→Cập nhật; chưa có thông báo tự động trong EXE cũ.1.0.0 cần setup mới một lần.1.1.0 trở đi có startup notification cho phiên bản sau. Native actual updater install/restart giữ favourites/history/DPAPI/cache và máy sạch chưa được nghiệm thu; không ghi PASS cho chúng. Authenticode vẫn NotSigned, chữ ký updater là lớp riêng.
+
+Task phát hành được hoàn thành trong phạm vi đã duyệt. Tiếp theo đề xuất nghiệm thu nâng cấp bản đã cài, máy khác và mạng yếu; không tự bắt đầu phase mới.
 
 ## Cập nhật sau user acceptance và phê duyệt phát hành
 
