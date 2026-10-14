@@ -139,7 +139,7 @@ def prepare_stage(origin,debug=False,test_fixtures=False,local_library=False,upd
     version=config.get('version')
     if not isinstance(version,str) or not re.fullmatch(r'\d+\.\d+\.\d+',version): raise ValueError('Invalid application version')
     web=(APP/'web').resolve()
-    files=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','supplementary.mjs','app-updates.mjs','favicon.svg']
+    files=['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','supplementary.mjs','app-updates.mjs','offline.mjs','favicon.svg']
     if not test_fixtures: files+=['catalog.client.json','quick-play.json']
     for name in files:
         source=APP/'web'/name
@@ -168,9 +168,10 @@ def prepare_stage(origin,debug=False,test_fixtures=False,local_library=False,upd
     (stage/'quick-play.json').write_text(json.dumps(quick,ensure_ascii=False),encoding='utf-8')
     (stage/'connection.json').write_text(json.dumps(dict(mode='local-library' if local_library else 'test-fixtures' if test_fixtures else 'remote' if origin else 'catalog-only',apiBase=origin or '',version=version,buildNumber=stamp)),encoding='utf-8')
     remote=(' '+origin) if origin else ''
-    csp=f"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'{remote}; connect-src 'self'{remote} ipc: http://ipc.localhost; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'"
+    csp=f"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self' http://offline.localhost{remote}; connect-src 'self'{remote} ipc: http://ipc.localhost; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'"
     override=backups/(stamp+'.override.json')
-    settings={'build':{'frontendDist':'../web-release/'+stamp,'devUrl':None},'app':{'security':{'csp':csp,'devCsp':csp,'capabilities':[]}},'bundle':{'resources':[],'externalBin':[]}}
+    events=[{'identifier':'main-update-events','windows':['main'],'permissions':['core:event:allow-listen','core:event:allow-unlisten']}]
+    settings={'build':{'frontendDist':'../web-release/'+stamp,'devUrl':None},'app':{'security':{'csp':csp,'devCsp':csp,'capabilities':events}},'bundle':{'resources':[],'externalBin':[]}}
     settings['bundle']['createUpdaterArtifacts']=bool(updater_public_key)
     if updater_public_key: settings['plugins']={'updater':{'pubkey':updater_public_key,'endpoints':[origin+'/v1/updates/windows-x86_64/{{current_version}}'],'requireSignedVersion':True,'windows':{'installMode':'passive'}}}
     if test_fixtures: settings.update(identifier='org.audiotp.acceptance',productName='AudioTP Test')

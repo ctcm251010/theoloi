@@ -1,5 +1,21 @@
 # THEOLOI — Development changelog
 
+## 2026-10-15 — Phản hồi Nghe online khi mất mạng
+
+User xác nhận EXE offline cơ bản ổn, góp ý thiếu thông báo khi chuyển online lúc mất mạng. Sửa sr-only/hidden notice bằng inline network guidance, pending button, clear trên reconnect;3 regression RED→GREEN/frontend95/browser TEST PASS. Final EXE/setup rebuild1.1.0 có chữ ký, đang thực hiện GitHub/update publication theo phê duyệt mới, không đổi983/media/credential.
+
+## 2026-10-15 — API offline1.1 live, dừng trước Release
+
+Sau phê duyệt deploy Worker đúng ctcm251010, giữ private R2/secrets/epoch3/update1.0.3. Review độc lập không Critical/Important;18livechecks PASS, native Rust tải guide1 hai lần với SHA/restart không auth/Range/skip/xóa/tải lại. Thêm ignored explicit live acceptance test, không network trong suite mặc định; preview version lấy package1.1.0 có regression. Native GUI acceptance còn chờ vì Computer Use pipe unavailable; chưa push/tag/GitHub Release hoặc publish update1.1.0. [Báo cáo](release-1.1.0-report.md#nghiệm-thu-live-sau-phê-duyệt1510).
+
+## 2026-10-15 — AudioTP1.1.0 local build, chưa phát hành
+
+Native offline downloads/cache/Range/SHA/delete/resume, UI Nghe offline và startup signed updater modal/progress. Giữ ba tab/player và983 media. Thêm authenticated offline manifest/public version-only API source; pacing/backoff tôn trọng limiter, generation chống logout/defer races. Frontend92/Worker40/typecheck/Python225 PASS4SKIP/Rust41 PASS2 deliberate helpers ignored +real artifact signature PASS. TEST upgrade cache giữ SHA, final production portable startup PASS. EXE/NSIS1.1.0 local READY FOR REVIEW; chưa push/tag/GitHub/Cloudflare theo điểm dừng người dùng. Native E2E/máy sạch/API mới live pending. [Báo cáo](release-1.1.0-report.md), [hướng dẫn học](offline-updates-guide.vi.md).
+
+## 2026-10-14 — Sửa Browser Use mở localhost
+
+Preview từ chối nhầm cross-site top-level navigation dẫn tới HTTP403/Chrome ERR_BLOCKED_BY_CLIENT. Cho phép đúng HTML entry GET/HEAD, giữ API/media protections và thêm frame denial. Codex tự mở tab mới và kiểm thử playback thành công. Worker37/frontend69/typecheck PASS; Windows Python64 PASS2 SKIP. [Báo cáo](local-browser-troubleshooting.md).
+
 ## 2026-10-14 — AudioTP1.0.3 thống thanh/Mật khẩu chung
 
 Thêm file thống thanh người dùng cấp5:11 vào supplementaryR2/private và playerchung, không đổi983/our-wish. Ô kết nối đổi nhãn **Mật khẩu chung**, không đổi hoặc nhúng giátrị. Frontend69/Worker36/typecheck/Python225PASS4SKIP/Rust16PASS,12livechecksPASS,review/secret/indexsạch. PR#4merge/tag/Release có5file/hashkhớp;userxácnhậnupdate1.0.1→1.0.3 và thửổn. [Báo cáo](release-1.0.3-report.md) phân biệt nativeuseracceptance với máysạch và ghi lỗi BrowserUse mởlocalhost chưa rõ rootcause.

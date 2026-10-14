@@ -18,6 +18,8 @@ Người dùng cung cấp `cau-nguyen-thong-thanh.m4a` và duyệt bốn bước
 
 ## Lỗi Browser Use mở localhost — khoanh vùng
 
+**Cập nhật14/10/2026:** task riêng sau phát hành đã xác minh và sửa root cause tại preview server, không cần đổi quyền Chrome. Xem [báo cáo](local-browser-troubleshooting.md). Đoạn dưới giữ bằng chứng lịch sử trước khi có HTTP diagnostic.
+
 Lệnh tạo tab vào `http://127.0.0.1:8772/` nhận `net::ERR_BLOCKED_BY_CLIENT`. CùngURL người dùng mở thủ công được; claim/DOM/click/audio/reload bằng Browser Use thành công. HTTPS GitHub bằng lệnh mở tab cũng thành công. Backend localhost phục vụ bình thường và file audio được player phát. Vì vậy chưa có bằng chứng server thiếu port/quyền media; vấn đề nằm ở đường mở/điều hướng tab mới của công cụ hoặc Chrome client. Không đủ chứng cứ quy cho extension cụ thể, firewall, CORS hay sandbox. Không vô hiệu hóa sandbox/protection/extension, không xuất cookie/token hoặc inspect công cụ nội bộ. Tiếp tục dùng tab người dùng mở; root cause còn UNKNOWN.
 
 ## Artifact/live

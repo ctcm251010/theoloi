@@ -28,7 +28,12 @@
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
     <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 17V5l11-2v12M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v2"/></symbol>
-    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="m9 3-.6 2.3-2 .9-2-.9-2 3.4 1.6 1.6-.2 2.3-1.8 1.3 2 3.5 2.2-.6 1.9 1.3.1 2.3h4l.7-2.2 2.1-.9 2 .9 2-3.5-1.6-1.6.2-2.2 1.8-1.4-2-3.4-2.2.5-1.9-1.3L13 3Z"/><circle cx="11.5" cy="11.5" r="3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L20 5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="m12 3 10 18H2Zm0 6v5m0 3v1"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
     <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
   </defs></svg>
@@ -36,7 +41,7 @@
   <div class="app-shell">
     <header class="app-header">
       <a class="brand" href="./index.html" aria-label="AudioTP trang chủ"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg><span>AudioTP</span></a>
-      <button id="settings-toggle" class="icon-button" aria-label="Cài đặt" aria-haspopup="dialog" aria-controls="settings-dialog"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg></button>
+      <div class="header-actions"><button id="offline-toggle" class="text-button" aria-pressed="false" title="Tải nhạc về máy để nghe khi mạng yếu hoặc không có Internet.">Nghe offline</button><button id="settings-toggle" class="icon-button" aria-label="Cài đặt" title="Cài đặt" aria-haspopup="dialog" aria-controls="settings-dialog"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg></button></div>
     </header>
     <nav class="nav-list" aria-label="Điều hướng chính">
       <button class="nav-item active" data-view="all" aria-current="page">Thư viện</button>
@@ -47,9 +52,11 @@
       <h1 id="page-title" class="sr-only">Thư viện</h1>
       <div class="search-toolbar">
         <label class="search-box"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="Tìm số hoặc tên bài ca..." aria-label="Tìm số hoặc tên bài ca" autocomplete="off"></label>
-        <button id="filters-toggle" class="filter-button" aria-haspopup="dialog" aria-controls="filters-dialog" aria-label="Bộ lọc"><svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg><span>Bộ lọc</span></button>
+        <button id="filters-toggle" class="filter-button" aria-haspopup="dialog" aria-controls="filters-dialog" aria-label="Bộ lọc"><svg class="icon" aria-hidden="true"><use href="#i-filter"/></svg><span>Bộ lọc</span></button>
       </div>
-      <div id="demo-notice" class="connection-notice" hidden><p>Chưa kết nối thư viện.</p><button id="connection-open" class="text-button">Kết nối</button></div>
+      <div class="download-toolbar"><span id="offline-summary" class="setting-status"></span><button id="download-open" class="text-button" aria-haspopup="dialog" aria-controls="download-dialog"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Tải về</button><button id="trash-open" class="icon-button" aria-label="Quản lý xóa bài offline" title="Xóa bài đã tải trên máy" aria-haspopup="dialog" aria-controls="trash-dialog" hidden><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></button></div>
+      <div id="download-job" class="download-job" hidden><p id="download-progress-text" role="status"></p><progress id="download-progress" max="1" value="0" aria-label="Tiến độ tải thư viện"></progress><div class="download-controls"><button id="download-pause" class="text-button">Tạm dừng</button><button id="download-resume" class="text-button">Tiếp tục</button><button id="download-retry" class="text-button">Thử lại bài lỗi</button><button id="download-cancel" class="text-button">Hủy tải</button></div></div>
+      <div id="demo-notice" class="connection-notice" hidden><p role="status" aria-live="polite">Chưa kết nối thư viện.</p><button id="connection-open" class="text-button">Kết nối</button></div>
       <div id="update-notice" class="connection-notice update-notice" role="status" hidden><p id="update-message"></p><button id="update-install" class="text-button">Cập nhật</button></div>
       <section class="library-section" aria-label="Danh mục âm thanh">
         <div class="tabs" role="tablist" aria-label="Loại âm nhạc">
@@ -65,7 +72,7 @@
           <div class="active-filters"><button id="clear-filters" class="text-button" hidden>Xóa bộ lọc</button></div>
           <div id="catalog-state" class="catalog-state" role="status"><span class="loading-ring" aria-hidden="true"></span><h2>Đang mở thư viện</h2></div>
           <div id="track-table" class="track-table" role="table" aria-label="Danh sách bài" hidden>
-            <div class="table-head" role="row"><span role="columnheader">Bài</span><span role="columnheader">Tên bài ca</span><span role="columnheader" class="duration-head">Thời lượng</span><span role="columnheader" class="sr-only">Yêu thích</span></div>
+            <div class="table-head" role="row"><span role="columnheader">Bài</span><span role="columnheader">Tên bài ca</span><span role="columnheader" class="duration-head">Thời lượng</span><span role="columnheader" class="sr-only">Tải offline và yêu thích</span></div>
             <div id="track-list" role="rowgroup"></div>
           </div>
         </div>
@@ -81,6 +88,10 @@
     <div class="player-actions"><div class="volume"><button id="mute" class="icon-button" aria-label="Tắt tiếng" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-volume"/></svg></button><input id="volume" type="range" min="0" max="1" step="0.01" value="0.7" aria-label="Âm lượng"></div><button id="playback-toggle" class="icon-button" aria-label="Tùy chọn phát" aria-haspopup="dialog" aria-controls="playback-dialog"><svg class="icon" aria-hidden="true"><use href="#i-more"/></svg></button></div>
     <div class="player-feedback"><span id="player-status" role="status" aria-live="polite"></span><button id="retry-play" class="text-button" hidden>Thử phát lại</button></div>
   </footer>
+  <dialog id="download-dialog" aria-labelledby="download-title"><div class="dialog-heading"><h2 id="download-title">Tải để nghe offline</h2><button class="icon-button" data-close-dialog="download-dialog" aria-label="Đóng tải về"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div><p id="download-capacity" class="setting-status"></p><button id="download-group" class="option-button"></button><button id="download-all" class="option-button"></button></dialog>
+  <dialog id="offline-confirm-dialog" aria-labelledby="offline-confirm-title"><div class="dialog-heading"><h2 id="offline-confirm-title">Xác nhận</h2></div><p id="offline-confirm-message"></p><p id="offline-confirm-error" class="setting-status" role="status"></p><div class="dialog-actions"><button class="text-button" data-close-dialog="offline-confirm-dialog">Để sau</button><button id="offline-confirm-submit" class="primary-button">Xác nhận</button></div></dialog>
+  <dialog id="trash-dialog" aria-labelledby="trash-title"><div class="dialog-heading"><h2 id="trash-title">Xóa bài offline</h2><button class="icon-button" data-close-dialog="trash-dialog" aria-label="Đóng quản lý offline"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div><p class="setting-status">Chỉ xóa file trên máy này. File gốc trên thư viện trực tuyến được giữ nguyên.</p><button id="trash-group" class="option-button"></button><button id="trash-all" class="option-button"></button><details><summary>Chọn từng bài đã tải</summary><div id="trash-selection" class="trash-selection"></div><button id="trash-selected" class="text-button">Xóa bài đã chọn</button></details></dialog>
+  <dialog id="update-dialog" class="update-dialog" aria-labelledby="update-title"><div class="dialog-heading"><h2 id="update-title">AudioTP đã có phiên bản mới!</h2></div><p id="update-versions"></p><p>Đã có bản cập nhật với những cải tiến và sửa lỗi mới.</p><p id="update-modal-message" role="status"></p><progress id="update-progress" max="100" value="0" aria-label="Tiến độ cập nhật" hidden></progress><div class="dialog-actions"><button id="update-defer" class="text-button">Để sau</button><button id="update-now" class="primary-button">Cập nhật ngay</button></div></dialog>
   <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
     <div class="dialog-heading"><h2 id="settings-title">Cài đặt</h2><button class="icon-button" data-close-dialog="settings-dialog" aria-label="Đóng cài đặt" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
     <div class="setting-row"><span>Giao diện</span><button id="theme-toggle" class="text-button"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg><span>Giao diện sáng</span></button></div>
@@ -89,7 +100,7 @@
     <details id="connection-settings"><summary>Kết nối thư viện</summary><form id="connection-form"><label>Địa chỉ thư viện<input id="api-base" type="url" placeholder="https://…" autocomplete="url" required></label><label>Mật khẩu chung<input id="access-code" type="password" autocomplete="off" required minlength="4" maxlength="256"></label><label id="remember-row" class="remember-row" hidden><input id="remember-access" type="checkbox">Nhớ đăng nhập trên máy này</label><p id="remember-note" class="setting-status" hidden>Windows mã hóa mật khẩu chung theo tài khoản của bạn. Chỉ bật trên máy cá nhân.</p><div class="dialog-actions"><button id="connect-button" class="primary-button" type="submit">Kết nối</button><button id="disconnect" class="text-button" type="button" hidden>Đăng xuất</button></div></form></details>
     <div class="setting-row"><span>Phiên bản ứng dụng</span><button id="update-check" class="text-button" hidden>Kiểm tra cập nhật</button></div>
     <p id="update-status" class="setting-status" role="status"></p>
-    <p id="build-version" class="version">AudioTP 1.0.3</p>
+    <p id="build-version" class="version">AudioTP 1.1.0</p>
   </dialog>
   <dialog id="filters-dialog" aria-labelledby="filters-title">
     <div class="dialog-heading"><h2 id="filters-title">Bộ lọc</h2><button class="icon-button" data-close-dialog="filters-dialog" aria-label="Đóng bộ lọc" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>

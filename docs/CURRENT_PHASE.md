@@ -1,5 +1,21 @@
 # THEOLOI — Current phase
 
+## Offline Downloads & Startup Updates — READY FOR REVIEW /15-10-2026
+
+**Đang phát hành theo phê duyệt mới15/10:** người dùng xác nhận EXE offline cơ bản “khá ổn”, yêu cầu sửa phản hồi khi Nghe online mất mạng rồi thực hiện bước4GitHub Release và bước5bật update theo thứ tự, giải thích từng mốc. Sửa inline feedback/loading/reconnect có3regression RED→GREEN,frontend95/browser TEST PASS. Final build `release/windows/1.1.0-20261014T205105238937Z/`; không dùng build193441/203538 intermediate. Đang kiểm tra chữ ký/audit trước push/merge/tag; chưa đánh dấu đã publish khi chưa xác minh. Không mở phase mới, không đổi R2 public access/credential/983media.
+
+Người dùng giao trọn feature/build/release qua attachment18187dfa. Branch `feature/offline-downloads-updates`, nền b361659 gồm bản sửa Browser Use local. Triển khai song song native offline, frontend và updater; root tích hợp API/build/QA. [Thiết kế](superpowers/specs/2026-10-15-offline-updates-design.md), [plan](superpowers/plans/2026-10-15-offline-updates.md). Giữ983media/catalog/state và R2 private; không tải hàng loạt để test. Production chỉ thay phần cần thiết sau khi artifact/test cụ thể đã sẵn; không đổi credential hoặc mua signing service.
+
+Chỉ đạo tiếp theo15/10: người dùng đã duyệt review source → deploy API offline → test một bài thật; **dừng trước GitHub Release**. Đã deploy Worker `52e19593-8136-41b7-9961-58fe9078c00d` vào đúng account ctcm251010, giữ secrets/epoch3/serving/private bucket và update1.0.3. Không publish installer/update1.1.0, push/tag/Release.
+
+Live API/native engine:18 checks PASS, manifest983 khớp size/hash, tải guide1 (`watv:vi:guide:4177`,2.027.172 bytes) hai lần vào cache TEST cô lập, SHA/restart không auth/HEAD/Range/skip với session sai/xóa local/tải lại PASS. Đây là test Rust dùng API thật, **không phải nghe qua WebView2 trong EXE**. Review độc lập không Critical/Important; frontend92/Worker40/typecheck/Python225PASS4SKIP/Rust41 PASS,3 tests ignored có chủ đích (thêm live test chạy riêng1PASS); final installer signature chạy riêng1PASS. Công cụ Windows vẫn native pipe unavailable; đã mở EXE1.1 và đề nghị người dùng xác nhận phát/tua/mở lại offline. Chưa DONE native GUI acceptance. [Bằng chứng và điểm dừng](release-1.1.0-report.md#nghiệm-thu-live-sau-phê-duyệt1510).
+
+Source/UI/native offline và startup updater đã implement/test;983/18 integrity PASS. Final EXE/NSIS1.1.0 tại `release/windows/1.1.0-20261014T193441266227Z/`, chữ ký updater verified, TEST installer upgrade giữ cache, production portable startup PASS. Native playback/Windows updater E2E/máy sạch vẫn pending; API offline đã live như cập nhật trên. [Nghiệm thu/build handoff](release-1.1.0-report.md), [học quy trình](offline-updates-guide.vi.md). Chưa phát hành.
+
+## Task sửa Browser Use local — DONE /14-10-2026
+
+Root cause đã xác minh bằng HTTP log: preview chặn cross-site top-level navigation. Sửa giới hạn HTML entry, giữ API/media/iframe/Host protections. Tự mở tab mới/phát ba nhóm và hai prayer, pause/seek/search PASS; Worker37/frontend69/typecheck PASS, Python Windows64 PASS2 SKIP. Không cần người dùng đổi Chrome; không Cloudflare/media/credential mutation. [Bằng chứng và quy trình](local-browser-troubleshooting.md). Không tự chuyển phase.
+
 ## Task riêng1.0.3 — DONE /14-10-2026
 
 Thống thanh và nhãn **Mật khẩu chung** hoàn tất theo yêu cầu. Audio5038802bytes/311.518912s/decode/hash PASS,privateR2/GET verified;983media/18metadata nguyên vẹn. Frontend69/Worker36/typecheck/Python225 PASS4SKIP/Rust16 PASS;reviewfix scopedrecovery córegression. Browserlocalcontrols/searchPASS;EXE/NSIS1.0.3 cóchữký,12livechecksPASS. User xác nhận update1.0.1→1.0.3/phát/nhãn ổn. PR#4merge/tagv1.0.3/Release5file,5GitHubhashkhớp. [Báo cáo](release-1.0.3-report.md). RootcauseBrowserUse mởlocalhostUNKNOWN; điều khiển/reload tabmởtayđược. Không mở rộngClosedBeta/phase; đềxuất tiếp theo kiểmthửmáykhác/mạngyếu/cài-gỡ.

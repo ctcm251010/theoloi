@@ -9,6 +9,9 @@ test('native mock serves only labelled self-authored fixtures with session, tick
  assert.equal((await fetch(base+'/v1/catalog')).status,401);
  await assert.rejects(()=>api.login('wrong'));
  await api.login(TEST_CODE);assert.deepEqual(await api.catalog(),fixtureCatalog);
+ const offline=await api.request('/v1/offline-manifest');assert.deepEqual(offline.tracks,fixtureCatalog.tracks);assert.equal(offline.assets.length,4);
+ assert.ok(offline.assets.every(a=>a.bytes>0 && /^[a-f0-9]{64}$/.test(a.sha256) && a.contentType==='audio/wav'));
+ assert.equal(JSON.stringify(offline).includes('objectKey'),false);
  assert.equal(fixtureCatalog.tracks.length,4);assert.ok(fixtureCatalog.tracks.every(x=>x.id.startsWith('test:') && x.title.startsWith('TEST')));
  assert.equal(fixtureQuick[0].assetIds[0],'test:silent:1');
  const url=await api.resolve(fixtureCatalog.tracks[0]);const r=await fetch(url,{headers:{Range:'bytes=0-11'}});

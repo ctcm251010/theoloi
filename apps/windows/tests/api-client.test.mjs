@@ -3,6 +3,23 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {MediaAPI,validateAPIBase} from '../web/api-client.mjs';
 const session={token:'synthetic-session',expiresAt:10000};
+
+test('offline fallback distinguishes unavailable network from authorization, cancellation and invalid catalog data',async()=>{
+ for(const status of [502,503,504]){
+  const api=new MediaAPI('https://api.test',{now:()=>100,fetcher:async()=>new Response(null,{status})});api.adoptSession(session);
+  await assert.rejects(()=>api.catalog(),error=>error.network===true && error.status===status);
+ }
+ for(const status of [401,403,404,409,429]){
+  const api=new MediaAPI('https://api.test',{now:()=>100,fetcher:async()=>new Response(null,{status})});api.adoptSession(session);
+  await assert.rejects(()=>api.catalog(),error=>!error.network && (status===401 || error.status===status));
+ }
+ for(const thrown of [new TypeError('private transport detail'),new DOMException('private timeout detail','AbortError')]){
+  const api=new MediaAPI('https://api.test',{now:()=>100,fetcher:async()=>{throw thrown;}});api.adoptSession(session);
+  await assert.rejects(()=>api.catalog(),error=>error.network===true && !error.message.includes('private'));
+ }
+ const invalid=new MediaAPI('https://api.test',{now:()=>100,fetcher:async()=>new Response('{invalid')});invalid.adoptSession(session);
+ await assert.rejects(()=>invalid.catalog(),error=>!error.network);
+});
 test('default browser fetch is invoked without the MediaAPI receiver',async()=>{
  const original=globalThis.fetch;
  try{globalThis.fetch=function(){assert.equal(this,undefined);return Promise.resolve(Response.json(session));};const api=new MediaAPI('https://api.test',{now:()=>100});await api.login('synthetic-user-access-code');assert.equal(api.token,session.token);}

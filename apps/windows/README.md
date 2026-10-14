@@ -4,6 +4,8 @@ Mỗi bài lấy nguồn theo assetId qua API, không fallback theo tên tab. Đ
 
 ## Nghe đúng audio đang có trên máy
 
+Browser Use có thể tự mở preview bằng tab mới; lỗi chặn điều hướng cross-site đã sửa ở adapter local. Nếu helper cũ đang chạy, restart đúng helper để nạp code mới. [Chẩn đoán và bằng chứng](../../docs/local-browser-troubleshooting.md).
+
 ```powershell
 cd D:\Workspace\AudioTP
 node workers/media-api/local-preview.mjs

@@ -150,6 +150,17 @@ export function createService(client,allowlist,{now=epochSeconds,quickAudio=EMPT
    const limiter=login?env.LOGIN_LIMITER:env.REQUEST_LIMITER;
    if(!(await limiter.limit({key:`${login?'login':'requests'}:${ip}`})).success)return finish(error(429,'rate_limited',{'Retry-After':'60'}));
    if(url.pathname==='/v1/health')return finish(['GET','HEAD'].includes(request.method)?Response.json({status:'ready',storage:'not-probed'}):error(405,'method_not_allowed',{Allow:'GET, HEAD'}));
+   // Public version notification only. Installer, catalog and audio still require
+   // their existing authorization; this route performs no storage operations.
+   const releaseInfo=/^\/v1\/release-info\/windows-x86_64\/([^/]+)$/.exec(url.pathname);
+   if(releaseInfo){
+    if(!['GET','HEAD'].includes(request.method))return finish(error(405,'method_not_allowed',{Allow:'GET, HEAD'}));
+    const current=stableVersion(releaseInfo[1]);if(!current)return finish(error(400,'invalid_version'));
+    const available=updates?stableVersion(updates.version):null;
+    const differing=available?current.findIndex((part,index)=>part!==available[index]):-1;
+    if(!updates || !available || differing===-1 || current[differing]>available[differing])return finish(new Response(null,{status:204}));
+    return finish(Response.json({version:updates.version,currentVersion:releaseInfo[1]}));
+   }
    if(login){
     if(request.method!=='POST')return finish(error(405,'method_not_allowed',{Allow:'POST'}));
     let data;try{data=await boundedJSON(request);}catch{return finish(error(400,'invalid_body'));}
@@ -192,6 +203,7 @@ export function createService(client,allowlist,{now=epochSeconds,quickAudio=EMPT
     return finish(await streamAsset(request,env.MEDIA,asset,'application/octet-stream',false));
    }
    if(url.pathname==='/v1/catalog' && ['GET','HEAD'].includes(request.method))return finish(Response.json(client));
+   if(url.pathname==='/v1/offline-manifest' && ['GET','HEAD'].includes(request.method))return finish(Response.json({schemaVersion:1,revision:client.revision,tracks:client.tracks,assets:client.tracks.map(track=>({assetId:track.id,bytes:allowlist[track.id].bytes,sha256:allowlist[track.id].sha256,contentType:'audio/mp4'}))}));
    const song=/^\/v1\/songs\/([^/]+)$/.exec(url.pathname);
    if(song && ['GET','HEAD'].includes(request.method)){
     let logicalId;try{logicalId=decodeURIComponent(song[1]);}catch{return finish(error(404,'song_not_found'));}

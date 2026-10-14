@@ -17,7 +17,7 @@ test('network errors sanitized, retry works and duplicate install prevented',asy
  await updates.check('session');assert.equal(updates.state.status,'error');assert.ok(!updates.state.message.includes('secret'));
  fail=false;await updates.check('session');const one=updates.install();await updates.install();assert.equal(installs,1);finish();await one;
 });
-test('browser and disconnected sessions do not check or install',async()=>{
+test('browser cannot check and disconnected sessions only request public metadata',async()=>{
  const browser=new AppUpdates();await browser.check('session');assert.equal(browser.available,false);
- let calls=0;const native=new AppUpdates(async()=>calls++);await native.check('');await native.install();assert.equal(calls,0);
+ const calls=[];const native=new AppUpdates(async cmd=>{calls.push(cmd);return null;});await native.check('');await native.install();assert.deepEqual(calls,['check_release_info']);
 });

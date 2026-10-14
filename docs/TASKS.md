@@ -1,5 +1,29 @@
 # THEOLOI tasks
 
+## Offline Downloads & Startup Updates — READY FOR REVIEW /15-10-2026
+
+- [x] Đọc attachment/context, chốt boundaries/IPC/manifest và plan; môi trường build READY.
+- [x] API offline metadata có auth và public version-only info, RED→GREEN; mock tự tạo có SHA/ETag.
+- [x] Native managed downloads/verify/range/resume/control/delete/protocol; pacing500ms/429/boundedrestart/network queue stop và tests.
+- [x] UI gear/offline/row state/bulk download/delete/progress/fallback; tests/browser TEST desktop/mobile, không giả claim native filesystem playback.
+- [x] Startup update modal/defer/progress + official signature/restart/cancellation tests; real final installer signature explicit PASS.
+- [x] Regression/review/data integrity; EXE/NSIS1.1.0 build, TEST0.2.0→1.1.0 cache SHA preserved; production portable startup.
+- [x] Artifact/hướng dẫn/report sẵn review; learning guide có build/release; [báo cáo](release-1.1.0-report.md).
+- [ ] Native player/updater E2E và clean machine; helper Windows unavailable, không dùng mock đánh dấu DONE.
+- [x] Review trước deploy: reviewer độc lập không Critical/Important; frontend92/Worker40/typecheck/Rust41 PASS; secret scan và index audit sạch;983media/18metadata không đổi.
+- [x] Sau phê duyệt15/10 deploy riêng API offline lên ctcm251010; giữ secrets/epoch3/serving/private bucket/update1.0.3, không upload installer/audio.
+- [x] Live API + native engine một bài thật:18checks PASS; guide1 hai lượt tải verified/restart không auth/Range/skip/xóa/tải lại. Test chạy riêng có chủ đích, không thuộc suite offline mặc định.
+- [x] Người dùng trả lời thử EXE offline “khá ổn”; phát hiện thiếu phản hồi nhìn thấy khi bấm Nghe online lúc mất mạng. Đây là user acceptance cơ bản, không thay máy sạch/toàn bộ matrix.
+- [x] Sửa phản hồi mạng: giữ offline, thông báo inline nhìn thấy/aria-live, nút Đang kết nối; clear khi mạng/kết nối lại.3 regression RED→GREEN/frontend95 PASS, browser TEST failure/recovery PASS, Windows Python64 PASS2SKIP.
+- [ ] **Người dùng đã duyệt tiếp:** push/review/merge/tag/GitHub Release1.1.0, sau đó publish một installer private và deploy update metadata; giải thích từng mốc, không mở phase mới.
+
+## Browser Use localhost — DONE /14-10-2026
+
+- [x] Reproduce tab mới ERR_BLOCKED_BY_CLIENT; log HTTP403 và Fetch Metadata xác định nguyên nhân tại preview server.
+- [x] Regression RED→GREEN; chỉ cho top-level HTML GET/HEAD, chặn API/media/iframe/cross-site fetch và Host lạ.
+- [x] Worker37/frontend69/typecheck PASS; Python Windows64 PASS2 SKIP; tự mở tab mới và playback/controls/search trên server bình thường PASS.
+- [x] Ghi nguyên nhân và cách tự QA; không đổi Chrome/sandbox/Cloudflare/media/credential.
+
 ## AudioTP1.0.3 — DONE
 
 - [x] File thống thanh local FFprobe/full decode/hash, copy byte-identical và registry riêng.
