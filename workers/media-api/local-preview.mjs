@@ -43,7 +43,7 @@ export async function loadQuickAudio(root){
 
 export class ReadOnlyFileBucket {
  constructor(root,manifest,supplemental={}){
-  this.root=path.resolve(root);this.entries=new Map(Object.values(manifest.assets).map(a=>[a.objectKey,a]));this.verified=new Map();this.prayerKeys=new Set();
+  this.root=path.resolve(root);this.entries=new Map(Object.values(manifest.assets).map(a=>[a.objectKey,a]));this.prayerKeys=new Set();
   for(const [id,asset] of Object.entries(supplemental)){
    validatePrayerAsset(id,asset);
    if(this.entries.has(asset.objectKey) || Object.values(manifest.assets).some(a=>a.assetId===id))throw Error('prayer_registry_collision');
@@ -60,13 +60,10 @@ export class ReadOnlyFileBucket {
   const actual=await realpath(target),mediaRoot=await realpath(path.join(this.root,namespace));
   const relative=path.relative(mediaRoot,actual);if(relative.startsWith('..') || path.isAbsolute(relative))throw Error('unsafe_media_path');
   const info=await stat(actual);if(!info.isFile() || info.size!==asset.bytes)throw Error('media_size_mismatch');
-  const fingerprint=[info.dev,info.ino,info.size,info.mtimeMs,info.ctimeMs].join(':');
-  if(this.verified.get(key)!==fingerprint){
-   const digest=createHash('sha256');for await(const chunk of createReadStream(actual))digest.update(chunk);
-   if(digest.digest('hex')!==asset.sha256)throw Error('media_hash_mismatch');
-   if(this.verified.size>=16)this.verified.delete(this.verified.keys().next().value);
-   this.verified.set(key,fingerprint);
-  }
+  // Windows can retain identical size/mtime/ctime after a rapid rewrite. The
+  // local read-only preview therefore verifies bytes for each media lookup.
+  const digest=createHash('sha256');for await(const chunk of createReadStream(actual))digest.update(chunk);
+  if(digest.digest('hex')!==asset.sha256)throw Error('media_hash_mismatch');
   return {asset,target:actual,meta:{size:asset.bytes,etag:asset.sha256,httpEtag:`"${asset.sha256}"`,customMetadata:{sha256:asset.sha256,'asset-id':asset.assetId},httpMetadata:{contentType:'audio/mp4'}}};
  }
  async head(key){return (await this.lookup(key))?.meta ?? null;}
@@ -88,7 +85,7 @@ export async function createPreviewServer({root=defaultRoot,port=8766,desktop=fa
  const allowed=JSON.parse(await readFile(path.join(root,'workers/media-api/generated/assets.json'),'utf8'));
  const worker=createService(client,allowed,{quickAudio});
  const web=path.join(root,'apps/windows/web');
- const files=new Set(['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','supplementary.mjs','app-updates.mjs','catalog.client.json','quick-play.json','favicon.svg']);
+ const files=new Set(['index.html','styles.css','app.mjs','catalog.mjs','player.mjs','storage.mjs','ui-core.mjs','api-client.mjs','remember-access.mjs','supplementary.mjs','app-updates.mjs','offline.mjs','catalog.client.json','quick-play.json','favicon.svg']);
  const env={SERVING_ENABLED:'true',LOCAL_PREVIEW:'true',AUTH_EPOCH:'local-only',SIGNING_KEY:randomBytes(32).toString('hex'),GROUP_CODE_SHA256:hash(localCode),SESSION_SECONDS:'43200',MEDIA:new ReadOnlyFileBucket(root,manifest,prayerAssets),LOGIN_LIMITER:localLimiter(30),REQUEST_LIMITER:localLimiter(300)};
  const server=createServer(async(req,res)=>{
   try{

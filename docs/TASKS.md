@@ -1,5 +1,17 @@
 # THEOLOI tasks
 
+## Offline Downloads & Startup Updates — READY FOR REVIEW /15-10-2026
+
+- [x] Đọc attachment/context, chốt boundaries/IPC/manifest và plan; môi trường build READY.
+- [x] API offline metadata có auth và public version-only info, RED→GREEN; mock tự tạo có SHA/ETag.
+- [x] Native managed downloads/verify/range/resume/control/delete/protocol; pacing500ms/429/boundedrestart/network queue stop và tests.
+- [x] UI gear/offline/row state/bulk download/delete/progress/fallback; tests/browser TEST desktop/mobile, không giả claim native filesystem playback.
+- [x] Startup update modal/defer/progress + official signature/restart/cancellation tests; real final installer signature explicit PASS.
+- [x] Regression/review/data integrity; EXE/NSIS1.1.0 build, TEST0.2.0→1.1.0 cache SHA preserved; production portable startup.
+- [x] Artifact/hướng dẫn/report sẵn review; learning guide có build/release; [báo cáo](release-1.1.0-report.md).
+- [ ] Native player/updater E2E và clean machine; helper Windows unavailable, không dùng mock đánh dấu DONE.
+- [ ] **Deferred theo người dùng:** push/tag/GitHub Release/R2 publish/deploy/live API mới. Dừng chờ review, chưa phát hành1.1.0.
+
 ## Browser Use localhost — DONE /14-10-2026
 
 - [x] Reproduce tab mới ERR_BLOCKED_BY_CLIENT; log HTTP403 và Fetch Metadata xác định nguyên nhân tại preview server.

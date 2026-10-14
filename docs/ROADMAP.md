@@ -1,5 +1,7 @@
 # THEOLOI roadmap
 
+Task riêng15/10 **AudioTP1.1.0 Offline Downloads & Startup Updates — READY FOR REVIEW**: code/tests và EXE/NSIS có chữ ký updater chuẩn bị local;983media/18metadata nguyên vẹn. Dừng trước GitHub/Cloudflare theo yêu cầu mới. Native/live acceptance chưa hoàn tất; không đánh dấu toànPhase03 DONE. [Bàn giao](release-1.1.0-report.md).
+
 Task riêng14/10 sửa Browser Use local **DONE**: root cause preview cross-site navigation; tự mở tab/phát nhạc và regression PASS. [Báo cáo](local-browser-troubleshooting.md). Không thay nghiệm thu native/live hoặc mở phase mới.
 
 [Yêu cầu master do người dùng cung cấp](MASTER_ROADMAP.md) là đặc tả dài hạn; [CURRENT_PHASE](CURRENT_PHASE.md) là trạng thái thực thi, [TASKS](TASKS.md) là checklist hiện tại. Tận dụng hệ thống docs hiện có, không thêm docs/roadmap song song.

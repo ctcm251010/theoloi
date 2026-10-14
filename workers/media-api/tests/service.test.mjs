@@ -6,6 +6,19 @@ const code='unit-test-access-code-not-a-real-secret';
 const sha=data=>createHash('sha256').update(data).digest('hex');
 const tracks=[{id:'guide:1',logicalId:'song:1',mode:'guide',durationSeconds:125},{id:'instrumental:1',logicalId:'song:1',mode:'instrumental',durationSeconds:126},{id:'silent:1',logicalId:'silent:1',mode:'silent',durationSeconds:57}].map(t=>({...t,section:t.mode==='silent'?null:'main',number:1,title:'Bài thử tự tạo',category:'Fixture'}));
 const bytes=Buffer.from('0123456789abcdefghijklmnopqrstuvwxyz');
+
+test('offline manifest is authenticated exact membership metadata with no storage keys and no R2 reads',async()=>{
+ const f=fixture();assert.equal((await f.request('/v1/offline-manifest')).status,401);
+ const token=await f.login(),response=await f.request('/v1/offline-manifest',{token});assert.equal(response.status,200);
+ const manifest=await response.json();assert.equal(manifest.schemaVersion,1);assert.equal(manifest.revision,'reviewed-r1');
+ assert.deepEqual(manifest.tracks,tracks);
+ assert.deepEqual(manifest.assets,tracks.map(t=>({assetId:t.id,bytes:36,sha256:sha(bytes),contentType:'audio/mp4'})));
+ assert.equal(JSON.stringify(manifest).includes('objectKey'),false);assert.equal(JSON.stringify(manifest).includes('sourceUrl'),false);
+ assert.equal(f.calls.length,0);assert.equal(response.headers.get('Cache-Control'),'private, no-store');
+ const head=await f.request('/v1/offline-manifest',{method:'HEAD',token});assert.equal(head.status,200);assert.equal(head.body,null);
+ assert.equal((await f.request('/v1/offline-manifest',{method:'POST',token})).status,404);
+ f.env.SERVING_ENABLED='false';assert.equal((await f.request('/v1/offline-manifest',{token})).status,403);
+});
 test('two independent prayers receive their own scoped media and leave original catalog intact',async()=>{
  const entries=[['our-wish','Cầu nguyện chúng con mong muốn',69.427664],['unison-prayer','Nhạc không lời cầu nguyện thống thanh',311.518912]];
  const prayerTracks=entries.map(([slug,title,durationSeconds])=>({id:'watv:vi:prayer:'+slug,logicalId:'watv:vi:prayer:'+slug,mode:'prayer',section:null,number:null,title,category:'Cầu nguyện',durationSeconds}));
@@ -172,6 +185,18 @@ const quickAudio={schemaVersion:1,revision:'sha256:'+sha('supplementary'),tracks
 // Structurally valid synthetic minisign envelope; not an executable or trusted release.
 const minisign=`untrusted comment: synthetic test signature\n${Buffer.concat([Buffer.from('Ed'),Buffer.alloc(72)]).toString('base64')}\ntrusted comment: synthetic\n${Buffer.alloc(64).toString('base64')}\n`;
 const updates={version:'1.0.1',pubDate:'2026-10-13T00:00:00Z',notes:'Synthetic release',objectKey:'updates/windows-x86_64/1.0.1/AudioTP_1.0.1_x64-setup.exe',bytes:bytes.length,sha256:sha(bytes),signature:Buffer.from(minisign).toString('base64')};
+
+test('startup release info exposes only newer stable version, never installer credentials or R2 data',async()=>{
+ const f=fixture({updates});
+ const r=await f.request('/v1/release-info/windows-x86_64/1.0.0');assert.equal(r.status,200);
+ assert.deepEqual(await r.json(),{version:'1.0.1',currentVersion:'1.0.0'});assert.equal(r.headers.get('Cache-Control'),'private, no-store');
+ for(const version of ['1.0.1','1.0.2','2.0.0'])assert.equal((await f.request('/v1/release-info/windows-x86_64/'+version)).status,204);
+ for(const version of ['bad','01.0.0','1.0.0-beta'])assert.equal((await f.request('/v1/release-info/windows-x86_64/'+version)).status,400);
+ assert.equal((await f.request('/v1/release-info/windows-x86_64/1.0.0',{method:'POST'})).status,405);
+ assert.equal((await f.request('/v1/update-files/1.0.1/installer')).status,401);
+ assert.equal((await f.request('/v1/updates/windows-x86_64/1.0.0')).status,401);assert.equal(f.calls.length,0);
+ f.env.REQUEST_LIMITER.limit=async()=>({success:false});assert.equal((await f.request('/v1/release-info/windows-x86_64/1.0.0')).status,429);
+});
 
 test('quick audio is authenticated, metadata only and keeps original catalog unchanged',async()=>{
  const f=fixture({quickAudio}),token=await f.login();

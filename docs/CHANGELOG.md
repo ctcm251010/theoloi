@@ -1,5 +1,9 @@
 # THEOLOI — Development changelog
 
+## 2026-10-15 — AudioTP1.1.0 local build, chưa phát hành
+
+Native offline downloads/cache/Range/SHA/delete/resume, UI Nghe offline và startup signed updater modal/progress. Giữ ba tab/player và983 media. Thêm authenticated offline manifest/public version-only API source; pacing/backoff tôn trọng limiter, generation chống logout/defer races. Frontend92/Worker40/typecheck/Python225 PASS4SKIP/Rust41 PASS2 deliberate helpers ignored +real artifact signature PASS. TEST upgrade cache giữ SHA, final production portable startup PASS. EXE/NSIS1.1.0 local READY FOR REVIEW; chưa push/tag/GitHub/Cloudflare theo điểm dừng người dùng. Native E2E/máy sạch/API mới live pending. [Báo cáo](release-1.1.0-report.md), [hướng dẫn học](offline-updates-guide.vi.md).
+
 ## 2026-10-14 — Sửa Browser Use mở localhost
 
 Preview từ chối nhầm cross-site top-level navigation dẫn tới HTTP403/Chrome ERR_BLOCKED_BY_CLIENT. Cho phép đúng HTML entry GET/HEAD, giữ API/media protections và thêm frame denial. Codex tự mở tab mới và kiểm thử playback thành công. Worker37/frontend69/typecheck PASS; Windows Python64 PASS2 SKIP. [Báo cáo](local-browser-troubleshooting.md).

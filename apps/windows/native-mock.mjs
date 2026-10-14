@@ -1,7 +1,7 @@
 // Acceptance only. No production catalog/media, Cloudflare, credential or R2 access.
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
-import {randomBytes} from 'node:crypto';
+import {randomBytes,createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {byteRange} from '../../workers/media-api/src/service.mjs';
@@ -49,12 +49,13 @@ export async function createMockServer({port=8870}={}){
     const range=req.method==='GET' && req.headers.range?byteRange(req.headers.range,bytes.length):null;
     if(req.method==='GET' && req.headers.range && !range)return reply(416,null,{'Content-Range':`bytes */${bytes.length}`});
     const output=range?bytes.subarray(range.offset,range.offset+range.length):bytes;
-    return reply(range?206:200,output,{'Content-Type':'audio/wav','Accept-Ranges':'bytes','Content-Length':output.length,...(range?{'Content-Range':`bytes ${range.offset}-${range.offset+range.length-1}/${bytes.length}`}:{})});
+    return reply(range?206:200,output,{'Content-Type':'audio/wav','Accept-Ranges':'bytes','ETag':'"'+createHash('sha256').update(bytes).digest('hex')+'"','X-AudioTP-Asset-Id':id,'Content-Length':output.length,...(range?{'Content-Range':`bytes ${range.offset}-${range.offset+range.length-1}/${bytes.length}`}:{})});
    }
    if(!url.pathname.startsWith('/v1/'))return json(404,{error:'not_found'});
    const expiry=sessions.get(String(req.headers.authorization || '').replace(/^Bearer /,''));
    if(!expiry || expiry<=now)return json(401,{error:'session_required'});
    if(url.pathname==='/v1/catalog' && req.method==='GET')return json(200,fixtureCatalog);
+   if(url.pathname==='/v1/offline-manifest' && req.method==='GET')return json(200,{schemaVersion:1,revision:fixtureCatalog.revision,tracks:fixtureCatalog.tracks,assets:fixtureCatalog.tracks.map(t=>({assetId:t.id,bytes:audio.get(t.id).length,sha256:createHash('sha256').update(audio.get(t.id)).digest('hex'),contentType:'audio/wav'}))});
    if(url.pathname==='/v1/play-tickets' && req.method==='POST'){
     if(!audio.has(body.assetId))return json(404,{error:'unknown_test_asset'});
     if(tickets.size>=256)return json(429,{error:'test_limit'});

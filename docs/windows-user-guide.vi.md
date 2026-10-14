@@ -1,4 +1,6 @@
-# AudioTP 1.0.3 — Hướng dẫn sử dụng
+# AudioTP 1.1.0 — Hướng dẫn sử dụng
+
+**Bản chuẩn bị review, chưa phát hành:** chức năng offline mới cần API tương ứng được deploy sau khi người quản lý duyệt. Bộ cài local không tự thay Cloudflare hoặc thông báo phiên bản mới cho người dùng cũ. Chưa phân phối bản này như release đã nghiệm thu live.
 
 Lần đầu mở bản ONLINE, phần **Kết nối thư viện** tự hiện để bạn dán mã và chọn Nhớ đăng nhập. Nếu đã nhớ mã và tự kết nối thành công, app vào thư viện trực tiếp. Bạn luôn có thể mở lại phần kết nối trong Cài đặt.
 
@@ -20,12 +22,14 @@ Thanh dưới có phát/dừng, tua và bài trước/sau; desktop có âm lư�
 
 Nếu mất mạng, chờ kết nối lại và bấm **Thử phát lại**. App cố giữ vị trí khi thử lại. Nếu đã nhớ đăng nhập, app thử kết nối lại khi phiên hết hạn. Nếu mã đã bị thu hồi/đổi, cần người quản lý cấp lại; app không retry vô hạn. Nếu Windows không mở được dữ liệu mã hóa, đăng xuất để xóa rồi nhập lại mã.
 
-App không tự tải toàn thư viện. Phiên bản này không lưu cache audio lâu dài; dữ liệu buffer do WebView2 quản lý. Yêu thích, lịch sử và giao diện lưu riêng với mã truy cập đã được Windows mã hóa; session và vé phát chỉ giữ trong RAM.
+App không tự tải toàn thư viện. Trong bản Windows, dùng icon tải ở từng bài hoặc **Tải về** dưới Bộ lọc để tải nhóm/toàn bộ. Xác nhận cho biết số bài còn thiếu và dung lượng; file được kiểm tra SHA-256 trước khi công nhận hoàn tất. Có tạm dừng/tiếp tục/hủy/thử lại. Dữ liệu lưu trong thư mục ứng dụng của Windows, được giữ khi cập nhật; session/vé phát chỉ trong RAM.
 
-Sau khi kết nối, app kiểm tra phiên bản mới và kiểm tra lại mỗi sáu giờ khi cửa sổ đang hiển thị. Có thể bấm **Cài đặt → Kiểm tra cập nhật**. Khi có bản mới, thông báo nhỏ xuất hiện với nút **Cập nhật**. App chỉ tải bộ cài sau khi bạn bấm nút; phát nhạc tạm dừng, chữ ký và phiên bản được xác minh trước khi mở bộ cài. App đóng để cài đặt; mở lại AudioTP sau khi hoàn tất. Không cần đăng nhập GitHub hoặc tải lại thư viện audio. Nếu lỗi, thông báo có nút Thử lại; bản đang cài vẫn dùng được.
+**Nghe offline** lọc cả ba tab, tìm kiếm, yêu thích và gần đây theo bài đã tải. Chọn **Nghe online** để trở lại; bài đã tải vẫn được ưu tiên phát local. Đủ manifest hiện hành thì app mặc định offline và ẩn nút tải chung; xóa bài sẽ hiện lại. Nút thùng rác và dấu kiểm từng bài cho xóa file trên máy, không xóa bản gốc R2. Hai mục cầu nguyện riêng hiện phát online, chưa nằm trong phạm vi tải983 bài chính. Không có mạng vẫn nghe bài đã tải mà không cần đăng nhập lại.
+
+Khi khởi động, app kiểm tra phiên bản ở nền với timeout; không có mạng hoặc đã mới nhất thì im lặng. Có thể bấm **Cài đặt → Kiểm tra cập nhật**. Khi có bản mới, modal giữa cửa sổ có **Để sau** và **Cập nhật ngay**. Chỉ tải sau khi bạn bấm; cần kết nối thư viện để xác minh gói chính thức. Có tiến độ, kiểm tra chữ ký/phiên bản trước cài, rồi đóng/mở lại theo installer hỗ trợ. Không cần đăng nhập GitHub hoặc tải lại audio offline. Nếu lỗi, bản đang cài vẫn dùng được. “Để sau” được tôn trọng tới lần mở app tiếp theo; kiểm tra thủ công vẫn mở lại thông báo.
 
 **Đang dùng 1.0.0:** bản này chưa có chức năng cập nhật, nên cần nhận và chạy bộ cài 1.0.1 từ người quản lý một lần. Từ 1.0.1 trở đi hỗ trợ luồng cập nhật trên. Chữ ký updater bảo vệ file cập nhật; đây không phải chữ ký Windows Authenticode, nên Windows vẫn có thể hiện cảnh báo nhà phát hành chưa xác định. Khi báo lỗi, gửi phiên bản app, tên/số bài và mô tả thao tác; tránh gửi mã truy cập hoặc URL phát tạm thời.
 
 **Bản 1.0.0:** phát hành nội bộ theo yêu cầu người quản lý, dùng API HTTPS và R2 private. Người quản lý đã xác nhận bản trước hoạt động và đăng nhập bằng mã ngắn; máy Windows khác và cài/gỡ bản ONLINE còn cần thử thực tế. Bản phát hành chưa có Authenticode hoặc tự cập nhật. Version1.0.0 không thay thế bằng chứng nghiệm thu còn thiếu. Xem báo cáo trong repository: docs/phase02-online-beta.md.
 
-**Gửi sang máy khác:** ưu tiên `AudioTP_1.0.3_x64-setup.exe`. Chạy setup để cài app và shortcut; cần Internet nếu bộ cài phải bổ sung WebView2. Có thể gửi `AudioTP.exe` để chạy portable nếu máy đã có WebView2; không cần chạy setup trong trường hợp đó. Máy nghe vẫn cần Internet để đăng nhập và phát nhạc. Repository GitHub hiện private: người nhận link Release cần có quyền repo, hoặc người quản lý gửi riêng file cài. Mật khẩu chung cấp riêng, không nằm trong release notes.
+**Sau khi được duyệt phát hành:** ưu tiên `AudioTP_1.1.0_x64-setup.exe` khi gửi máy khác. Chạy setup để cài app/shortcut; cần Internet nếu phải bổ sung WebView2. `AudioTP.exe` chạy portable khi máy đã có WebView2. Cần mạng để đăng nhập/tải lần đầu, sau đó file offline hợp lệ phát không cần mạng. Repository GitHub hiện private: người nhận link Release cần quyền repo hoặc nhận file từ quản lý. Mật khẩu chung cấp riêng, không nằm trong release notes. Xem `docs/offline-updates-guide.vi.md` để hiểu cách lưu file và quy trình build/phát hành.

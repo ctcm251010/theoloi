@@ -1,6 +1,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod remember;
+mod offline_fs;
+mod offline;
 mod update_policy;
 mod updater;
 #[cfg(test)]
@@ -101,7 +103,7 @@ mod tests {
 
 fn main() {
     // Bundled frontend only. No general shell/fs/network plugin or R2 credential.
-    tauri::Builder::default()
+    offline::register(tauri::Builder::default())
         .manage(Mutex::new(()))
         .manage(updater::PendingUpdates::default())
         .invoke_handler(tauri::generate_handler![
@@ -109,10 +111,17 @@ fn main() {
             read_access_code,
             forget_access_code,
             updater::check_update,
+            updater::check_release_info,
             updater::install_update,
-            updater::clear_update
+            updater::clear_update,
+            offline::offline_status,
+            offline::offline_sync,
+            offline::offline_start,
+            offline::offline_control,
+            offline::offline_remove
         ])
         .setup(|app| {
+            offline::initialize(app.handle());
             // The updater requires a public key. LOCAL/TEST builds intentionally have no plugin
             // configuration, so leave it unregistered rather than failing application startup.
             if updater::configured(&app.config().plugins) {

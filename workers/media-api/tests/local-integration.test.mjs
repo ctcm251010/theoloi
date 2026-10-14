@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile,mkdir,writeFile,mkdtemp,rm} from 'node:fs/promises';
+import {readFile,mkdir,writeFile,mkdtemp,rm,stat,utimes} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
@@ -95,6 +95,21 @@ test('local file adapter rejects tampered bytes, wrong size and traversal withou
  await writeFile(file,Buffer.alloc(bytes.length,1));await assert.rejects(()=>bucket.head('key'),/hash/);
  await writeFile(file,'short');await assert.rejects(()=>bucket.head('key'),/size/);
  const unsafe=new ReadOnlyFileBucket(root,{assets:{fixture:{...asset,localPath:'media/audio/../../secret'}}});await assert.rejects(()=>unsafe.head('key'),/unsafe/);
+});
+
+test('local verification never trusts a size/timestamp cache after a same-size rewrite',async t=>{
+ const root=await mkdtemp(path.join(tmpdir(),'audiotp-readonly-'));
+ t.after(()=>{assert.equal(path.dirname(path.resolve(root)),path.resolve(tmpdir()));assert.ok(path.basename(root).startsWith('audiotp-readonly-'));return rm(root,{recursive:true,force:true});});
+ await mkdir(path.join(root,'media/audio'),{recursive:true});
+ const file=path.join(root,'media/audio/fixture.m4a'),bytes=Buffer.from('self-authored-cache-fixture');
+ await writeFile(file,bytes);
+ const bucket=new ReadOnlyFileBucket(root,{assets:{fixture:{assetId:'fixture',objectKey:'key',localPath:'media/audio/fixture.m4a',bytes:bytes.length,sha256:hash(bytes)}}});
+ await bucket.head('key');const before=await stat(file);
+ await writeFile(file,Buffer.alloc(bytes.length,1));await utimes(file,before.atime,before.mtime);
+ // Windows may also preserve ctime at its filesystem timestamp resolution.
+ // Even an unchanged metadata fingerprint is not proof that bytes are unchanged.
+ if(bucket.verified){const now=await stat(file);bucket.verified.set('key',[now.dev,now.ino,now.size,now.mtimeMs,now.ctimeMs].join(':'));}
+ await assert.rejects(()=>bucket.head('key'),/hash/);
 });
 
 test('supplementary local prayer bucket requires exact registered path, key and verified bytes',async t=>{

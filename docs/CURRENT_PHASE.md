@@ -1,5 +1,13 @@
 # THEOLOI — Current phase
 
+## Offline Downloads & Startup Updates — READY FOR REVIEW /15-10-2026
+
+Người dùng giao trọn feature/build/release qua attachment18187dfa. Branch `feature/offline-downloads-updates`, nền b361659 gồm bản sửa Browser Use local. Triển khai song song native offline, frontend và updater; root tích hợp API/build/QA. [Thiết kế](superpowers/specs/2026-10-15-offline-updates-design.md), [plan](superpowers/plans/2026-10-15-offline-updates.md). Giữ983media/catalog/state và R2 private; không tải hàng loạt để test. Production chỉ thay phần cần thiết sau khi artifact/test cụ thể đã sẵn; không đổi credential hoặc mua signing service.
+
+Chỉ đạo mới15/10: xuất EXE/installer chuẩn bị đưa GitHub rồi **dừng để người dùng review**. Không push/tag/Release, upload installer R2 hoặc deploy Cloudflare trong lượt này. API offline mới chưa có live cho tới khi được phép deploy; không báo bản build local là đã phục vụ tính năng mới qua production.
+
+Source/UI/native offline và startup updater đã implement/test: frontend92,Worker40/typecheck,Python225 PASS4SKIP,Rust41 PASS2 deliberate helper/artifact ignored +explicit real-signature PASS.983/18 integrity PASS. Final EXE/NSIS1.1.0 tại `release/windows/1.1.0-20261014T193441266227Z/`, chữ ký updater verified, TEST installer upgrade giữ cache, production portable startup PASS. Native playback/Windows updater E2E/máy sạch/live API mới pending; helper native unavailable. [Nghiệm thu/build handoff](release-1.1.0-report.md), [học quy trình](offline-updates-guide.vi.md). Dừng ở đây, chưa phát hành.
+
 ## Task sửa Browser Use local — DONE /14-10-2026
 
 Root cause đã xác minh bằng HTTP log: preview chặn cross-site top-level navigation. Sửa giới hạn HTML entry, giữ API/media/iframe/Host protections. Tự mở tab mới/phát ba nhóm và hai prayer, pause/seek/search PASS; Worker37/frontend69/typecheck PASS, Python Windows64 PASS2 SKIP. Không cần người dùng đổi Chrome; không Cloudflare/media/credential mutation. [Bằng chứng và quy trình](local-browser-troubleshooting.md). Không tự chuyển phase.

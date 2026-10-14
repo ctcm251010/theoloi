@@ -31,6 +31,9 @@ test('source-only workerd: online client, private R2 simulation, exact ranges an
  await bucket.put(updates.objectKey,bytes,{httpMetadata:{contentType:'application/octet-stream'},customMetadata:{sha256:updates.sha256,'asset-id':'audiotp:windows:x86_64:1.0.1'}});
  const api=new MediaAPI('https://runtime.test',{fetcher:(url,init)=>mf.dispatchFetch(url,init)});
  t.after(()=>api.logout());await api.login(code);assert.deepEqual(await api.catalog(),client);
+ const offline=await api.request('/v1/offline-manifest');assert.deepEqual(offline,{schemaVersion:1,revision:client.revision,tracks:client.tracks,assets:[{assetId:asset.assetId,bytes:bytes.length,sha256:asset.sha256,contentType:'audio/mp4'}]});
+ assert.equal((await mf.dispatchFetch('https://runtime.test/v1/offline-manifest')).status,401);
+ const releaseInfo=await mf.dispatchFetch('https://runtime.test/v1/release-info/windows-x86_64/1.0.0');assert.deepEqual(await releaseInfo.json(),{version:'1.0.1',currentVersion:'1.0.0'});
  assert.deepEqual(await api.request('/v1/quick-audio'),{schemaVersion:1,revision:quickAudio.revision,tracks:[prayer]});
  const prayerURL=await api.resolve(prayer);
  const prayerResponse=await mf.dispatchFetch(prayerURL,{headers:{Range:'bytes=1-4'}});assert.equal(prayerResponse.status,206);assert.deepEqual(Buffer.from(await prayerResponse.arrayBuffer()),bytes.subarray(1,5));

@@ -32,14 +32,14 @@ export class MediaAPI {
      if(this.localPreview && !retried){await this.localSession();if(cancellation!==this.cancellation)throw Error('Yêu cầu kết nối đã hủy.');const data=await this.request(path,{method,body,authenticated,retried:true,accept});if(cancellation!==this.cancellation)throw Error('Yêu cầu kết nối đã hủy.');return data;}
      this.logout();this.onUnauthorized();
     }
-    const messages={401:'Mật khẩu chung hoặc phiên kết nối không hợp lệ.',403:'Chưa được cấp quyền phát từ máy chủ này.',404:'Chưa tìm thấy bài trên máy chủ.',409:'File audio không khớp dữ liệu đã xác minh.',429:'Đang có nhiều yêu cầu. Hãy chờ một phút rồi thử lại.',503:'Máy chủ tạm chưa sẵn sàng.'};const failure=Error(messages[response.status] || `Không kết nối được (${response.status}).`);failure.status=response.status;throw failure;
+    const messages={401:'Mật khẩu chung hoặc phiên kết nối không hợp lệ.',403:'Chưa được cấp quyền phát từ máy chủ này.',404:'Chưa tìm thấy bài trên máy chủ.',409:'File audio không khớp dữ liệu đã xác minh.',429:'Đang có nhiều yêu cầu. Hãy chờ một phút rồi thử lại.',503:'Máy chủ tạm chưa sẵn sàng.'};const failure=Error(messages[response.status] || `Không kết nối được (${response.status}).`);failure.status=response.status;failure.network=[502,503,504].includes(response.status);throw failure;
    }
    const data=await response.json();
    if(generation!==this.generation)throw Error('Yêu cầu đã hủy do phiên kết nối thay đổi.');
    // Accept synchronously under the validated request generation. This also
    // permits a legitimate preview re-bootstrap without accepting stale login data.
    return accept(data);
-  }catch(error){if(generation!==this.generation)throw Error('Yêu cầu đã hủy do phiên kết nối thay đổi.');if(error.name==='AbortError')throw Error('Máy chủ phản hồi quá lâu. Hãy thử lại.');if(error instanceof SyntaxError)throw Error('Dữ liệu máy chủ trả về không hợp lệ.');if(error instanceof TypeError)throw Error('Không kết nối được thư viện. Kiểm tra địa chỉ và kết nối mạng.');throw error;}
+  }catch(error){if(generation!==this.generation)throw Error('Yêu cầu đã hủy do phiên kết nối thay đổi.');if(error.name==='AbortError')throw Object.assign(Error('Máy chủ phản hồi quá lâu. Hãy thử lại.'),{network:true});if(error instanceof SyntaxError)throw Error('Dữ liệu máy chủ trả về không hợp lệ.');if(error instanceof TypeError)throw Object.assign(Error('Không kết nối được thư viện. Kiểm tra địa chỉ và kết nối mạng.'),{network:true});throw error;}
   finally{clearTimeout(timer);this.controllers.delete(controller);}
  }
  adoptSession(data){if(typeof data?.token!=='string' || !data.token || !Number.isFinite(data.expiresAt) || data.expiresAt<=this.now())throw Error('Phiên máy chủ trả về không hợp lệ.');++this.generation;this.tickets.clear();this.urls.clear();this.pending.clear();this.token=data.token;this.expiresAt=data.expiresAt;}
